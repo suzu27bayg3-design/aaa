@@ -40,34 +40,39 @@ add(0, bytes([0xC0|CH, 68]), 0)                               # GM Oboe
 for c,v in ((101,0),(100,0),(6,2),(38,0)): cc(0,c,v)         # pitch-bend range 2 st
 cc(0,91,75); cc(0,7,110)                                      # reverb, volume
 
-t = 0; prev = None
+# --- slur groups: a group = notes joined legato (broken by rests and at the mid-phrase marks) ---
+SLUR_BREAK_AFTER = {5, 18, 32}
+groups = []; cur = []; t = 0
 for i,(name,beats) in enumerate(MELODY):
     dur = int(beats*PPQ)
     if name is None:
-        t += dur; prev = None; continue
-    p = midi(name)
-    # legato join: tiny gap; last note of a phrase breathes
-    end = t + dur - (10 if (i+1<len(MELODY) and MELODY[i+1][0]) else 40)
-    # scoop into upward leaps / phrase starts (cents below target -> 0)
-    scoop = prev is None or (prev is not None and p-prev >= 4)
-    cc(t,11,70)
-    bend(t, -45 if scoop else 0)
-    add(t, bytes([0x90|CH, p, 78 if scoop else 70]))
-    step = 12
-    for tt in range(0, end-t, step):
-        x = tt/(end-t)
-        # expression swell: crescendo to 55% of note, then ease off
-        e = 78 + 30*math.sin(math.pi*min(1,x/0.55)/2) if x<.55 else 108 - 22*((x-.55)/.45)
-        cc(t+tt, 11, e)
-        # vibrato: delayed onset (~1/3 beat), ramps in, ~5.5 Hz, +-18 cents
-        depth = 0 if tt < 160 else min(1,(tt-160)/260)*18
-        if beats < 1: depth = 0
-        sc = -45*max(0, 1-tt/70) if scoop else 0
-        vib = depth*math.sin(2*math.pi*tt/96)
-        bend(t+tt, sc+vib)
-    bend(end-2, 0)
-    add(end, bytes([0x80|CH, p, 0]), 0)
-    prev = p; t += dur
+        if cur: groups.append(cur); cur = []
+    else:
+        cur.append((i, midi(name), t, dur))
+        if i in SLUR_BREAK_AFTER: groups.append(cur); cur = []
+    t += dur
+if cur: groups.append(cur)
+
+OVER = 36      # ticks the next note starts before the previous one ends (legato overlap)
+for g in groups:
+    g0 = g[0][2]; gend = g[-1][2] + g[-1][3] - 40   # last note of a group breathes out
+    glen = gend - g0
+    # one continuous expression + pitch-bend curve for the whole slur (no per-note dips)
+    for tt in range(0, glen, 12):
+        x = tt/glen
+        e = 76 + 32*math.sin(math.pi*x/0.6/2) if x < .6 else 108 - 30*((x-.6)/.4)
+        cc(g0+tt, 11, e)
+        scoop = -45*max(0, 1-tt/70)                     # scoop only into the slur's first note
+        depth = 0 if tt < 160 else min(1, (tt-160)/260)*17
+        vib = depth*math.sin(2*math.pi*tt/96)           # phase continues across note changes
+        bend(g0+tt, scoop+vib)
+    bend(gend-2, 0)
+    for k,(i,p,ts,d) in enumerate(g):
+        last = k == len(g)-1
+        te = gend if last else ts + d + OVER              # overlap into the next note
+        add(ts, bytes([0x90|CH, p, 82 if k == 0 else 52]))  # soft re-attack inside a slur
+        add(te, bytes([0x80|CH, p, 0]), 0)
+t = sum(int(b*PPQ) for _,b in MELODY)
 add(t+PPQ*2, b'\xff\x2f\x00', 2)
 
 ev.sort(key=lambda e:(e[0],e[1]))
