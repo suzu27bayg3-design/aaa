@@ -34,5 +34,6 @@
 - 計算は python で検算する。
 
 ## 仕上げ
+0. 法令セットを追加したら `python3 gas-tech/quiz/build.py` でクイズページ `quiz/quiz.html` を作り直し、Artifact ツールで同じファイルを公開し直す（URL: https://claude.ai/artifact/SDd1CPzWsrskYYvzXE1nPL）。
 1. `PROGRESS.md` に 2 行を追加する（番号・テーマ・日付・ノートへのリンク）。
 2. コミットしてプッシュする。
