@@ -14,10 +14,12 @@
 - **検査をする人の選択肢**：知事のほかに、次の者が検査をしてもよい。どの場合も、**検査の結果を知事に届け出る**ことで、知事がその施設を把握できるようにしている（[消防庁 資料](https://www.fdma.go.jp/singi_kento/kento/items/kento079_09_1-5-1.pdf)）。
   - 高圧ガス保安協会（KHK）
   - 経済産業大臣が指定する**指定完成検査機関**
-  - **変更の工事に限って**、経済産業大臣の認定を受けた**認定完成検査実施者**が自分で検査する
+  - 経済産業大臣の認定を受けた事業者が自分で検査する特例（以前は**認定完成検査実施者**の制度。令和 5 年 12 月 21 日の改正で廃止され、**認定高度保安実施者**の制度に移った。[経済産業省 認定高度保安実施者制度](https://www.meti.go.jp/policy/safety_security/industrial_safety/sangyo/hipregas/sinnintei/index.html)）
 - **対象**：第一種製造者の製造施設と、第一種貯蔵所。新しく設置する工事だけでなく、変更の工事のうち**特定変更工事**も対象になる。
 
-「危険の大きさに応じて規制を強くする」原理から見ると、完成検査は**許可制（第一種）の施設に付いてくる**検査です。自主保安の能力が認められた事業者（認定完成検査実施者）には、変更工事の検査を自分で行うことが認められています。
+「危険の大きさに応じて規制を強くする」原理から見ると、完成検査は**許可制（第一種）の施設に付いてくる**検査です。自主保安の能力が高いと国が認めた事業者には、検査を自分で行う特例が認められています。
+
+> **改正に注意**：古い問題集には「認定完成検査実施者」が今の制度として出てくる。令和 5 年 12 月 21 日の改正でこの認定制度は廃止された。ただし、旧制度の認定を受けていた事業者は有効期間まで効力が続き、2026 年 12 月 21 日までの経過措置期間もある（[経済産業省](https://www.meti.go.jp/policy/safety_security/industrial_safety/sangyo/hipregas/sinnintei/index.html)）。
 
 ---
 
@@ -39,15 +41,15 @@
 
 ### 問 3（指定・認定の主体）
 イ．指定完成検査機関を指定するのは、経済産業大臣である。
-ロ．認定完成検査実施者は、都道府県知事の認定を受けた者である。
+ロ．指定完成検査機関は、都道府県知事が事業所ごとに指定する。
 ハ．指定完成検査機関の完成検査を受けて届け出た場合でも、その後改めて都道府県知事の完成検査を受けなければならない。
 
 (1) イ　(2) ロ　(3) イ、ロ　(4) イ、ハ　(5) ロ、ハ
 
-### 問 4（認定完成検査実施者）
-イ．認定完成検査実施者は、認定を受けた特定変更工事について、自ら完成検査を行うことができる。
-ロ．認定完成検査実施者が自ら完成検査を行ったときは、その検査の記録を都道府県知事に届け出る。
-ハ．認定完成検査実施者は、新たな製造施設の設置の工事についても、自ら完成検査を行うことができる。
+### 問 4（認定制度の改正）
+イ．令和 5 年 12 月 21 日に施行された改正で、認定完成検査実施者の認定制度は廃止された。
+ロ．改正前に認定完成検査実施者の認定を受けていた事業者は、その認定の有効期間までは効力が続く。
+ハ．改正後に新しく設けられた認定高度保安実施者は、都道府県知事が認定する。
 
 (1) イ　(2) ハ　(3) イ、ロ　(4) ロ、ハ　(5) イ、ロ、ハ
 
@@ -74,7 +76,7 @@
 
 ### 問 8（届出の種類）
 イ．高圧ガス保安協会や指定完成検査機関で完成検査を受けた後に、都道府県知事に出す届出は、完成検査受検届である。
-ロ．認定完成検査実施者が自ら完成検査を行ったときに出す届出は、完成検査記録届である。
+ロ．第一種貯蔵所について、高圧ガス保安協会や指定完成検査機関で完成検査を受けたときも、完成検査受検届を出す。
 ハ．完成検査受検届は、工事に着手する前に出さなければならない。
 
 (1) イ　(2) ハ　(3) イ、ロ　(4) ロ、ハ　(5) イ、ロ、ハ
@@ -89,7 +91,7 @@
 ### 問 10（総合）
 イ．指定完成検査機関を指定するのは経済産業大臣である。
 ロ．第一種製造者は、軽微な変更の工事をしたときは、その完成後遅滞なく都道府県知事に届け出なければならない。
-ハ．認定完成検査実施者が自ら完成検査を行えるのは、変更の工事に限られる。
+ハ．完成検査は、許可制である第一種製造者の製造施設と第一種貯蔵所に課される。
 
 (1) イ　(2) ハ　(3) イ、ロ　(4) ロ、ハ　(5) イ、ロ、ハ
 
@@ -117,7 +119,7 @@
 <details><summary>問 3 → (1) イ</summary>
 
 - イ：正。
-- ロ：誤。認定完成検査実施者を認定するのは経済産業大臣である。
+- ロ：誤。指定完成検査機関は経済産業大臣が指定する（イ）。
 - ハ：誤。届け出れば、知事の完成検査は受けなくてよい。
 
 根拠：[経済産業省 指定完成検査機関等](https://www.meti.go.jp/policy/safety_security/industrial_safety/sangyo/hipregas/shiteikikan/index.html)、[消防庁 資料](https://www.fdma.go.jp/singi_kento/kento/items/kento079_09_1-5-1.pdf)
@@ -127,11 +129,13 @@
 
 <details><summary>問 4 → (3) イ、ロ</summary>
 
-- イ：正。
-- ロ：正。届出は**完成検査記録届**による。
-- ハ：誤。認定完成検査実施者が自分で検査できるのは、**変更の工事（特定変更工事）に限られる**。
+- イ：正。同じ改正で、認定保安検査実施者の認定制度も廃止された。
+- ロ：正。施行日から 3 年間（2026 年 12 月 21 日まで）の経過措置期間もある。
+- ハ：誤。経済産業大臣が認定する。
 
-根拠：[消防庁 資料（「③は変更の工事に限る」）](https://www.fdma.go.jp/singi_kento/kento/items/kento079_09_1-5-1.pdf)、[経済産業省 通達](https://www.meti.go.jp/policy/safety_security/industrial_safety/sangyo/hipregas/hourei/18032305.pdf)、[松山市 審査基準](https://www.city.matsuyama.ehime.jp/kurashi/tetsuzuki/kijunkikan/sbkouhou/yoboukijun.files/kouatugasuseizouchozousyokanseikensa.pdf)
+根拠：[経済産業省 認定高度保安実施者制度](https://www.meti.go.jp/policy/safety_security/industrial_safety/sangyo/hipregas/sinnintei/index.html)、[消防庁掲載 新たな認定制度の運用](https://www.fdma.go.jp/relocation/neuter/topics/fieldList4_16/pdf/r05/01/shiryou4-4.pdf)
+
+参考：旧制度の認定完成検査実施者は、変更の工事（特定変更工事）に限って自ら完成検査を行い、記録を知事に届け出る仕組みだった（[消防庁 資料](https://www.fdma.go.jp/singi_kento/kento/items/kento079_09_1-5-1.pdf)）。
 </details>
 
 <details><summary>問 5 → (5) ロ、ハ</summary>
@@ -146,7 +150,7 @@
 <details><summary>問 6 → (5) イ、ロ、ハ</summary>
 
 - イ・ロ・ハ：すべて正。
-- 第一種貯蔵所でも、製造施設と同じ仕組みになっている。KHK・指定完成検査機関・認定完成検査実施者による例外もある。
+- 第一種貯蔵所でも、製造施設と同じ仕組みになっている。KHK・指定完成検査機関による例外もある。
 
 根拠：[愛知県 第一種貯蔵所 完成検査](https://www.pref.aichi.jp/site/koatsugas/tyozou-kanseikensa.html)、[宮城県 第一種貯蔵所 完成検査受検届](https://www.pref.miyagi.jp/soshiki/syoubou/1chozou-kankenjyuken.html)
 </details>
@@ -166,7 +170,7 @@
 - ロ：正。
 - ハ：誤。完成検査受検届は、KHK などで検査を受けて基準に適合すると認められた**後**に出す。
 
-根拠：[宮城県 完成検査受検届](https://www.pref.miyagi.jp/soshiki/syoubou/1seizou-kankenjyuken.html)、[愛知県 第一種貯蔵所 完成検査](https://www.pref.aichi.jp/site/koatsugas/tyozou-kanseikensa.html)
+根拠：[宮城県 完成検査受検届（製造）](https://www.pref.miyagi.jp/soshiki/syoubou/1seizou-kankenjyuken.html)、[宮城県 完成検査受検届（第一種貯蔵所）](https://www.pref.miyagi.jp/soshiki/syoubou/1chozou-kankenjyuken.html)、[愛知県 第一種貯蔵所 完成検査](https://www.pref.aichi.jp/site/koatsugas/tyozou-kanseikensa.html)
 </details>
 
 <details><summary>問 9 → (1) イ</summary>
@@ -180,7 +184,7 @@
 
 - イ：正（問 3）。
 - ロ：正（セット 03 問 6）。
-- ハ：正（問 4）。
+- ハ：正。届出制の第二種製造者・第二種貯蔵所には課されない（セット 05 問 9）。
 </details>
 
 ---
@@ -190,8 +194,8 @@
 |----|----|
 | 前 ⇔ 後 | 完成検査を「使用開始後」に受けてよい、とする（問 1・問 9） |
 | 届出を落とす | KHK の検査に合格すれば届出も不要、とする（問 2） |
-| 大臣 ⇔ 知事 | 認定完成検査実施者を知事が認定する、とする（問 3） |
-| 範囲を広げる | 認定完成検査実施者が新設の工事も検査できる、とする（問 4） |
+| 大臣 ⇔ 知事 | 指定完成検査機関・認定高度保安実施者を知事が指定・認定する、とする（問 3・問 4） |
+| 改正前の制度 | 認定完成検査実施者を今の制度として出題する（問 4） |
 | 検査どうしの混同 | 完成検査に合格すれば保安検査は不要、とする（問 7） |
 | 「すべて」 | 変更工事はすべて完成検査が不要、とする（問 5） |
 
@@ -200,7 +204,8 @@
 - [e-Gov 法令検索：高圧ガス保安法](https://laws.e-gov.go.jp/law/326AC0000000204)
 - [消防庁 検討会資料（完成検査を行う者の区分）](https://www.fdma.go.jp/singi_kento/kento/items/kento079_09_1-5-1.pdf)
 - [経済産業省 指定完成検査機関等](https://www.meti.go.jp/policy/safety_security/industrial_safety/sangyo/hipregas/shiteikikan/index.html)
-- [経済産業省 通達（認定完成検査実施者の特定変更工事）](https://www.meti.go.jp/policy/safety_security/industrial_safety/sangyo/hipregas/hourei/18032305.pdf)
+- [経済産業省 認定高度保安実施者制度](https://www.meti.go.jp/policy/safety_security/industrial_safety/sangyo/hipregas/sinnintei/index.html)
+- [経済産業省 通達（旧制度の特定変更工事）](https://www.meti.go.jp/policy/safety_security/industrial_safety/sangyo/hipregas/hourei/18032305.pdf)
 - 宮城県：[製造施設完成検査申請](https://www.pref.miyagi.jp/soshiki/syoubou/1seizou-kanseikensa.html)、[完成検査受検届（製造）](https://www.pref.miyagi.jp/soshiki/syoubou/1seizou-kankenjyuken.html)、[完成検査受検届（第一種貯蔵所）](https://www.pref.miyagi.jp/soshiki/syoubou/1chozou-kankenjyuken.html)
 - [愛知県 第一種貯蔵所 完成検査](https://www.pref.aichi.jp/site/koatsugas/tyozou-kanseikensa.html)
 - [千葉県 手続きの流れ](https://www.pref.chiba.lg.jp/hoan/tetsuzuki/shigoto-sangyou/shoukougyou/documents/r5-1.pdf)
