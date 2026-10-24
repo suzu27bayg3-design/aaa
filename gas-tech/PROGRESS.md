@@ -7,6 +7,7 @@
 | 03 | 燃焼の化学量論 | 2026-10-21 | [03-combustion-stoichiometry.md](lessons/03-combustion-stoichiometry.md) |
 | 04 | 燃焼範囲・燃焼速度・着火 | 2026-10-22 | [04-flammability-burning-velocity.md](lessons/04-flammability-burning-velocity.md) |
 | 05 | 熱力学の第一法則・第二法則 | 2026-10-23 | [05-thermodynamics-laws.md](lessons/05-thermodynamics-laws.md) |
+| 06 | ガスサイクル（ブレイトン／ランキン／コージェネ） | 2026-10-24 | [06-power-cycles-cogeneration.md](lessons/06-power-cycles-cogeneration.md) |
 | 27（旧・参考） | ガス事業法の目的と事業区分 | 2026-10-19 | [27-gas-business-act-purpose.md](lessons/27-gas-business-act-purpose.md) |
 
 ## 法令トラック：高圧ガス保安法（甲種機械）
