@@ -40,6 +40,7 @@
 | R4 | 過去問 令和 4 年度（問 1〜20） | 2026-10-27 | [law-set-R4.md](koatsu-koukikai/law-set-R4.md) |
 | R5 | 過去問 令和 5 年度（問 1〜20） | 2026-10-27 | [law-set-R5.md](koatsu-koukikai/law-set-R5.md) |
 | R6 | 過去問 令和 6 年度（問 1〜20） | 2026-10-27 | [law-set-R6.md](koatsu-koukikai/law-set-R6.md) |
+| R7 | 過去問 令和 7 年度（問 1〜20） | 2026-10-27 | [law-set-R7.md](koatsu-koukikai/law-set-R7.md) |
 | X | 過去問 年度不明（問 12・13） | 2026-10-26 | [law-set-X.md](koatsu-koukikai/law-set-X.md) |
 
 - 2026-10-23：セット 04 を改正（認定完成検査実施者の制度廃止）に合わせて修正。

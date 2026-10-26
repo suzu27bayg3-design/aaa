@@ -150,7 +150,7 @@ footer p { margin: 0; }
   <main id="stage"></main>
 
   <footer>
-    <p>セット 01〜16 は過去問の論点をもとに作った練習問題です。H24〜H26・R2〜R6・X は過去問題集から書き起こした過去問で、出題当時の法令に基づきます（改正された点は解説に「現行法の補足」として追記）。本試験の問題と正解は <a href="http://shiken.khk.or.jp/shiken.html" target="_blank" rel="noopener">KHK の公表ページ</a>、最新の条文は <a href="https://laws.e-gov.go.jp/law/326AC0000000204" target="_blank" rel="noopener">e-Gov 法令検索</a> で確認してください。</p>
+    <p>セット 01〜16 は過去問の論点をもとに作った練習問題です。H24〜H26・R2〜R7・X は過去問題集から書き起こした過去問で、出題当時の法令に基づきます（改正された点は解説に「現行法の補足」として追記）。本試験の問題と正解は <a href="http://shiken.khk.or.jp/shiken.html" target="_blank" rel="noopener">KHK の公表ページ</a>、最新の条文は <a href="https://laws.e-gov.go.jp/law/326AC0000000204" target="_blank" rel="noopener">e-Gov 法令検索</a> で確認してください。</p>
     <p>成績はこのブラウザにだけ保存されます。<button class="btn ghost" id="reset" type="button" style="padding:2px 10px;font-weight:400">成績を消す</button> <span id="resetMsg" role="status"></span></p>
   </footer>
 </div>
@@ -327,7 +327,7 @@ document.getElementById('reset').addEventListener('click', () => {
   render();
 });
 
-const firstPast = SETS.find(s => s.id === 'R6') || SETS.find(s => s.id === 'R5') || SETS.find(s => s.id === 'R4') || SETS.find(s => s.id === 'R3') || SETS.find(s => /^H/.test(s.id));
+const firstPast = SETS.find(s => s.id === 'R7') || SETS.find(s => s.id === 'R6') || SETS.find(s => s.id === 'R5') || SETS.find(s => s.id === 'R4') || SETS.find(s => s.id === 'R3') || SETS.find(s => /^H/.test(s.id));
 let first = firstPast ? firstPast.id : (SETS.length ? SETS[SETS.length - 1].id : null);
 try { const k = sessionStorage.getItem(KEY + '-set'); if (k && (k === 'mix' || SETS.some(s => s.id === k))) first = k; } catch (e) {}
 if (first) start(first);
