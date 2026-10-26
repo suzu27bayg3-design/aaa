@@ -327,7 +327,7 @@ document.getElementById('reset').addEventListener('click', () => {
   render();
 });
 
-const firstPast = SETS.find(s => s.id === 'R4') || SETS.find(s => s.id === 'R3') || SETS.find(s => /^H/.test(s.id));
+const firstPast = SETS.find(s => s.id === 'R5') || SETS.find(s => s.id === 'R4') || SETS.find(s => s.id === 'R3') || SETS.find(s => /^H/.test(s.id));
 let first = firstPast ? firstPast.id : (SETS.length ? SETS[SETS.length - 1].id : null);
 try { const k = sessionStorage.getItem(KEY + '-set'); if (k && (k === 'mix' || SETS.some(s => s.id === k))) first = k; } catch (e) {}
 if (first) start(first);
