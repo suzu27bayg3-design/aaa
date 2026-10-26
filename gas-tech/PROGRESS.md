@@ -37,6 +37,7 @@
 | H26 | 過去問 平成 26 年度（問 1〜20） | 2026-10-26 | [law-set-H26.md](koatsu-koukikai/law-set-H26.md) |
 | R2 | 過去問 令和 2 年度（問 15・16） | 2026-10-26 | [law-set-R2.md](koatsu-koukikai/law-set-R2.md) |
 | R3 | 過去問 令和 3 年度（問 1〜20） | 2026-10-27 | [law-set-R3.md](koatsu-koukikai/law-set-R3.md) |
+| R4 | 過去問 令和 4 年度（問 1〜9・12〜20） | 2026-10-27 | [law-set-R4.md](koatsu-koukikai/law-set-R4.md) |
 | R5 | 過去問 令和 5 年度（問 12） | 2026-10-26 | [law-set-R5.md](koatsu-koukikai/law-set-R5.md) |
 | X | 過去問 年度不明（問 12・13） | 2026-10-26 | [law-set-X.md](koatsu-koukikai/law-set-X.md) |
 
