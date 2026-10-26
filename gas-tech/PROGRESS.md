@@ -31,5 +31,11 @@
 | 14 | 製造の技術上の基準 I（一般則） | 2026-10-23 | [law-set-14.md](koatsu-koukikai/law-set-14.md) |
 | 15 | 製造の技術上の基準 II（コンビ則） | 2026-10-23 | [law-set-15.md](koatsu-koukikai/law-set-15.md) |
 | 16 | 総合模試（20 問） | 2026-10-23 | [law-set-16.md](koatsu-koukikai/law-set-16.md) |
+| H24 | 過去問 平成 24 年度（問 4〜20） | 2026-10-26 | [law-set-H24.md](koatsu-koukikai/law-set-H24.md) |
+| H25 | 過去問 平成 25 年度（問 1〜16・19・20） | 2026-10-26 | [law-set-H25.md](koatsu-koukikai/law-set-H25.md) |
+| H26 | 過去問 平成 26 年度（問 1〜20） | 2026-10-26 | [law-set-H26.md](koatsu-koukikai/law-set-H26.md) |
+| R2 | 過去問 令和 2 年度（問 15・16） | 2026-10-26 | [law-set-R2.md](koatsu-koukikai/law-set-R2.md) |
+| R5 | 過去問 令和 5 年度（問 12） | 2026-10-26 | [law-set-R5.md](koatsu-koukikai/law-set-R5.md) |
+| X | 過去問 年度不明（問 12・13） | 2026-10-26 | [law-set-X.md](koatsu-koukikai/law-set-X.md) |
 
 - 2026-10-23：セット 04 を改正（認定完成検査実施者の制度廃止）に合わせて修正。

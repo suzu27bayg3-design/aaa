@@ -81,6 +81,10 @@ h1 { font-family: var(--f-display); font-weight: 700; font-size: 26px; margin: 0
 .qtopic { color: var(--muted); font-size: 14px; }
 .qsrc { margin-left: auto; font-family: var(--f-mono); font-size: 12px; color: var(--muted); }
 .ask { margin: 0; font-size: 15px; }
+.scenario { border: 1px solid var(--line); border-radius: 8px; background: var(--bg); padding: 10px 14px; font-size: 14px; min-width: 0; overflow-wrap: anywhere; }
+.scenario summary { cursor: pointer; font-weight: 700; font-family: var(--f-display); color: var(--accent); }
+.scenario p, .scenario ul { margin: 8px 0 0; }
+.scenario ul { padding-left: 1.2em; }
 .stmts { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
 .stmts li { display: grid; grid-template-columns: 2em 1fr; gap: 10px; align-items: start; }
 .kana {
@@ -132,7 +136,7 @@ footer p { margin: 0; }
 <div class="wrap">
   <header>
     <div class="brand"><span class="sign">高圧ガス</span><h1>甲機 法令ドリル</h1></div>
-    <p class="lede">高圧ガス製造保安責任者（甲種機械）法令。イ・ロ・ハのうち正しいものの組合せを (1)〜(5) から選ぶ、本試験と同じ形式の練習問題です。</p>
+    <p class="lede">高圧ガス製造保安責任者（甲種機械）法令。イ・ロ・ハのうち正しいものの組合せを (1)〜(5) から選ぶ、本試験と同じ形式です。01〜16 は練習問題、H24〜X は過去問題集から書き起こした過去問（出題当時の法令）です。</p>
   </header>
 
   <nav class="sets" id="sets" aria-label="演習セット"></nav>
@@ -146,7 +150,7 @@ footer p { margin: 0; }
   <main id="stage"></main>
 
   <footer>
-    <p>問題は過去問の論点をもとに作った練習問題で、本試験の問題文ではありません。本試験の問題と正解は <a href="http://shiken.khk.or.jp/shiken.html" target="_blank" rel="noopener">KHK の公表ページ</a>、最新の条文は <a href="https://laws.e-gov.go.jp/law/326AC0000000204" target="_blank" rel="noopener">e-Gov 法令検索</a> で確認してください。</p>
+    <p>セット 01〜16 は過去問の論点をもとに作った練習問題です。H24・H25・H26・R2・R5・X は過去問題集から書き起こした過去問で、出題当時の法令に基づきます（改正された点は解説に「現行法の補足」として追記）。本試験の問題と正解は <a href="http://shiken.khk.or.jp/shiken.html" target="_blank" rel="noopener">KHK の公表ページ</a>、最新の条文は <a href="https://laws.e-gov.go.jp/law/326AC0000000204" target="_blank" rel="noopener">e-Gov 法令検索</a> で確認してください。</p>
     <p>成績はこのブラウザにだけ保存されます。<button class="btn ghost" id="reset" type="button" style="padding:2px 10px;font-weight:400">成績を消す</button> <span id="resetMsg" role="status"></span></p>
   </footer>
 </div>
@@ -226,7 +230,12 @@ function renderQuestion() {
   head.lastChild.target = '_blank'; head.lastChild.rel = 'noopener';
   card.appendChild(head);
 
-  card.appendChild(el('p', 'ask', '次のイ、ロ、ハの記述のうち、正しいものはどれか。'));
+  if (q.scenario) {
+    const sc = el('details', 'scenario', '<summary>' + q.scenarioLabel + '</summary>' + q.scenario);
+    sc.open = true;
+    card.appendChild(sc);
+  }
+  card.appendChild(el('p', 'ask', q.ask || '次のイ、ロ、ハの記述のうち、正しいものはどれか。'));
   const ul = el('ul', 'stmts');
   q.stmts.forEach(([k, t]) => { const li = el('li'); li.appendChild(el('span', 'kana', k)); li.appendChild(el('span', 'txt', t)); ul.appendChild(li); });
   card.appendChild(ul);
@@ -318,7 +327,8 @@ document.getElementById('reset').addEventListener('click', () => {
   render();
 });
 
-let first = SETS.length ? SETS[SETS.length - 1].id : null;
+const firstPast = SETS.find(s => /^H/.test(s.id));
+let first = firstPast ? firstPast.id : (SETS.length ? SETS[SETS.length - 1].id : null);
 try { const k = sessionStorage.getItem(KEY + '-set'); if (k && (k === 'mix' || SETS.some(s => s.id === k))) first = k; } catch (e) {}
 if (first) start(first);
 </script>

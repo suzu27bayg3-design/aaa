@@ -43,10 +43,17 @@ def block_md(text):
 
 def parse_set(path):
     src = open(path, encoding='utf-8').read()
-    num = re.search(r'law-set-(\d+)\.md$', path).group(1)
+    num = re.search(r'law-set-(\w+)\.md$', path).group(1)
     title = src.splitlines()[0].lstrip('# ').strip()
     m = re.search(r'第 \d+ 回\s*(.*)$', title)
     topic = m.group(1).strip() if m and m.group(1).strip() else '総論'
+    past = re.search(r'過去問\s*(.*)$', title)
+    if past:
+        topic = '過去問 ' + past.group(1).strip()
+
+    # Past-exam sets share a scenario across several questions: "### 例（問 8〜問 13）".
+    scenarios = [(int(a), int(b), block_md(body)) for a, b, body in
+                 re.findall(r'^### 例（問 (\d+)〜問 (\d+)）\n(.*?)(?=^### )', src, re.S | re.M)]
 
     questions = {}
     for qm in re.finditer(r'^### 問 (\d+)（(.+?)）\n(.*?)(?=^### |^---)', src, re.S | re.M):
@@ -54,9 +61,19 @@ def parse_set(path):
         stmts = re.findall(r'^([イロハ])．(.+)$', body, re.M)
         choice_line = re.search(r'^\(1\).*$', body, re.M).group(0)
         choices = [c.strip() for c in re.split(r'\(\d\)', choice_line) if c.strip()]
-        questions[qn] = {'n': qn, 'topic': qtopic,
-                         'stmts': [[k, inline_md(v)] for k, v in stmts],
-                         'choices': choices}
+        q = {'n': qn, 'topic': qtopic,
+             'stmts': [[k, inline_md(v)] for k, v in stmts],
+             'choices': choices}
+        # Optional stem line (past exams): the first line that is neither a statement nor the choices.
+        ask = next((l.strip() for l in body.splitlines()
+                    if l.strip() and not re.match(r'[イロハ]．|\(1\)|<!--', l.strip())), None)
+        if ask:
+            q['ask'] = inline_md(ask)
+        for a, b, html_ in scenarios:
+            if a <= qn <= b:
+                q['scenario'] = html_
+                q['scenarioLabel'] = '例（問 %d〜問 %d）' % (a, b)
+        questions[qn] = q
 
     for am in re.finditer(r'<details><summary>問 (\d+) → \((\d)\)[^<]*</summary>(.*?)</details>', src, re.S):
         qn = int(am.group(1))
