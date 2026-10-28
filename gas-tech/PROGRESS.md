@@ -11,6 +11,7 @@
 | 07 | 流体力学 I：ベルヌーイの式と流量計測 | 2026-10-25 | [07-bernoulli-flow-measurement.md](lessons/07-bernoulli-flow-measurement.md) |
 | 08 | 流体力学 II：管内の圧力損失 | 2026-10-26 | [08-pipe-pressure-loss.md](lessons/08-pipe-pressure-loss.md) |
 | 09 | 伝熱と熱交換器 | 2026-10-27 | [09-heat-transfer-exchangers.md](lessons/09-heat-transfer-exchangers.md) |
+| 10 | 腐食と防食 | 2026-10-28 | [10-corrosion-protection.md](lessons/10-corrosion-protection.md) |
 | 27（旧・参考） | ガス事業法の目的と事業区分 | 2026-10-19 | [27-gas-business-act-purpose.md](lessons/27-gas-business-act-purpose.md) |
 
 ## 法令トラック：高圧ガス保安法（甲種機械）
