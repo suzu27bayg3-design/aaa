@@ -1,6 +1,6 @@
 # YouTube Shorts：うんちが四角い動物！？（ウォンバット）
 
-- 動画: `wombat_short.mp4`（1080×1920 縦型 / 30fps / 約31秒 / H.264 + AAC）
+- 動画: `wombat_short.mp4`（1080×1920 縦型 / 30fps / 約33秒 / H.264 + AAC）
 - 生成スクリプト: `make_short.py`（音声モデルは `../shorts_honey/` の `mei_normal.htsvoice` と `mei_happy.htsvoice` を使用。どちらも MMDAgent_Example の Voice/mei/ に入っています）
 - 声: 冒頭・驚き・オチは明るい声（Mei happy）、説明は通常の声（Mei normal）に切り替え。話速1.2倍、抑揚強め、明瞭度EQ＋コンプ、BGMダッキング、-14 LUFSに正規化
 - 構成: 冒頭1秒で「四角いうんち！？」→ 理由を段階的に明かす → 最後の「だから、うんちは四角いんです」が冒頭につながるループ構成
@@ -41,7 +41,12 @@ VOICEVOX:ずんだもん
 ほかに「えっ」となる動物の体の秘密、知ってたらコメントで教えてください！
 ```
 
-## VOICEVOXの声で作り直す手順
+## 現在の声: VOICEVOX:ずんだもん
+`voicevox_synth.py` がVOICEVOXエンジン(HTTP API)にずんだもん口調の台本（〜のだ）を送り、`voicevox/001〜007_ずんだもん.wav` を作成。
+`make_short.py` はこのフォルダの音声を自動で使い、画面下に「VOICEVOX:ずんだもん」を表示します。
+VOICEVOXアプリを起動したPCなら `python3 voicevox_synth.py && python3 make_short.py` で再生成できます。
+
+## VOICEVOXアプリで手動で作る場合
 1. VOICEVOXを起動し、メニュー「ファイル → テキスト読み込み」で `voicevox_script.txt` を開く（1行＝1シーンで7行入ります）
 2. キャラクターを選び、右側のパラメータを調整（目安: 話速 1.15〜1.25 / 抑揚 1.2〜1.4 / 間の長さ 0.8）
    - 1・3・6・7行目（冒頭・驚き・受賞・オチ）は明るめのスタイル、2・4・5行目（説明）は通常スタイルにするとメリハリが出ます
