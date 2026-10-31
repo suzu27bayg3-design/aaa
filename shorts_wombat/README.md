@@ -1,7 +1,7 @@
 # YouTube Shorts：うんちが四角い動物！？（ウォンバット）
 
 - 動画: `wombat_short.mp4`（1080×1920 縦型 / 30fps / 約31秒 / H.264 + AAC）
-- 生成スクリプト: `make_short.py`（音声モデルは `../shorts_honey/mei_normal.htsvoice` を使用）
+- 生成スクリプト: `make_short.py`（音声モデルは `../shorts_honey/` の `mei_normal.htsvoice` と `mei_happy.htsvoice` を使用。どちらも MMDAgent_Example の Voice/mei/ に入っています）
 - 声: 冒頭・驚き・オチは明るい声（Mei happy）、説明は通常の声（Mei normal）に切り替え。話速1.2倍、抑揚強め、明瞭度EQ＋コンプ、BGMダッキング、-14 LUFSに正規化
 - 構成: 冒頭1秒で「四角いうんち！？」→ 理由を段階的に明かす → 最後の「だから、うんちは四角いんです」が冒頭につながるループ構成
 
