@@ -2,7 +2,7 @@
 
 - 動画: `quantum_short.mp4`（1080×1920 縦型 / 30fps / H.264 + AAC）
 - 生成スクリプト: `make_short.py`（`voicevox/` に音声があればそれを使用、なければ Open JTalk の Mei 音声）
-- ずんだもん音声: VOICEVOXエンジン起動中に `python3 voicevox_synth.py && python3 make_short.py`
+- 声: VOICEVOX:ずんだもん（〜のだ口調）。エンジンは `bash tools/voicevox_engine.sh` で起動し、 `python3 voicevox_synth.py && python3 make_short.py`
 - 構成: 「スマホの写真は壁をすり抜ける電子で保存」→ トンネル効果の原理 → フラッシュメモリの仕組み → ノーベル賞 → 冒頭に戻るループ
 
 ## 投稿用メタデータ
@@ -29,9 +29,11 @@ https://www.halbleiter.org/en/digital-technology/flash-cell/
 米国特許 US6933554（NANDのトンネル酸化膜 約100Å＝約10nm）
 https://patents.google.com/patent/US6933554
 
+VOICEVOX:ずんだもん
+
 #雑学 #豆知識 #量子力学 #量子トンネル効果 #ノーベル賞 #スマホ #shorts
 ```
-（ずんだもん音声で書き出した場合は説明欄の最後に `VOICEVOX:ずんだもん` を追記）
+
 
 **固定コメント案**
 ```
