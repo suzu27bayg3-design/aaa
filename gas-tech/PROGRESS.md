@@ -14,6 +14,7 @@
 | 10 | 腐食と防食 | 2026-10-28 | [10-corrosion-protection.md](lessons/10-corrosion-protection.md) |
 | 11 | LNG の物性と BOG | 2026-10-29 | [11-lng-properties-bog.md](lessons/11-lng-properties-bog.md) |
 | 12 | 気化器（ORV・SCV・IFV） | 2026-10-30 | [12-vaporizers.md](lessons/12-vaporizers.md) |
+| 13 | 熱量調整（LPG 増熱）と付臭 | 2026-10-31 | [13-calorie-adjustment-odorization.md](lessons/13-calorie-adjustment-odorization.md) |
 | 27（旧・参考） | ガス事業法の目的と事業区分 | 2026-10-19 | [27-gas-business-act-purpose.md](lessons/27-gas-business-act-purpose.md) |
 
 ## 法令トラック：高圧ガス保安法（甲種機械）
