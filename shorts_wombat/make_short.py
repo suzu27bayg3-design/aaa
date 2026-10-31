@@ -7,8 +7,8 @@
   3. numpyで簡単なBGMを合成し、ナレーションとミックス
   4. ffmpeg で H.264 + AAC の MP4 に書き出し
 
-必要: ffmpeg, open_jtalk, naist-jdic, mei_normal.htsvoice, Pillow, numpy
-使い方: python3 make_short.py [--voice path/to/mei_normal.htsvoice]
+必要: ffmpeg, open_jtalk, naist-jdic, mei_normal.htsvoice + mei_happy.htsvoice, Pillow, numpy
+使い方: python3 make_short.py [--voice-dir 声モデルのあるフォルダ]
 """
 import argparse
 import math
@@ -48,9 +48,29 @@ SCENES = [
 SOURCE_NOTE = "出典: Yang et al. Soft Matter (2021) / タスマニア大学 / Ig Nobel 2019"
 
 
-def tts(text, path, voice):
-    subprocess.run(["open_jtalk", "-x", DIC, "-m", voice, "-r", "1.12",
-                    "-fm", "1.5", "-ow", path], input=text.encode(), check=True)
+# ショート向けの声の設計:
+#   hook  = 明るい声(mei_happy)・やや高め … 冒頭/驚き/オチで感情を乗せる
+#   talk  = 通常の声(mei_normal)・抑揚強め … 説明は聞き取りやすく
+#   -r: 話速, -fm: ピッチ(半音), -jf: 抑揚(F0変動)の強さ, -a: 声質(大きいほど明るく若い)
+VOICE_PRESETS = {
+    "hook": ("mei_happy.htsvoice", ["-r", "1.20", "-fm", "0.5", "-jf", "1.25", "-a", "0.56"]),
+    "talk": ("mei_normal.htsvoice", ["-r", "1.22", "-fm", "2.0", "-jf", "1.35", "-a", "0.56"]),
+}
+# 各シーンの声（SCENES と同じ順番）
+VOICE_STYLE = ["hook", "talk", "hook", "talk", "talk", "hook", "hook"]
+
+
+def tts(text, path, voice_dir, style="talk"):
+    model, opts = VOICE_PRESETS[style]
+    subprocess.run(["open_jtalk", "-x", DIC, "-m", os.path.join(voice_dir, model), *opts,
+                    "-ow", path], input=text.encode(), check=True)
+    # 声の音質処理: 低域カット / こもり(250Hz)を軽く削る / 明瞭度(3kHz)を持ち上げる / コンプで音量を揃える
+    proc = path.replace(".wav", "_fx.wav")
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", path, "-af",
+                    "highpass=f=90,equalizer=f=250:t=q:w=1:g=-2,equalizer=f=3200:t=q:w=1.2:g=4,"
+                    "acompressor=threshold=-20dB:ratio=3:attack=5:release=80:makeup=2",
+                    proc], check=True)
+    path = proc
     with wave.open(path) as w:
         sr = w.getframerate()
         a = np.frombuffer(w.readframes(w.getnframes()), np.int16).astype(np.float32) / 32768
@@ -199,15 +219,17 @@ def scene_layer(head, sub, color, idx):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--voice", default=os.path.join(HERE, "..", "shorts_honey", "mei_normal.htsvoice"))
+    ap.add_argument("--voice-dir", default=os.path.join(HERE, "..", "shorts_honey"),
+                    help="mei_normal.htsvoice と mei_happy.htsvoice があるフォルダ")
     ap.add_argument("--out", default=os.path.join(HERE, "wombat_short.mp4"))
     args = ap.parse_args()
 
     tmp = tempfile.mkdtemp()
-    gap = 0.35
+    gap = 0.22  # 間を詰めてテンポよく
     voices, durs = [], []
+    assert len(VOICE_STYLE) == len(SCENES)
     for i, (narr, *_rest) in enumerate(SCENES):
-        a = tts(narr, os.path.join(tmp, f"v{i}.wav"), args.voice)
+        a = tts(narr, os.path.join(tmp, f"v{i}.wav"), args.voice_dir, VOICE_STYLE[i])
         voices.append(a)
         durs.append(len(a) / SR + gap)
     total = sum(durs) + 0.5
@@ -215,12 +237,18 @@ def main():
     assert total < 60, "Shortsは60秒以内に"
 
     # 音声ミックス
-    mix = bgm(total)
+    music = bgm(total)
+    vo = np.zeros_like(music)
     pos = 0.15
     for a, du in zip(voices, durs):
         s = int(pos * SR)
-        mix[s:s + len(a)] += a * 0.95
+        vo[s:s + len(a)] += a
         pos += du
+    # ダッキング: 声が鳴っている間はBGMを下げる（声の包絡線を平滑化してゲインに）
+    env = np.convolve(np.abs(vo), np.ones(int(0.05 * SR)) / int(0.05 * SR), "same")
+    active = np.convolve((env > 0.01).astype(float), np.ones(int(0.25 * SR)) / int(0.25 * SR), "same")
+    music *= 1 - 0.55 * np.clip(active * 1.5, 0, 1)
+    mix = vo * 0.9 + music * 1.3
     mix = np.clip(mix / max(1.0, np.abs(mix).max() / 0.95), -1, 1)
     wav_path = os.path.join(tmp, "mix.wav")
     with wave.open(wav_path, "wb") as w:
@@ -240,7 +268,7 @@ def main():
         "ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24",
         "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-", "-i", wav_path,
         "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-pix_fmt", "yuv420p",
-        "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", args.out],
+        "-af", "loudnorm=I=-14:TP=-1.5:LRA=9", "-ar", "48000", "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", args.out],
         stdin=subprocess.PIPE)
     starts = np.cumsum([0.15] + durs[:-1])
     nframes = int(total * FPS)
