@@ -60,6 +60,32 @@ VOICE_PRESETS = {
 VOICE_STYLE = ["hook", "talk", "hook", "talk", "talk", "hook", "hook"]
 
 
+VOICE_FX = ("highpass=f=90,equalizer=f=250:t=q:w=1:g=-2,equalizer=f=3200:t=q:w=1.2:g=4,"
+            "acompressor=threshold=-20dB:ratio=3:attack=5:release=80:makeup=2")
+
+
+def load_audio(path, fx):
+    """任意の音声ファイル(wav/mp3等)を 48kHz モノラル float に読み込む（ffmpeg経由）"""
+    cmd = ["ffmpeg", "-loglevel", "error", "-i", path]
+    if fx:
+        cmd += ["-af", fx]
+    cmd += ["-ac", "1", "-ar", str(SR), "-f", "f32le", "-"]
+    a = np.frombuffer(subprocess.run(cmd, capture_output=True, check=True).stdout, np.float32)
+    # 書き出し時に付く前後の無音を詰める（-45dBより小さい部分）
+    idx = np.where(np.abs(a) > 10 ** (-45 / 20))[0]
+    return a[max(0, idx[0] - int(0.03 * SR)): idx[-1] + int(0.08 * SR)] if len(idx) else a
+
+
+def external_voices(folder):
+    """VOICEVOX等で書き出した音声を名前順に返す（001_..., 002_... の連番を想定）"""
+    exts = (".wav", ".mp3", ".m4a", ".ogg", ".flac")
+    files = sorted(f for f in os.listdir(folder) if f.lower().endswith(exts))
+    assert len(files) == len(SCENES), f"{folder} の音声は {len(files)} 個、シーンは {len(SCENES)} 個です"
+    for f, (narr, *_r) in zip(files, SCENES):
+        print(f"  {f}  ←  {narr[:20]}…")
+    return [load_audio(os.path.join(folder, f), VOICE_FX) for f in files]
+
+
 def tts(text, path, voice_dir, style="talk"):
     model, opts = VOICE_PRESETS[style]
     subprocess.run(["open_jtalk", "-x", DIC, "-m", os.path.join(voice_dir, model), *opts,
@@ -212,8 +238,9 @@ def scene_layer(head, sub, color, idx):
     d.text(((W - (bb[2] - bb[0])) / 2, 185), title, font=tf, fill=(15, 35, 5, 255))
     # 出典
     nf = ImageFont.truetype(FONT, 30)
-    bb = d.textbbox((0, 0), SOURCE_NOTE, font=nf)
-    d.text(((W - (bb[2] - bb[0])) / 2, H - 260), SOURCE_NOTE, font=nf, fill=(220, 255, 200, 170))
+    bb = d.multiline_textbbox((0, 0), SOURCE_NOTE, font=nf, align="center")
+    d.multiline_text(((W - (bb[2] - bb[0])) / 2, H - 260), SOURCE_NOTE, font=nf, align="center",
+                     fill=(220, 255, 200, 170))
     return layer
 
 
@@ -221,17 +248,29 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--voice-dir", default=os.path.join(HERE, "..", "shorts_honey"),
                     help="mei_normal.htsvoice と mei_happy.htsvoice があるフォルダ")
+    ap.add_argument("--voice-files", default=None,
+                    help="VOICEVOX等で書き出したシーン別音声のフォルダ（指定するとOpen JTalkの代わりに使う）")
+    ap.add_argument("--credit", default="",
+                    help="画面下に出すクレジット 例: 'VOICEVOX:ずんだもん'")
     ap.add_argument("--out", default=os.path.join(HERE, "wombat_short.mp4"))
     args = ap.parse_args()
+    if args.voice_files is None and os.path.isdir(os.path.join(HERE, "voicevox")) and any(
+            f.lower().endswith((".wav", ".mp3")) for f in os.listdir(os.path.join(HERE, "voicevox"))):
+        args.voice_files = os.path.join(HERE, "voicevox")
+    if args.credit:
+        global SOURCE_NOTE
+        SOURCE_NOTE = SOURCE_NOTE + "\n" + args.credit
 
     tmp = tempfile.mkdtemp()
     gap = 0.22  # 間を詰めてテンポよく
-    voices, durs = [], []
     assert len(VOICE_STYLE) == len(SCENES)
-    for i, (narr, *_rest) in enumerate(SCENES):
-        a = tts(narr, os.path.join(tmp, f"v{i}.wav"), args.voice_dir, VOICE_STYLE[i])
-        voices.append(a)
-        durs.append(len(a) / SR + gap)
+    if args.voice_files:
+        print("外部音声を使用:", args.voice_files)
+        voices = external_voices(args.voice_files)
+    else:
+        voices = [tts(narr, os.path.join(tmp, f"v{i}.wav"), args.voice_dir, VOICE_STYLE[i])
+                  for i, (narr, *_rest) in enumerate(SCENES)]
+    durs = [len(a) / SR + gap for a in voices]
     total = sum(durs) + 0.5
     print(f"total {total:.1f}s")
     assert total < 60, "Shortsは60秒以内に"
