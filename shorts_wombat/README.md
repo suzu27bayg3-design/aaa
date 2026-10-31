@@ -29,7 +29,7 @@ https://www.rsc.org/news-events/articles/2021/jan/wombat-poo/
 Georgia Tech「IgNobel for Cubed Poops」
 https://www.hu.gatech.edu/Lee/?p=130
 
-音声: Open JTalk / HTS voice "Mei" (MMDAgent, © Nagoya Institute of Technology, CC BY 3.0)
+VOICEVOX:ずんだもん
 
 #雑学 #豆知識 #ウォンバット #動物 #イグノーベル賞 #shorts
 ```

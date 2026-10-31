@@ -257,6 +257,8 @@ def main():
     if args.voice_files is None and os.path.isdir(os.path.join(HERE, "voicevox")) and any(
             f.lower().endswith((".wav", ".mp3")) for f in os.listdir(os.path.join(HERE, "voicevox"))):
         args.voice_files = os.path.join(HERE, "voicevox")
+        if not args.credit:
+            args.credit = "VOICEVOX:ずんだもん"  # 規約で必須のクレジット
     if args.credit:
         global SOURCE_NOTE
         SOURCE_NOTE = SOURCE_NOTE + "\n" + args.credit
