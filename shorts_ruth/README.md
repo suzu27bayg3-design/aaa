@@ -20,37 +20,37 @@
 ```
 - 「大谷翔平」を入れると検索・関連表示に乗りやすくなります。タイトルは40字前後までに。
 
-### 説明欄
+### 説明欄（`../docs/description_guide.md` の型）
 ```
-大谷翔平より100年前に二刀流で歴史を作った男、ベーブ・ルース。
+【大谷翔平より100年前の二刀流】ベーブ・ルースの成績がすごすぎる
+投手で94勝、打者で714本塁打。メジャーリーグ最初の“二刀流スター”を40秒でまとめました。
 
-【通算打撃】打率.342 / 2,873安打 / 714本塁打/ 長打率.690 / OPS 1.164
-【四球】2,062個（投手に勝負を避けられた証。2001年まで歴代最多）
-【通算投手】94勝46敗 / 防御率2.28（1916年 最優秀防御率）
-【獲得タイトル】本塁打王12回 / 打点王6回 / MVP（1923）/ ワールドシリーズ制覇7回
-【最も輝いた年 1921年】59本塁打（当時の新記録）/ 171打点 / 177得点 / OPS 1.359
-※資料により安打（2,873〜2,874）、打点（2,213〜2,214）、1921年のOPS（1.358〜1.359）の表記に差があります
+▼ベーブ・ルース 成績まとめ
+・通算打撃：打率.342 / 2,873安打 / 714本塁打 / 長打率.690 / OPS 1.164
+・四球：2,062個（投手に勝負を避けられた証。2001年まで歴代最多）
+・通算投手：94勝46敗 / 防御率2.28（1916年 最優秀防御率）
+・タイトル：本塁打王12回 / 打点王6回 / MVP（1923）/ ワールドシリーズ制覇7回
+・最も輝いた年（1921年）：59本塁打（当時の新記録）/ 171打点 / 177得点 / OPS 1.359
 
-▼ルー・ゲーリッグ編もどうぞ（関連動画に設定）
+💬 大谷とルース、二刀流としてすごいのはどっち？ コメントで教えてください！
+▶ MLBレジェンド図鑑：ルー・ゲーリッグ / ジョージ・シスラー / サイ・ヤング も公開中
 
-出典:
-アメリカ野球殿堂 https://baseballhall.org/hall-of-famers/ruth-babe
+※記録は資料により差があります（安打2,873〜2,874、打点2,213〜2,214、1921年OPS 1.358〜1.359）
+出典：アメリカ野球殿堂 https://baseballhall.org/hall-of-famers/ruth-babe
 MLB.com https://www.mlb.com/player/121578
 Baseball-Reference https://www.baseball-reference.com/players/r/ruthba01.shtml
-Wikipedia（タイトル一覧）https://en.wikipedia.org/wiki/List_of_career_achievements_by_Babe_Ruth
 SABR（1921年）https://sabr.org/research/article/babe-ruth-in-1921-recrowning-baseballs-greatest-slugging-season/
 MLB.com（四球記録）https://www.mlb.com/news/rickey-henderson-passes-babe-ruth-walk-record
+写真：Wikimedia Commons（Public domain）Underwood & Underwood, Charles M. Conlon, George G. Bain ほか
+音声：VOICEVOX:ずんだもん
 
-写真: Wikimedia Commons（Public domain）Underwood & Underwood, Charles M. Conlon, Francis P. Burke, George G. Bain ほか
-音声: VOICEVOX:ずんだもん
-
-#MLB #大谷翔平 #ベーブルース #二刀流 #shorts
+#大谷翔平 #ベーブルース #メジャーリーグ #MLB #二刀流
 ```
 - ハッシュタグは3〜5個に絞り、内容と関係あるものだけにします。
 
 ### 固定コメント
 ```
-大谷とルース、二刀流としてすごいのはどっち？ コメントで教えてください⚾
+大谷とルース、二刀流としてすごいのはどっち？ コメントで教えてください！
 次に紹介してほしい昔のMLB選手も募集中！
 ```
 - 2択の質問は答えやすく、コメントが付きやすくなります。

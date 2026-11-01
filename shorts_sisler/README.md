@@ -18,34 +18,34 @@
 【MLB伝説】257安打の男 ジョージ・シスラーの成績 #shorts #イチロー
 ```
 
-### 説明欄
+### 説明欄（`../docs/description_guide.md` の型）
 ```
-イチローが2004年に262安打で抜いた、シーズン257安打の記録。84年間それを持っていたのがジョージ・シスラーです。
+【イチローが抜いた84年前の記録】シーズン257安打 ジョージ・シスラーの成績
+1920年に257安打、1922年には打率.420。イチローが2004年に262安打で超えるまで84年間残った記録の持ち主を40秒でまとめました。
 
-【シーズン257安打】1920年（打率.407）→ 2004年 イチローが262安打で更新
-【通算打撃】打率.340 / 2,812安打 / 102本塁打 / 1,178打点 / 375盗塁 / 出塁率.379 / 長打率.468
-【獲得タイトル】首位打者2回（1920, 1922）/ 盗塁王4回（1918, 1921, 1922, 1927）/ MVP（1922）
-【最も輝いた年 1922年】打率.420 / 51盗塁（盗塁王）/ 41試合連続安打（1941年にディマジオが56試合で更新するまでア・リーグ記録）/ MVP
+▼ジョージ・シスラー 成績まとめ
+・シーズン安打：257本（1920年）→ 2004年 イチローが262安打で更新
+・通算打撃：打率.340 / 2,812安打 / 102本塁打 / 1,178打点 / 375盗塁
+・タイトル：首位打者2回（1920, 1922）/ 盗塁王4回 / MVP（1922）
+・最も輝いた年（1922年）：打率.420 / 51盗塁 / 41試合連続安打（1941年までア・リーグ記録）/ MVP
+
+💬 イチローの262安打とシスラーの257安打、すごいのはどっち？ コメントで教えてください！
+▶ MLBレジェンド図鑑：ベーブ・ルース / ルー・ゲーリッグ / サイ・ヤング も公開中
+
 ※通算打点は資料により1,175〜1,178、連続試合安打は41（42とする資料もあり）
-
-▼ベーブ・ルース編・ルー・ゲーリッグ編もどうぞ
-
-出典:
-アメリカ野球殿堂 https://baseballhall.org/hall-of-famers/sisler-george
+出典：アメリカ野球殿堂 https://baseballhall.org/hall-of-famers/sisler-george
 Baseball-Reference https://www.baseball-reference.com/players/s/sislege01.shtml
-Baseball-Reference Bullpen https://www.baseball-reference.com/bullpen/George_Sisler
 Britannica https://www.britannica.com/biography/George-Sisler
-SABR「The Three, or Was It Two, .400 Hitters of 1922」https://sabr.org/journal/article/the-three-or-was-it-two-400-hitters-of-1922/
+SABR https://sabr.org/journal/article/the-three-or-was-it-two-400-hitters-of-1922/
+写真：Wikimedia Commons（Public domain / CC0）Library of Congress, Metropolitan Museum of Art ほか
+音声：VOICEVOX:ずんだもん
 
-写真: Wikimedia Commons（Public domain / CC0）Library of Congress, Metropolitan Museum of Art ほか
-音声: VOICEVOX:ずんだもん
-
-#MLB #イチロー #ジョージシスラー #安打記録 #shorts
+#イチロー #ジョージシスラー #メジャーリーグ #MLB #安打記録
 ```
 
 ### 固定コメント
 ```
-イチローの262安打とシスラーの257安打、どっちがすごいと思う？⚾
+イチローの262安打とシスラーの257安打、すごいのはどっち？ コメントで教えてください！
 次に紹介してほしい昔のMLB選手も募集中！
 ```
 

@@ -20,40 +20,36 @@
 ```
 - 日本のプロ野球ファンに響く「衣笠祥雄」をタイトルに入れるのがポイントです。
 
-### 説明欄
+### 説明欄（`../docs/description_guide.md` の型）
 ```
-衣笠祥雄が1987年に抜いた2,130試合連続出場。その記録を持っていたのが「鉄の馬」ルー・ゲーリッグです。
+【衣笠祥雄が抜いた記録】2130試合連続出場「鉄の馬」ルー・ゲーリッグの成績
+約14年間1試合も休まず、通算2,721安打・1,995打点。衣笠が追いかけたメジャーリーグの鉄人を40秒でまとめました。
 
-【連続試合出場】2,130試合（1925年6月1日〜1939年4月30日）
-　1987年6月13日 衣笠祥雄が2,131試合目で更新（最終2,215試合）、1995年 カル・リプケンJr.が更新
-【通算打撃】打率.340 / 2,721安打（2009年までヤンキース最多）/ 493本塁打 / 1,995打点 / 出塁率.447 / 長打率.632 / OPS 1.080
-【13年連続100打点】1926〜1938年
-【記録とタイトル】満塁本塁打23本（2013年まで最多）/ MVP 2回（1927, 1936）/ 三冠王（1934）/ 本塁打王3回 / 打点王5回 / ワールドシリーズ制覇6回
-【最も輝いた年 1927年】打率.373 / 47本塁打 / 175打点（当時の新記録）/ OPS 1.240 / MVP
-1939年の引退スピーチで「地球上で最も幸運な男（the luckiest man on the face of the earth）」と語りました。
+▼ルー・ゲーリッグ（ゲーリック）成績まとめ
+・連続試合出場：2,130試合（1925〜1939年）→ 1987年 衣笠祥雄が2,131試合目で更新（最終2,215試合）
+・通算打撃：打率.340 / 2,721安打 / 493本塁打 / 1,995打点 / OPS 1.080
+・特徴的な記録：13年連続100打点（1926〜1938）/ 満塁本塁打23本（2013年まで最多）
+・タイトル：MVP2回（1927, 1936）/ 三冠王（1934）/ ワールドシリーズ制覇6回
+・最も輝いた年（1927年）：打率.373 / 47本塁打 / 175打点（当時の新記録）/ OPS 1.240 / MVP
+
+💬 衣笠とゲーリッグ、連続出場の記録がすごいのはどっち？ コメントで教えてください！
+▶ MLBレジェンド図鑑：ベーブ・ルース / ジョージ・シスラー / サイ・ヤング も公開中
+
 ※1927年の打点は資料により173〜175
-
-▼ベーブ・ルース編もどうぞ（関連動画に設定）
-
-出典:
+出典：アメリカ野球殿堂 https://baseballhall.org/hall-of-famers/gehrig-lou
 MLB.com https://www.mlb.com/player/114680
 Baseball-Reference https://www.baseball-reference.com/players/g/gehrilo01.shtml
 Britannica https://www.britannica.com/biography/Lou-Gehrig
-アメリカ野球殿堂 https://baseballhall.org/hall-of-famers/gehrig-lou
-MLB.com「20 amazing Lou Gehrig facts」https://www.mlb.com/news/lou-gehrig-facts-and-figures
-Baseball-Reference Bullpen 1927 AL https://www.baseball-reference.com/bullpen/1927_AL
 nippon.com（衣笠祥雄の記録更新）https://www.nippon.com/ja/japan-topics/today0613/
-デイリースポーツ（衣笠祥雄）https://www.daily.co.jp/baseball/2018/04/25/0011195533.shtml
+写真：Wikimedia Commons（Public domain）Library of Congress, New York Daily News, El Gráfico ほか
+音声：VOICEVOX:ずんだもん
 
-写真: Wikimedia Commons（Public domain）Library of Congress, New York Daily News, El Gráfico ほか
-音声: VOICEVOX:ずんだもん
-
-#MLB #衣笠祥雄 #ルーゲーリッグ #鉄人 #shorts
+#衣笠祥雄 #ルーゲーリッグ #メジャーリーグ #MLB #鉄人
 ```
 
 ### 固定コメント
 ```
-連続試合出場、衣笠とゲーリッグ、どっちの記録がすごいと思う？⚾
+衣笠とゲーリッグ、連続出場の記録がすごいのはどっち？ コメントで教えてください！
 次に紹介してほしい昔のMLB選手も募集中！
 ```
 
