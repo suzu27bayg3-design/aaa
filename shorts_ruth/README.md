@@ -2,7 +2,7 @@
 
 - 動画: `ruth_short.mp4`（1080×1920 縦型 / 30fps / H.264 + AAC）
 - 生成: `bash ../tools/voicevox_engine.sh` → `python3 ../tools/legend_short.py legend_cfg.py`（台本・成績・写真の割り当ては `legend_cfg.py`）
-- 構成（約40秒）: 写真＋問いかけ「大谷より100年前の二刀流」→ 通算打撃（安打を含む5項目）→ 四球2,062（カウントアップ）→ 通算投手 → 獲得タイトル → 最も輝いた年1921 → 冒頭に戻るループ
+- 構成（約44秒）: 写真＋問いかけ「大谷より100年前の二刀流」→ 通算打撃（安打を含む5項目）→ 四球2,062（カウントアップ）→ 通算投手 → 獲得タイトル → 最も輝いた年1921 → 冒頭に戻るループ
 - 写真: Wikimedia Commons の Public domain 写真（`photos/SOURCES.md`）。試合映像は不使用
 - 最後の0.4秒にサムネイル用コマ（`thumb.png`）
 - 旧版のスクリプト（`make_ruth.py` / `make_short.py`）も残しています
