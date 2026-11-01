@@ -9,7 +9,7 @@ SCENES = [
          text=["大谷より", "100年前の", "二刀流"],
          narration="大谷翔平より100年前に、二刀流で歴史を作った男がいるのだ。"),
     dict(kind="board", photo="01_swing_c1927.png", head="通算打撃成績", eng="CAREER BATTING", hl=4,
-         rows=[("打率", ".342", None), ("安打", "2,873", None), ("本塁打", "714", "1974年まで歴代1位"),
+         rows=[("打率", ".342", None), ("安打", "2,873", None), ("本塁打", "714", None),
                ("長打率", ".690", None), ("OPS", "1.164", None)],
          narration="ベーブ・ルース。通算2873安打、714本塁打。オーピーエスは、いってんいちろくよん、なのだ。"),
     dict(kind="big", photo="00_title_c1922.jpg", value="2,062", label="四球", voice="hook",
