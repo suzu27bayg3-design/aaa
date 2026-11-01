@@ -147,6 +147,50 @@ def caption(d, text):
         d.text(((W - tw) / 2, y + i * 70), ln, font=f, fill=WHITE)
 
 
+
+
+# ---- 写真（photos/ フォルダに置くと自動で使う） ---------------------------------
+from PIL import ImageOps
+
+
+def load_photos(folder):
+    """photos/ の画像を読み込み、紺〜クリームのデュオトーンに加工して返す（名前順）。
+    1枚目=タイトル用（人物の顔が分かるもの推奨）。クレジットは photos/credits.txt に1行で書く。"""
+    if not os.path.isdir(folder):
+        return [], ""
+    files = sorted(f for f in os.listdir(folder) if f.lower().endswith((".jpg", ".jpeg", ".png", ".webp")))
+    out = []
+    for f in files:
+        im = Image.open(os.path.join(folder, f)).convert("L")
+        im = ImageOps.autocontrast(im, cutoff=1)
+        im = ImageOps.colorize(im, black=(8, 14, 40), white=(245, 232, 205), mid=(110, 110, 120))
+        # 1.12倍の余白をつけて画面を覆うサイズに（パン・ズーム用）
+        s = max(W * 1.12 / im.width, H * 1.12 / im.height)
+        im = im.resize((int(im.width * s), int(im.height * s)), Image.LANCZOS)
+        out.append(im.convert("RGBA"))
+    cpath = os.path.join(folder, "credits.txt")
+    credit = open(cpath, encoding="utf-8").read().strip() if os.path.exists(cpath) else ""
+    return out, credit
+
+
+def photo_frame(ph, lt, dur, darkness, seed=0):
+    """ケン・バーンズ効果: ゆっくりズームしながら少しパン"""
+    p = max(0.0, min(1.0, lt / max(dur, 0.1)))
+    z = 1.0 + 0.08 * p                      # 1.00 → 1.08
+    cw, ch = ph.width / z, ph.height / z
+    cw, ch = min(cw, ph.width), min(ch, ph.height)
+    # 縦横比を画面に合わせる
+    if cw / ch > W / H:
+        cw = ch * W / H
+    else:
+        ch = cw * H / W
+    dx = (ph.width - cw) * (0.5 + 0.3 * math.sin(seed + p * 1.2))
+    dy = (ph.height - ch) * (0.35 + 0.15 * p)
+    img = ph.crop((int(dx), int(dy), int(dx + cw), int(dy + ch))).resize((W, H), Image.BILINEAR)
+    shade = Image.new("RGBA", (W, H), (6, 10, 30, int(255 * darkness)))
+    return Image.alpha_composite(img, shade)
+
+
 # ---- シーン描画 -----------------------------------------------------------------
 def draw_board(img, sc, lt):
     d = ImageDraw.Draw(img)
@@ -248,6 +292,8 @@ def main():
         w.writeframes((mix * 32767).astype(np.int16).tobytes())
 
     bg = make_bg()
+    photos, photo_credit = load_photos(os.path.join(HERE, "photos"))
+    print(f"photos: {len(photos)}")
     sweep = sweep_layer()
     out = os.path.join(HERE, "gehrig_short.mp4")
     ff = subprocess.Popen([
@@ -261,7 +307,22 @@ def main():
         si = max(0, int(np.searchsorted(starts, t, side="right")) - 1)
         lt = t - starts[si]
         sc = SCENES[si]
-        frame = bg.copy()
+        if photos:
+            if sc["kind"] == "title":
+                ph, dk = photos[0], 0.25
+            elif sc["kind"] == "outro":
+                ph, dk = photos[-1], 0.45
+            else:
+                ph, dk = photos[si % len(photos)], 0.70
+            frame = photo_frame(ph, lt, durs[si], dk, seed=si)
+            if sc["kind"] == "title":  # 文字の読みやすさのため下半分を暗く
+                g = Image.new("RGBA", (W, H))
+                gd = ImageDraw.Draw(g)
+                for yy in range(500, H, 8):
+                    gd.rectangle((0, yy, W, yy + 8), fill=(6, 10, 30, int(min(220, (yy - 500) * 0.32))))
+                frame = Image.alpha_composite(frame, g)
+        else:
+            frame = bg.copy()
         cx = int((t * 260) % (W * 2))
         frame.alpha_composite(sweep.crop((cx, 0, cx + W, H)))
         if sc["kind"] == "title":
@@ -275,6 +336,8 @@ def main():
         d = ImageDraw.Draw(frame)
         caption(d, sc["caption"])
         d.text((W - 60, 1665), CREDIT, font=jp(26, True), fill=(220, 225, 255), anchor="ra")
+        if photos and photo_credit:
+            d.text((60, 1665), "Photo: " + photo_credit, font=jp(24, True), fill=(220, 225, 255))
         d.rectangle((0, H - 16, int(W * t / total), H), fill=GOLD)
         ff.stdin.write(frame.convert("RGB").tobytes())
     ff.stdin.close()
