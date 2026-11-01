@@ -1,9 +1,11 @@
 # YouTube Shorts：100年前の二刀流 ベーブ・ルース（MLBレジェンド紹介）
 
 - 動画: `ruth_short.mp4`（1080×1920 縦型 / 30fps / 約48秒 / H.264 + AAC）
-- 声: VOICEVOX:ずんだもん。`bash ../tools/voicevox_engine.sh` → `python3 voicevox_synth.py && python3 make_short.py`
-- 構成: 「大谷より100年前の二刀流！？」→ デビュー → 1918年 13勝＆11本 → 1927年 60本（数字カウントアップ）→ 通算714本 → 1934年来日 → 2022年 大谷と比較 → 冒頭に戻るループ
+- デザイン: スポーツ中継の成績テロップ風（`make_ruth.py`）。行が順にスライドイン、数字は0からカウントアップ、字幕つき
+- 声: VOICEVOX:ずんだもん。`bash ../tools/voicevox_engine.sh` → `python3 voicevox_synth.py && python3 make_ruth.py`
+- 構成: タイトル → 通算打撃成績（打率/本塁打/打点/出塁率/長打率/OPS）→ 通算投手成績 → 獲得タイトル → 最も輝いた年（1921年）→ 締め
 - 最後の0.4秒にサムネイル用コマ（`thumb.png`）
+- 旧版（絵文字＋カード形式）は `make_short.py`（Gitの履歴に動画も残っています）
 
 ## 素材について（重要）
 - **試合映像・プレー動画は使っていません。** MLBの映像は権利管理が厳しく、無断で使うと著作権侵害の申し立て（削除・ストライク）の対象になります。
@@ -19,34 +21,31 @@
 
 **説明欄**
 ```
-大谷翔平より100年以上前に二刀流をやった男、ベーブ・ルース。
-・1914年 レッドソックスで投手としてデビュー
-・1918年 13勝＆11本塁打（同一シーズン2桁勝利＆2桁本塁打）
-・1927年 シーズン60本塁打（1961年にマリスが61本を打つまで34年間の記録）
-・通算714本塁打（1974年にハンク・アーロンが更新するまで歴代1位）
-・通算 打率.342 / 投手 94勝46敗 防御率2.28
-・1934年 日米野球で来日
-・2022年 大谷翔平が10勝＆10本塁打を達成し「ルース以来104年ぶり」と話題に
+大谷翔平より100年前の二刀流、ベーブ・ルースの成績まとめ。
+
+【通算打撃成績】打率.342 / 714本塁打 / 2,214打点 / 出塁率.474 / 長打率.690 / OPS 1.164
+【通算投手成績】163登板 / 94勝46敗 / 勝率.671 / 防御率2.28
+【獲得タイトル】本塁打王12回 / 打点王6回 / 首位打者(1924) / 最優秀防御率(1916) / MVP(1923) / ワールドシリーズ制覇7回
+【最も輝いた年 1921年】打率.378 / 59本塁打 / 171打点 / 177得点 / 出塁率.512 / 長打率.846 / OPS 1.359
+※打点は資料により2,213〜2,214、1921年のOPSは1.358〜1.359と表記に差があります
 
 出典:
 アメリカ野球殿堂 Babe Ruth
 https://baseballhall.org/hall-of-famers/ruth-babe
 MLB.com Babe Ruth
 https://www.mlb.com/player/121578
-SABR「How 'Ruthian' was Babe Ruth?」
-https://sabr.org/journal/article/how-ruthian-was-babe-ruth/
-MLB.com「Ohtani ties Ruth, passes Ichiro in same game」(2022)
-https://www.mlb.com/angels/news/shohei-ohtani-ties-babe-ruth-passes-ichiro-in-win-vs-athletics
-Sports Illustrated (2022) 10勝10本塁打
-https://www.si.com/mlb/2022/08/10/shohei-ohtani-babe-ruth-10-wins-home-runs-single-season-milestone-record-angels
-野球殿堂「#Shortstops: Babe in Japan」(1934年来日)
-https://baseballhall.org/discover/shortstops-babe-in-japan
-HISTORY.com（1961年 マリスの61本）
-https://www.history.com/this-day-in-history/roger-maris-breaks-home-run-record
+Baseball-Reference Babe Ruth
+https://www.baseball-reference.com/players/r/ruthba01.shtml
+Wikipedia「List of career achievements by Babe Ruth」（タイトル一覧）
+https://en.wikipedia.org/wiki/List_of_career_achievements_by_Babe_Ruth
+SABR「Babe Ruth in 1921: Recrowning Baseball's Greatest Slugging Season」
+https://sabr.org/research/article/babe-ruth-in-1921-recrowning-baseballs-greatest-slugging-season/
+Baseball-Reference Bullpen 1921 American League
+https://www.baseball-reference.com/bullpen/1921_AL
 
 VOICEVOX:ずんだもん
 
-#MLB #野球 #ベーブルース #大谷翔平 #二刀流 #雑学 #shorts
+#MLB #野球 #ベーブルース #大谷翔平 #二刀流 #shorts
 ```
 
 **固定コメント案**
