@@ -21,7 +21,7 @@ SCENES = [
     dict(kind="board", photo="04_may_1924.jpg", head="最も輝いた年", year="1922", hl=0, voice="hook",
          rows=[("打率", ".420", "MVP"), ("盗塁", "51", "盗塁王"), ("連続試合安打", "41", "当時ア・リーグ記録")],
          narration="最も輝いた1922年は、打率、よんわりにぶ。41試合連続安打で、MVPなのだ！"),
-    dict(kind="loop", photo="05_three_stars_1924.jpg", voice="hook",
+    dict(kind="loop", photo="00_title_1924.jpg", voice="hook",
          text=["イチローが追いかけた", "安打製造機", "ジョージ・シスラー"],
          narration="イチローが追いかけた、84年前の安打製造機。それがジョージ・シスラーなのだ。"),
 ]
