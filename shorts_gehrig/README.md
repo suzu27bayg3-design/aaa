@@ -5,7 +5,7 @@
 - 声: VOICEVOX:ずんだもん。`bash ../tools/voicevox_engine.sh` → `python3 voicevox_synth.py && python3 make_gehrig.py`
 - 構成: タイトル（2,130試合連続出場・鉄の馬）→ 通算打撃成績 → 鉄人の記録（投手成績の代わり）→ 獲得タイトル → 最も輝いた年（1927年）→ 引退スピーチ
 - 最後の0.4秒にサムネイル用コマ（`thumb.png`）
-- 試合映像・写真は不使用（理由は `../shorts_ruth/README.md` 参照）
+- 写真: Wikimedia Commons のパブリックドメイン写真6枚（出典は `photos/SOURCES.md`）。試合映像は不使用
 
 ## 投稿用メタデータ
 
