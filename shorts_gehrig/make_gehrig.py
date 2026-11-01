@@ -58,6 +58,7 @@ SCENES = [
 ]
 SOURCE = "Stats: 野球殿堂 / MLB.com / Baseball-Reference / SABR"
 CREDIT = "VOICEVOX:ずんだもん"
+SHOW_CAPTION = False  # 字幕（ナレーションの文字起こし）を出す場合は True
 
 
 # ---- 数値フォーマット（カウントアップ用） ---------------------------------------
@@ -335,7 +336,8 @@ def main():
             header(ImageDraw.Draw(frame))
             draw_board(frame, sc, lt)
         d = ImageDraw.Draw(frame)
-        caption(d, sc["caption"])
+        if SHOW_CAPTION:
+            caption(d, sc["caption"])
         d.text((W - 60, 1665), CREDIT, font=jp(26, True), fill=(220, 225, 255), anchor="ra")
         if photos and photo_credit:
             d.text((60, 1705), "Photo: " + photo_credit, font=jp(22, True), fill=(220, 225, 255))
