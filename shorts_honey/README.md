@@ -1,6 +1,8 @@
 # YouTube Shorts：はちみつはなぜ腐らない？
 
-- 動画: `honey_short.mp4`（1080×1920 縦型 / 30fps / 約52秒 / H.264 + AAC）
+- 動画: `honey_short.mp4`（1080×1920 縦型 / 30fps / 約36秒 / H.264 + AAC）
+- 声: VOICEVOX:ずんだもん（〜のだ口調）。`bash ../tools/voicevox_engine.sh` → `python3 voicevox_synth.py && python3 make_short.py`
+- 構成: 7シーン。浸透圧は図で説明し、最後の「数千年前のはちみつでも腐っていない」が冒頭につながるループ
 - 生成スクリプト: `make_short.py`
 
 ## 投稿用メタデータ
@@ -17,6 +19,7 @@
 ② pH約3〜4.5の酸性
 ③ ミツバチの酵素（グルコースオキシダーゼ）が過酸化水素を生成
 ※1歳未満の乳児にははちみつを与えないでください（乳児ボツリヌス症）
+※保存はフタをしっかり閉めて。湿気を吸うと発酵することがあります
 
 出典:
 Smithsonian Magazine「The Science Behind Honey's Eternal Shelf Life」
@@ -28,7 +31,7 @@ https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000168157.html
 消費者庁 食品安全ポータル（ボツリヌス菌）
 https://www.caa.go.jp/policies/policy/consumer_safety/food_safety/food_safety_portal/microorganism_virus/contents_001
 
-音声: Open JTalk / HTS voice "Mei" (MMDAgent, © Nagoya Institute of Technology, CC BY 3.0)
+VOICEVOX:ずんだもん
 
 #雑学 #豆知識 #はちみつ #科学 #shorts
 ```
