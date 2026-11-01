@@ -18,11 +18,11 @@ SCENES = [
     dict(kind="titles", photo="03_1908.jpg", head="記録とタイトル", eng="RECORDS & TITLES",
          rows=[("投手三冠", "1", "回 1901"), ("完全試合", "1", "回 1904", "20世紀初")],
          narration="1901年には投手三冠。1904年には、20世紀初の完全試合なのだ。"),
-    dict(kind="board", photo="04_1899.jpg", head="最も輝いた年", year="1901", hl=2, voice="hook",
+    dict(kind="board", photo="00_title_1902.jpg", head="最も輝いた年", year="1901", hl=2, voice="hook",
          rows=[("勝利", "33", "リーグ1位"), ("敗戦", "10", None), ("防御率", "1.62", "リーグ1位"),
                ("奪三振", "158", "リーグ1位")],
          narration="最も輝いた1901年は、33勝10敗、防御率1.62で、投手三冠なのだ！"),
-    dict(kind="loop", photo="05_1950.jpg", voice="hook",
+    dict(kind="loop", photo="02_thompson_1909.jpg", voice="hook",
          text=["1956年", "サイ・ヤング賞", "誕生"],
          narration="亡くなった翌年の1956年、彼の名前をつけたサイ・ヤング賞が生まれたのだ。"),
 ]
