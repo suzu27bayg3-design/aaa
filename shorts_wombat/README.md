@@ -56,3 +56,9 @@ VOICEVOXアプリを起動したPCなら `python3 voicevox_synth.py && python3 m
 5. `python3 make_short.py --credit "VOICEVOX:キャラ名"` で再生成（画面下にクレジットが入ります）
 
 VOICEVOXは各キャラクターの利用規約に従い、説明欄にも「VOICEVOX:キャラ名」を必ず記載してください。
+
+## サムネイル
+動画の**最後の0.4秒**にサムネイル専用のコマ（`thumb.png` と同じ画像）が入っています。
+YouTubeアプリで投稿するとき（または投稿後の「編集」で）サムネイルの鉛筆アイコンをタップし、
+コマ選択バーを**右端まで**動かすとこのコマを選べます。
+動画を作り直した場合は `python3 ../tools/add_thumb_frame.py <動画> --text ... --emoji ...` で再度追加してください（2回実行すると2回分足されます）。
