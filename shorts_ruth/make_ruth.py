@@ -313,7 +313,8 @@ def main():
             elif sc["kind"] == "outro":
                 ph, dk = photos[-1], 0.45
             else:
-                ph, dk = photos[si % len(photos)], 0.70
+                mid = photos[1:-1] if len(photos) >= 3 else photos  # 先頭=タイトル, 最後=締め
+                ph, dk = mid[(si - 1) % len(mid)], 0.70
             frame = photo_frame(ph, lt, durs[si], dk, seed=si)
             if sc["kind"] == "title":  # 文字の読みやすさのため下半分を暗く
                 g = Image.new("RGBA", (W, H))
@@ -337,7 +338,7 @@ def main():
         caption(d, sc["caption"])
         d.text((W - 60, 1665), CREDIT, font=jp(26, True), fill=(220, 225, 255), anchor="ra")
         if photos and photo_credit:
-            d.text((60, 1665), "Photo: " + photo_credit, font=jp(24, True), fill=(220, 225, 255))
+            d.text((60, 1705), "Photo: " + photo_credit, font=jp(22, True), fill=(220, 225, 255))
         d.rectangle((0, H - 16, int(W * t / total), H), fill=GOLD)
         ff.stdin.write(frame.convert("RGB").tobytes())
     ff.stdin.close()
