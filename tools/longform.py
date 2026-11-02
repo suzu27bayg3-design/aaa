@@ -439,6 +439,30 @@ def fig_area(img, box, fig, cfg):
         d.text((bx, top + 280), "→ ψ が再現される", font=jp(28, True), fill=GOLD, anchor="mm")
         d.text((ax, yy + 60), "元の状態は測ったときに壊れる（コピーはできない）", font=jp(26, True),
                fill=(200, 210, 240), anchor="lm")
+    elif k == "landscape":
+        # 答えのよさ＝高さ。小さな谷にはまったボールと、山をすり抜ける量子
+        base = y1 - 70
+        f = lambda t: 0.62 + 0.22 * math.sin(t * 11) * (1 - 0.3 * t) - 0.55 * math.exp(-((t - 0.72) / 0.06) ** 2)
+        xs = [x0 + 40 + i * (x1 - x0 - 80) / 300 for i in range(301)]
+        pts = [(x, base - (base - y0 - 90) * f(i / 300)) for i, x in enumerate(xs)]
+        d.polygon(pts + [(xs[-1], base + 10), (xs[0], base + 10)], fill=(90, 130, 230, 90))
+        d.line(pts, fill=(150, 190, 255), width=5)
+        # 一番低い谷
+        imin = min(range(301), key=lambda i: f(i / 300))
+        mx, my = pts[imin]
+        d.text((mx, my + 40), "一番よい答え", font=jp(26, True), fill=GOLD, anchor="mm")
+        d.ellipse((mx - 10, my - 22, mx + 10, my - 2), outline=GOLD, width=3)
+        # 小さな谷にはまったボール
+        loc = min(range(110, 180), key=lambda i: f(i / 300))
+        bxp, byp = pts[loc]
+        d.ellipse((bxp - 18, byp - 36, bxp + 18, byp), fill=(255, 120, 120), outline=WHITE, width=3)
+        d.text((bxp, byp + 36), "小さな谷にはまる", font=jp(24, True), fill=(255, 150, 150), anchor="mm")
+        # トンネル（点線の矢印）
+        for i in range(loc, imin, 12):
+            x, yv = pts[i]
+            d.line((x, byp - 18, x + 6, byp - 18), fill=(110, 220, 120), width=4)
+        d.text(((bxp + mx) / 2, byp - 110), "量子：山をすり抜ける（トンネル効果）", font=jp(26, True), fill=(110, 220, 120), anchor="mm")
+        d.text((x0 + 50, y0 + 30), "高さ＝答えの悪さ", font=jp(26, True), fill=(200, 210, 240))
     elif k == "summary":
         for i, s in enumerate(fig["items"]):
             gap = min(112, (y1 - y0 - 30) / len(fig["items"]))  # 立ち絵ワイプと重ならないよう詰める
