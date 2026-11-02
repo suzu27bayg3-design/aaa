@@ -395,6 +395,50 @@ def fig_area(img, box, fig, cfg):
             d.text((cx + 60, yy + 24), sub, font=jp(30, True), fill=WHITE, anchor="lm")
         d.text((x1 - 40, (topy + base) / 2 + 40), "重力が弱いほど\n時間は速く進む", font=jp(30, True), fill=(200, 210, 240),
                anchor="rm", align="right")
+    elif k == "pair":
+        # もつれたペア: 測る前は「0と1の重ね合わせ」、片方を測るともう片方も決まる
+        cy1, cy2 = y0 + 120, y0 + 360
+        for row, (cy, lab) in enumerate(((cy1, "測る前"), (cy2, "片方を測ると"))):
+            d.text((x0 + 30, cy), lab, font=jp(30, True), fill=(200, 210, 240), anchor="lm")
+            ax, bx = x0 + 330, x1 - 120
+            d.line((ax, cy, bx, cy), fill=(255, 130, 200), width=4)
+            for i in range(9):
+                t = i / 8
+                d.ellipse((ax + (bx - ax) * t - 4, cy - 4 + 14 * math.sin(t * 9), ax + (bx - ax) * t + 4,
+                           cy + 4 + 14 * math.sin(t * 9)), fill=(255, 130, 200))
+            for j, xx in enumerate((ax, bx)):
+                d.ellipse((xx - 62, cy - 62, xx + 62, cy + 62), fill=(60, 70, 110), outline=WHITE, width=4)
+                txt = "0?1" if row == 0 else "0"
+                d.text((xx, cy), txt, font=num(52 if row == 0 else 70), fill=GOLD if row else WHITE, anchor="mm")
+            if row:
+                d.text((ax, cy + 95), "0が出た", font=jp(28, True), fill=GOLD, anchor="mm")
+                d.text((bx, cy + 95), "必ず0になる", font=jp(28, True), fill=GOLD, anchor="mm")
+            d.text(((ax + bx) / 2, cy - 50), "どんなに離れていても", font=jp(24, True), fill=(255, 170, 220), anchor="mm")
+    elif k == "teleport":
+        # アリスとボブ: もつれたペア＋2ビットの通信で状態を移す
+        ax, bx = x0 + 280, x1 - 280
+        top = y0 + 30
+        for xx, nm, col in ((ax, "送り手 アリス", (120, 200, 255)), (bx, "受け手 ボブ", (255, 150, 200))):
+            d.rounded_rectangle((xx - 230, top, xx + 230, top + 300), 26, fill=(255, 255, 255, 20), outline=col, width=4)
+            d.text((xx, top + 32), nm, font=jp(36, True), fill=col, anchor="mm")
+        d.ellipse((ax - 170, top + 110, ax - 70, top + 210), fill=GOLD)
+        d.text((ax - 120, top + 160), "ψ", font=jp(54, True), fill=NAVY, anchor="mm")
+        d.text((ax - 120, top + 232), "送りたい状態", font=jp(24, True), fill=WHITE, anchor="mm")
+        d.ellipse((ax + 60, top + 110, ax + 160, top + 210), fill=(255, 130, 200))
+        d.ellipse((bx - 50, top + 110, bx + 50, top + 210), fill=(255, 130, 200))
+        d.line((ax + 160, top + 160, bx - 50, top + 160), fill=(255, 130, 200), width=4)
+        d.text(((ax + bx) / 2, top + 135), "① もつれたペアを共有", font=jp(28, True), fill=(255, 170, 220), anchor="mm")
+        d.rounded_rectangle((ax - 190, top + 90, ax + 180, top + 255), 20, outline=WHITE, width=3)
+        d.text((ax, top + 278), "② 2つをまとめて測る", font=jp(28, True), fill=WHITE, anchor="mm")
+        yy = top + 360
+        d.line((ax, yy, bx - 20, yy), fill=(110, 220, 120), width=6)
+        d.polygon([(bx - 20, yy - 16), (bx + 10, yy), (bx - 20, yy + 16)], fill=(110, 220, 120))
+        d.text(((ax + bx) / 2, yy - 30), "③ 結果の2ビットを、ふつうの通信で送る（光より速くない）",
+               font=jp(28, True), fill=(110, 220, 120), anchor="mm")
+        d.text((bx, top + 245), "④ 2ビットに合わせて操作", font=jp(26, True), fill=WHITE, anchor="mm")
+        d.text((bx, top + 280), "→ ψ が再現される", font=jp(28, True), fill=GOLD, anchor="mm")
+        d.text((ax, yy + 60), "元の状態は測ったときに壊れる（コピーはできない）", font=jp(26, True),
+               fill=(200, 210, 240), anchor="lm")
     elif k == "summary":
         for i, s in enumerate(fig["items"]):
             gap = min(112, (y1 - y0 - 30) / len(fig["items"]))  # 立ち絵ワイプと重ならないよう詰める
