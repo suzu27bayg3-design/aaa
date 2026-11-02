@@ -98,36 +98,90 @@ def pick_icon(title):
     return "💡"
 
 
+def _kind(c):
+    if "\u3041" <= c <= "\u309f":
+        return "h"  # ひらがな
+    if c in "、。・，．）」』！？：；…" or c == " ":
+        return "p"  # 区切りの記号
+    return "o"
+
+
+def chunks(text):
+    """改行してよい位置で文字列を区切る（日本語の文節のおおまかな切れ目）
+    ・ひらがな（助詞など）の次に、ひらがな以外が来るところ
+    ・読点や「・」などの記号のあと
+    ・カタカナの語、英数字の語、数字と単位はまとめて1つにする"""
+    out, cur = [], ""
+    for i, c in enumerate(text):
+        if cur:
+            prev = cur[-1]
+            kp, kc = _kind(prev), _kind(c)
+            hrun = len(cur) - len(cur.rstrip("\u3041\u3042\u3043\u3044\u3045\u3046\u3047\u3048\u3049\u304a"
+                                                 + "".join(chr(x) for x in range(0x304b, 0x309f))))
+            # ひらがな1文字だけ（「動き始める」の「き」など送りがな）のあとは、助詞でなければ切らない
+            okuri = kp == "h" and hrun == 1 and prev not in "はがをにでとのもへやかねよ"
+            close_h = prev in "」』）" and kc == "h"  # 「周期」を のように、閉じかっこの後の助詞は切り離さない
+            brk = (kp == "p" and kc != "p" and not close_h) or (kp == "h" and kc not in ("h", "p") and not okuri) \
+                or c in "（「『"
+            if brk:
+                out.append(cur)
+                cur = ""
+        cur += c
+    if cur:
+        out.append(cur)
+    return out
+
+
 def wrap(d, text, font, width):
-    """1文字ずつ詰めて折り返す。句読点は行頭に置かず、英数字の単語（IBMなど）は途中で切らない"""
-    import re
+    """文節の切れ目で折り返す。1つの文節が長すぎるときだけ文字の途中で折り返す。
+    句読点や閉じかっこは行頭に置かない"""
     lines, cur = [], ""
-    for tok in re.findall(r"[A-Za-z0-9.,%^]+|\n|.", text):
-        if tok == "\n":
-            lines.append(cur); cur = ""; continue
-        if d.textlength(cur + tok, font=font) > width and cur and tok not in "、。！？」）":
-            lines.append(cur); cur = tok
-        else:
-            cur += tok
+    for para_i, para in enumerate(text.split("\n")):
+        if para_i:
+            lines.append(cur); cur = ""
+        for tok in chunks(para):
+            if d.textlength(cur + tok, font=font) <= width or not cur:
+                if d.textlength(cur + tok, font=font) <= width:
+                    cur += tok
+                    continue
+            if cur and d.textlength(tok, font=font) <= width:
+                lines.append(cur); cur = tok
+                continue
+            for ch in tok:  # 長すぎる文節は文字単位で
+                if d.textlength(cur + ch, font=font) > width and cur and ch not in "、。！？」）・":
+                    lines.append(cur); cur = ch
+                else:
+                    cur += ch
     lines.append(cur)
     return lines
+
+
+def fit_size(d, texts, box_w, box_h, start, smallest, bold=False, spacing=0.25, max_lines=9):
+    """複数の文字列が、どれも同じ大きさで枠に収まる一番大きな文字サイズ（図の中で大きさをそろえる）"""
+    for size in range(start, smallest - 1, -1):
+        f = jp(size, bold)
+        lh = int(size * (1 + spacing))
+        ok = True
+        for t in texts:
+            ls = wrap(d, t, f, box_w)
+            if len(ls) > max_lines or len(ls) * lh > box_h or any(d.textlength(l, font=f) > box_w for l in ls):
+                ok = False
+                break
+        if ok:
+            return size
+    return smallest
 
 
 def fit_text(d, text, box_w, box_h, start, smallest, bold=False, spacing=0.25):
     """枠（幅 box_w・高さ box_h）に収まる一番大きな文字サイズで折り返す。(フォント, 行, 行の高さ) を返す"""
     for size in range(start, smallest - 1, -2):
         f = jp(size, bold)
-        lines = []
-        for part in text.split("\n"):
-            lines += wrap(d, part, f, box_w)
+        lines = wrap(d, text, f, box_w)
         lh = int(size * (1 + spacing))
         if len(lines) * lh <= box_h and all(d.textlength(l, font=f) <= box_w for l in lines):
             return f, lines, lh
     f = jp(smallest, bold)
-    lines = []
-    for part in text.split("\n"):
-        lines += wrap(d, part, f, box_w)
-    return f, lines, int(smallest * (1 + spacing))
+    return f, wrap(d, text, f, box_w), int(smallest * (1 + spacing))
 
 
 # ---- 背景・枠 ------------------------------------------------------------------
@@ -283,7 +337,9 @@ def fig_area(img, box, fig, cfg):
             d.rounded_rectangle((cx - bw / 2, base_y - hgt, cx + bw / 2, base_y), 14,
                                 fill=GOLD if i == len(items) - 1 else (110, 150, 255))
             d.text((cx, base_y - hgt - 44), txt, font=jp(50), fill=WHITE, anchor="mm")
-            lf, ll, lh = fit_text(d, lab, (x1 - x0 - 200) / len(items) + 30, 46, 38, 22, bold=True)
+            if i == 0:
+                bl_sz = fit_size(d, [it[0] for it in items], (x1 - x0 - 200) / len(items) + 30, 46, 38, 20, bold=True)
+            lf, ll, lh = fit_text(d, lab, (x1 - x0 - 200) / len(items) + 30, 46, bl_sz, bl_sz, bold=True)
             for j, ln in enumerate(ll[:1]):
                 d.text((cx, base_y + 14 + j * lh), ln, font=lf, fill=WHITE, anchor="ma")
         d.line((x0 + 60, base_y, x1 - 60, base_y), fill=WHITE, width=3)
@@ -296,6 +352,10 @@ def fig_area(img, box, fig, cfg):
         n = len(items)
         gapc = 18
         hh = (y1 - y0 - 10 - gapc * (n - 1)) / n
+        isz0 = int(min(hh * 0.62, 120))
+        tw0 = x1 - 70 - (x0 + 75 + isz0 + 40)
+        tsz = int(min(36, max(26, hh * 0.18)))
+        bsz = fit_size(d, [it[1].replace("\n", "") for it in items], tw0, hh - tsz * 1.25 - 44, 48, 24, spacing=0.22)
         for i, it in enumerate(items):
             t, s_ = it[0], it[1]
             yy = y0 + 5 + i * (hh + gapc)
@@ -308,9 +368,9 @@ def fig_area(img, box, fig, cfg):
             img.alpha_composite(ic, (int(icx + (isz - ic.width) / 2), int(cyc - ic.height / 2)))
             tx = icx + isz + 40
             tw = x1 - 70 - tx
-            tf = jp(int(min(36, max(26, hh * 0.18))), True)
+            tf = jp(tsz, True)
             th = tf.size * 1.25
-            bf, bl, lh = fit_text(d, s_.replace("\n", ""), tw, hh - th - 44, 48, 24, spacing=0.22)
+            bf, bl, lh = fit_text(d, s_.replace("\n", ""), tw, hh - th - 44, bsz, bsz, spacing=0.22)
             block = th + len(bl) * lh
             ty = cyc - block / 2
             d.text((tx, ty), t, font=tf, fill=GOLD)
@@ -327,7 +387,10 @@ def fig_area(img, box, fig, cfg):
             d.ellipse((cx - 24, ly - 24, cx + 24, ly + 24), fill=col)
             d.text((cx, ly - 80), yr, font=num(80 if len(items) <= 4 else 66), fill=col, anchor="mm")
             colw = (x1 - x0 - 320) / max(1, len(items) - 1) - 20
-            lf, ll, lh = fit_text(d, s, colw, y1 - ly - 70, 40 if len(items) <= 4 else 34, 24, bold=True)
+            if i == 0:
+                tl_sz = fit_size(d, [it[1] for it in items], colw, y1 - ly - 70, 40 if len(items) <= 4 else 34, 22,
+                                 bold=True)
+            lf, ll, lh = fit_text(d, s, colw, y1 - ly - 70, tl_sz, tl_sz, bold=True)
             for j, ln in enumerate(ll):
                 d.text((cx, ly + 56 + j * lh), ln, font=lf, fill=WHITE, anchor="ma")
     elif k == "platform":
@@ -405,31 +468,46 @@ def fig_area(img, box, fig, cfg):
             bx = x0 + 20 + i * cw
             d.rounded_rectangle((bx + 8, top + ih + 40, bx + cw - 8, top + ih + 170), 18, fill=(255, 255, 255, 30),
                                 outline=GOLD, width=3)
-            lf, _, _ = fit_text(d, lab, cw - 30, 40, 30, 20, bold=True)
-            vf, _, _ = fit_text(d, val, cw - 30, 50, 40, 22, bold=True)
+            if i == 0:
+                st_l = fit_size(d, [a for a, _ in fig["stats"]], cw - 30, 40, 30, 18, bold=True, max_lines=1)
+                st_v = fit_size(d, [b for _, b in fig["stats"]], cw - 30, 50, 40, 18, bold=True, max_lines=1)
+            lf, vf = jp(st_l, True), jp(st_v, True)
             d.text((bx + cw / 2, top + ih + 72), lab, font=lf, fill=(200, 210, 240), anchor="mm")
             d.text((bx + cw / 2, top + ih + 125), val, font=vf, fill=WHITE, anchor="mm")
     elif k == "table" and len(fig["rows"]) > 6 and not fig.get("_sub"):
-        # 行が多い表は、左右2つの表に分けて文字を大きくする
+        # 行が多い表は、左右2つの表に分けて文字を大きくする（列の幅と文字の大きさは左右でそろえる）
         half = (len(fig["rows"]) + 1) // 2
         mid = (x0 + x1) / 2
-        fig_area(img, (x0, y0, mid + 15, y1), dict(fig, rows=fig["rows"][:half], _sub=True), cfg)
-        fig_area(img, (mid - 15, y0, x1, y1), dict(fig, rows=fig["rows"][half:] + [("", "", "")] * (2 * half - len(fig["rows"])),
-                                                   _sub=True), cfg)
+        rows = fig["rows"]
+        sub = dict(fig, _sub=True, _all=rows)
+        fig_area(img, (x0, y0, mid + 15, y1), dict(sub, rows=rows[:half]), cfg)
+        fig_area(img, (mid - 15, y0, x1, y1), dict(sub, rows=rows[half:] + [("",) * len(fig["head"])] * (2 * half - len(rows))),
+                 cfg)
     elif k == "table":
         head, rows = fig["head"], fig["rows"]
+        allrows = [r for r in fig.get("_all", rows) if any(r)]
         nc = len(head)
         hdr = 64 if len(rows) > 6 else 70
         rh = (y1 - y0 - hdr - 20) / len(rows)
-        fs = int(max(22, min(42, rh * 0.52)))
-        # 列の幅: いちばん長い文字に合わせて配分する
-        need = [max([d.textlength(r[j], font=jp(fs, True)) for r in rows] + [d.textlength(head[j], font=jp(fs, True))]) + 60
-                for j in range(nc)]
+        base = int(max(22, min(42, rh * 0.52)))
+        # 列の幅: いちばん長い文字に合わせて配分する（表全体の中身で決める）
+        need = [max([d.textlength(r[j], font=jp(base, True)) for r in allrows] + [d.textlength(head[j], font=jp(base, True))])
+                + 50 for j in range(nc)]
         tot = x1 - x0 - 60
         widths = [w * tot / sum(need) for w in need]
         cols = [x0 + 30]
         for w_ in widths:
             cols.append(cols[-1] + w_)
+        # 表の中の文字は、すべて同じ大きさ（1行に収まる大きさを優先し、無理なら2行）
+        cells = [(r[j], cols[j + 1] - cols[j] - 30) for r in allrows for j in range(nc)]
+        def all_fit(size, nl):
+            f = jp(size, True)
+            return all(len(wrap(d, c, f, w)) <= nl for c, w in cells) and nl * size * 1.15 <= rh - 12
+        one = next((z for z in range(base, 19, -1) if all_fit(z, 1)), 20)
+        two = next((z for z in range(base, 19, -1) if all_fit(z, 2)), 20)
+        fs = one if one >= two * 0.85 else two
+        cf = jp(fs, True)
+        clh = int(fs * 1.15)
         d.rounded_rectangle((cols[0], y0 + 10, cols[-1], y0 + 10 + hdr), 16, fill=(66, 133, 244, 200))
         for j, h in enumerate(head):
             d.text(((cols[j] + cols[j + 1]) / 2, y0 + 10 + hdr / 2), h, font=jp(min(40, fs + 2), True), fill=WHITE,
@@ -439,12 +517,38 @@ def fig_area(img, box, fig, cfg):
             d.rounded_rectangle((cols[0], yy, cols[-1], yy + rh - (10 if rh >= 70 else 4)), 14,
                                 fill=(255, 255, 255, 22 if i % 2 else 36))
             for j, cell in enumerate(row):
-                cf, cl, clh = fit_text(d, cell, cols[j + 1] - cols[j] - 30, rh - 12, fs + (2 if j == 0 else 0), 20, bold=True,
-                                       spacing=0.15)
+                cl = wrap(d, cell, cf, cols[j + 1] - cols[j] - 30)
                 cy0 = yy + (rh - (10 if rh >= 70 else 4)) / 2 - (len(cl) - 1) * clh / 2
                 for q, ln in enumerate(cl):
                     d.text(((cols[j] + cols[j + 1]) / 2, cy0 + q * clh), ln, font=cf, fill=GOLD if j == 0 else WHITE,
                            anchor="mm")
+    elif k == "tiles":
+        # タイルの並び（例: 9回のふりかえり）。番号・題名・ひとことを、すべてのタイルで同じ大きさにそろえる
+        items = fig["items"]
+        nc = fig.get("cols", 3)
+        nr = (len(items) + nc - 1) // nc
+        g = 16
+        tw_ = (x1 - x0 - g * (nc - 1)) / nc
+        th_ = (y1 - y0 + 10 - g * (nr - 1)) / nr
+        badge = min(th_ - 24, 64)
+        inner = tw_ - badge - 50
+        t_sz = fit_size(d, [it[1] for it in items], inner, th_ * 0.4, 40, 22, bold=True, max_lines=1)
+        s_sz = fit_size(d, [it[2] for it in items], inner, th_ * 0.5, 32, 18, bold=True, max_lines=2, spacing=0.15)
+        tf, sf = jp(t_sz, True), jp(s_sz, True)
+        for i, (no, title, sub) in enumerate(items):
+            bx = x0 + (i % nc) * (tw_ + g)
+            by = y0 - 5 + (i // nc) * (th_ + g)
+            d.rounded_rectangle((bx, by, bx + tw_, by + th_), 18, fill=(255, 255, 255, 30), outline=(110, 150, 255), width=3)
+            cy = by + th_ / 2
+            d.rounded_rectangle((bx + 16, cy - badge / 2, bx + 16 + badge, cy + badge / 2), 14, fill=GOLD)
+            d.text((bx + 16 + badge / 2, cy), str(no), font=num(int(badge * 0.62)), fill=NAVY, anchor="mm")
+            tx = bx + badge + 34
+            sl = wrap(d, sub, sf, inner)
+            blk = t_sz * 1.2 + len(sl) * s_sz * 1.15
+            ty = cy - blk / 2
+            d.text((tx, ty), title, font=tf, fill=GOLD)
+            for j, ln in enumerate(sl):
+                d.text((tx, ty + t_sz * 1.2 + j * s_sz * 1.15), ln, font=sf, fill=WHITE)
     elif k == "bb84":
         # BB84: 送り手のビットと測り方 → 光子の偏光 → 受け手の測り方と結果 → 鍵
         bits = [0, 1, 1, 0, 1, 0]
@@ -704,7 +808,9 @@ def fig_area(img, box, fig, cfg):
             yy = y0 + 20 + i * gap
             d.rounded_rectangle((x0 + 60, yy, x1 - 60, yy + gap - 16), 20, fill=(255, 255, 255, 24))
             d.text((x0 + 110, yy + (gap - 16) / 2), "✓", font=jp(50), fill=GOLD, anchor="mm")
-            sf, _, _ = fit_text(d, s, x1 - x0 - 260, gap - 20, 48, 30)
+            if i == 0:
+                sm_sz = fit_size(d, fig["items"], x1 - x0 - 260, gap - 20, 48, 28, max_lines=1)
+            sf = jp(sm_sz)
             d.text((x0 + 160, yy + (gap - 16) / 2), s, font=sf, fill=WHITE, anchor="lm")
 
 
@@ -724,9 +830,10 @@ def slide_parts(bg, cfg, ch_i, ch):
         # 左: 箇条書き / 右: 図
         nb = len(ch["bullets"])
         step = min(150, (bottom - 170) / nb)
+        b_sz = fit_size(d, ch["bullets"], 750, step - 18, 46, 30, spacing=0.2)
         for i, b in enumerate(ch["bullets"]):
             yy = 170 + i * step
-            bf, bl, lh = fit_text(d, b, 750, step - 18, 46, 30, spacing=0.2)
+            bf, bl, lh = fit_text(d, b, 750, step - 18, b_sz, b_sz, spacing=0.2)
             hblk = len(bl) * lh
             d.rounded_rectangle((100, yy + 4, 112, yy + max(hblk, 56) - 4), 6, fill=GOLD)
             for j, ln in enumerate(bl):
@@ -777,11 +884,17 @@ def item_rects(fig, box):
         mid = (x0 + x1) / 2
         rows = fig["rows"]
         left = item_rects(dict(fig, rows=rows[:half]), (x0, y0, mid + 15, y1))
-        right = item_rects(dict(fig, rows=rows[half:] + [("", "", "")] * (2 * half - len(rows))), (mid - 15, y0, x1, y1))
+        right = item_rects(dict(fig, rows=rows[half:] + [("",) * len(fig["head"])] * (2 * half - len(rows))),
+                           (mid - 15, y0, x1, y1))
         return left + right[:len(rows) - half]
     if k == "table":
         n = len(fig["rows"]); hdr = 64 if n > 6 else 70; rh = (y1 - y0 - hdr - 20) / n
         return [(x0, y0 + hdr + 18 + i * rh - 3, x1, y0 + hdr + 18 + (i + 1) * rh - 1) for i in range(n)]
+    if k == "tiles":
+        items = fig["items"]; nc = fig.get("cols", 3); nr = (len(items) + nc - 1) // nc
+        tw_ = (x1 - x0 - 16 * (nc - 1)) / nc; th_ = (y1 - y0 + 10 - 16 * (nr - 1)) / nr
+        return [(x0 + (i % nc) * (tw_ + 16) - 4, y0 - 9 + (i // nc) * (th_ + 16), x0 + (i % nc) * (tw_ + 16) + tw_ + 4,
+                 y0 - 1 + (i // nc) * (th_ + 16) + th_) for i in range(len(items))]
     if k == "vote":
         return [(x0, y0 + 40 + i * 150 - 8, x1, y0 + 40 + i * 150 + 142) for i in range(4)]
     if k == "bb84":
@@ -909,7 +1022,7 @@ def subtitle_pages(text):
     bx0, bx1 = (360, W - 360) if use_port else (60, W - 60)
     tx = bx0 + 40 if use_port else 260
     d = ImageDraw.Draw(Image.new("RGB", (8, 8)))
-    ls = wrap(d, text, jp(50, True), bx1 - tx - 40)
+    ls = wrap(d, text, jp(46, True), bx1 - tx - 40)
     return [sum(len(x) for x in ls[i:i + 3]) for i in range(0, len(ls), 3)]
 
 
@@ -976,11 +1089,11 @@ def line_overlay(spk, text, expr=None, mouth=0, page=0, blink=()):
     tx = bx0 + 40 if use_port else 260
     d.rounded_rectangle((tx - 10, 800, tx - 10 + d.textlength(name, font=jp(36)) + 60, 856), 18, fill=col)
     d.text((tx + 20, 828), name, font=jp(36), fill=WHITE, anchor="lm")
-    f = jp(50, True)
+    f = jp(46, True)
     lines = wrap(d, text, f, bx1 - tx - 40)[page * 3: page * 3 + 3]
-    ty = 938 - (len(lines) * 62) / 2
+    ty = 935 - (len(lines) * 58) / 2
     for i, ln in enumerate(lines):
-        d.text((tx, ty + i * 62), ln, font=f, fill=NAVY)
+        d.text((tx, ty + i * 58), ln, font=f, fill=NAVY)
     return lay
 
 
