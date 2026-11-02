@@ -463,6 +463,31 @@ def fig_area(img, box, fig, cfg):
             d.line((x, byp - 18, x + 6, byp - 18), fill=(110, 220, 120), width=4)
         d.text(((bxp + mx) / 2, byp - 110), "量子：山をすり抜ける（トンネル効果）", font=jp(26, True), fill=(110, 220, 120), anchor="mm")
         d.text((x0 + 50, y0 + 30), "高さ＝答えの悪さ", font=jp(26, True), fill=(200, 210, 240))
+    elif k == "repeater":
+        # 上: 区間ごとのもつれ / 下: 中継点でまとめて測る → 端と端がもつれる
+        xs = [x0 + 80, x0 + (x1 - x0) / 2 - 40, x0 + (x1 - x0) / 2 + 40, x1 - 80]
+        names = ["A", "中継点", "", "B"]
+        for row, cy in enumerate((y0 + 120, y0 + 360)):
+            d.text((x0 + 20, cy - 85), "① 区間ごとにもつれを作る" if row == 0 else "② 中継点でまとめて測ると…",
+                   font=jp(28, True), fill=(200, 210, 240), anchor="lm")
+            pairs = [(0, 1), (2, 3)] if row == 0 else [(0, 3)]
+            for a, b in pairs:
+                yy = cy if row == 0 else cy + 45
+                d.line((xs[a], yy, xs[b], yy), fill=(255, 130, 200), width=4)
+                for i in range(10):
+                    t = i / 9
+                    xx = xs[a] + (xs[b] - xs[a]) * t
+                    d.ellipse((xx - 4, yy - 4 + 10 * math.sin(t * 8), xx + 4, yy + 4 + 10 * math.sin(t * 8)),
+                              fill=(255, 130, 200))
+            for i, xx in enumerate(xs):
+                col = GOLD if i in (0, 3) else (120, 200, 255)
+                d.ellipse((xx - 30, cy - 30, xx + 30, cy + 30), fill=(60, 70, 110), outline=col, width=4)
+            d.text((xs[0], cy - 50), "A", font=jp(30, True), fill=GOLD, anchor="mm")
+            d.text((xs[3], cy - 50), "B", font=jp(30, True), fill=GOLD, anchor="mm")
+            d.rounded_rectangle((xs[1] - 50, cy - 45, xs[2] + 50, cy + 45), 18, outline=(120, 200, 255), width=3)
+            d.text(((xs[1] + xs[2]) / 2, cy + 70 if row == 0 else cy - 62), "中継点", font=jp(26, True),
+                   fill=(120, 200, 255), anchor="mm")
+        d.text(((xs[0] + xs[3]) / 2, y0 + 460), "AとBが直接もつれる（もつれ交換）", font=jp(30, True), fill=GOLD, anchor="mm")
     elif k == "summary":
         for i, s in enumerate(fig["items"]):
             gap = min(112, (y1 - y0 - 30) / len(fig["items"]))  # 立ち絵ワイプと重ならないよう詰める
