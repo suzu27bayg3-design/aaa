@@ -278,6 +278,24 @@ def fig_area(img, box, fig, cfg):
                 pts = [(x0 + 70 + i * 2, cy - 25 * math.sin(i / 14 + j)) for i in range(int((x1 - x0 - 140) / 2))]
                 d.line(pts, fill=col, width=5)
             d.text((cx, top + 290), "光の粒・光の波を量子ビットに", font=jp(28, True), fill=WHITE, anchor="mm")
+        elif st == "nv":  # ダイヤモンドの格子と、窒素＋空孔のペア
+            for r in range(5):
+                for c in range(9):
+                    ax = x0 + 120 + c * (x1 - x0 - 240) / 8 + (30 if r % 2 else 0)
+                    ay = top + 30 + r * 55
+                    if c < 8:
+                        d.line((ax, ay, ax + (x1 - x0 - 240) / 8, ay), fill=(120, 140, 200), width=2)
+                    if r < 4:
+                        d.line((ax, ay, ax + (-30 if r % 2 else 30), ay + 55), fill=(120, 140, 200), width=2)
+                    if (r, c) == (2, 4):
+                        d.ellipse((ax - 18, ay - 18, ax + 18, ay + 18), fill=(110, 150, 255), outline=WHITE, width=3)
+                        d.text((ax, ay), "N", font=jp(22, True), fill=WHITE, anchor="mm")
+                    elif (r, c) == (2, 5):
+                        d.ellipse((ax - 18, ay - 18, ax + 18, ay + 18), outline=GOLD, width=4)
+                        d.text((ax, ay), "V", font=jp(22, True), fill=GOLD, anchor="mm")
+                    else:
+                        d.ellipse((ax - 9, ay - 9, ax + 9, ay + 9), fill=(200, 210, 230))
+            d.text((cx, top + 290), "N＝窒素　V＝原子の抜けた穴（空孔）", font=jp(28, True), fill=WHITE, anchor="mm")
         cw = (x1 - x0 - 40) / len(fig["stats"])
         for i, (lab, val) in enumerate(fig["stats"]):
             bx = x0 + 20 + i * cw
@@ -338,6 +356,45 @@ def fig_area(img, box, fig, cfg):
                 else:
                     d.text((cx, cy), "○" if same else "×", font=jp(40, True),
                            fill=(110, 220, 120) if same else (230, 90, 90), anchor="mm")
+    elif k == "dial":
+        # 量子状態を時計の針にたとえる: 外からの影響があると針が余分に回る
+        for i, (lab, ang, col) in enumerate((("影響なし", 0, (120, 200, 255)), ("磁場・重力あり", 35, GOLD))):
+            cx = x0 + (x1 - x0) * (0.27 + 0.46 * i)
+            cy = (y0 + y1) / 2 - 10
+            r = 140
+            d.ellipse((cx - r, cy - r, cx + r, cy + r), outline=(150, 160, 210), width=4)
+            for t in range(12):
+                a = math.radians(t * 30)
+                d.line((cx + (r - 14) * math.sin(a), cy - (r - 14) * math.cos(a), cx + r * math.sin(a), cy - r * math.cos(a)),
+                       fill=(150, 160, 210), width=3)
+            a0 = math.radians(90)
+            d.line((cx, cy, cx + (r - 30) * math.sin(a0), cy - (r - 30) * math.cos(a0)), fill=(120, 200, 255, 140), width=6)
+            a = math.radians(90 + ang)
+            d.line((cx, cy, cx + (r - 30) * math.sin(a), cy - (r - 30) * math.cos(a)), fill=col, width=9)
+            d.ellipse((cx - 10, cy - 10, cx + 10, cy + 10), fill=WHITE)
+            if ang:
+                d.arc((cx - r + 40, cy - r + 40, cx + r - 40, cy + r - 40), 0, ang, fill=(255, 120, 120), width=5)
+                d.text((cx + r - 10, cy + 70), "ずれ", font=jp(30, True), fill=(255, 120, 120), anchor="lm")
+            d.text((cx, cy + r + 40), lab, font=jp(32, True), fill=col, anchor="mm")
+    elif k == "tower":
+        # スカイツリーの展望台と地上の時計
+        bx = x0 + 230
+        base, topy = y1 - 60, y0 + 40
+        d.polygon([(bx - 70, base), (bx + 70, base), (bx + 14, topy + 60), (bx - 14, topy + 60)], fill=(150, 170, 220))
+        d.line((bx, topy, bx, topy + 60), fill=(150, 170, 220), width=8)
+        d.rounded_rectangle((bx - 45, topy + 120, bx + 45, topy + 160), 10, fill=(200, 215, 245))
+        d.line((x0 + 40, base, x1 - 40, base), fill=WHITE, width=4)
+        for (yy, lab, sub, col) in ((topy + 140, "展望台（地上450m）", "1日に約4ナノ秒速く進む", GOLD),
+                                    (base - 40, "地上", "基準", (120, 200, 255))):
+            cx = bx + 200
+            d.ellipse((cx - 36, yy - 36, cx + 36, yy + 36), outline=col, width=5)
+            d.line((cx, yy, cx, yy - 24), fill=col, width=5)
+            d.line((cx, yy, cx + 18, yy + 8), fill=col, width=5)
+            d.line((bx + 50, yy, cx - 40, yy), fill=col, width=3)
+            d.text((cx + 60, yy - 20), lab, font=jp(34, True), fill=col, anchor="lm")
+            d.text((cx + 60, yy + 24), sub, font=jp(30, True), fill=WHITE, anchor="lm")
+        d.text((x1 - 40, (topy + base) / 2 + 40), "重力が弱いほど\n時間は速く進む", font=jp(30, True), fill=(200, 210, 240),
+               anchor="rm", align="right")
     elif k == "summary":
         for i, s in enumerate(fig["items"]):
             gap = min(112, (y1 - y0 - 30) / len(fig["items"]))  # 立ち絵ワイプと重ならないよう詰める
