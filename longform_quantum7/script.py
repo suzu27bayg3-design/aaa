@@ -133,3 +133,11 @@ COLD_OPEN = dict(fig_from=2, hook=('30都市の道順で', '1400億年？'), lin
 
 # 次回予告（最後の約20秒）: 次回の動く図を見せ、終了画面で次回の動画を表示する
 NEXT_TEASER = dict(title='第8回 量子インターネット', from_script="../longform_quantum8/script.py", fig_from=3)
+
+# 縦長ショート（tools/shorts_from_longform.py で書き出す）
+SHORT = dict(fig_from=2, hook=('小さな谷を', 'すり抜ける？'), lines=[
+    ('M', '答えのよさを高さに置きかえると、一番低い谷が、一番よい答えになるの。', None, 'explain'),
+    ('Z', 'でも、ボールは小さな谷にはまっちゃうのだ。', None, 'think'),
+    ('M', '量子のゆらぎを使うと、山を越えずにすり抜けられることがあるの。これが量子アニーリングのアイデアよ。', None, 'explain'),
+    ('Z', '本当に速いのかは、本編で確かめるのだ！', None, 'smug'),
+])

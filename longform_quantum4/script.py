@@ -132,3 +132,11 @@ COLD_OPEN = dict(fig_from=3, hook=('盗み見すると', '誤りが増える通�
 
 # 次回予告（最後の約20秒）: 次回の動く図を見せ、終了画面で次回の動画を表示する
 NEXT_TEASER = dict(title='第5回 量子センサ', from_script="../longform_quantum5/script.py", fig_from=4)
+
+# 縦長ショート（tools/shorts_from_longform.py で書き出す）
+SHORT = dict(fig_from=3, hook=('盗み見すると', '誤りが増える通信？'), lines=[
+    ('M', '光の粒を1個ずつ、向きを変えて送るの。盗聴者は測り方を当てずっぽうで選ぶから、半分は間違えて、状態を変えてしまうわ。', None, 'explain'),
+    ('Z', 'だから、受け手の誤りが増えるのだ！', None, 'smug'),
+    ('M', '全部を盗み見すると、誤りは約25%。誤りの割合を調べれば、盗聴に気づけるのよ。', None, 'explain'),
+    ('Z', '弱点もあるって、本編で話しているのだ！', None, 'think'),
+])

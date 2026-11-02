@@ -117,3 +117,11 @@ COLD_OPEN = dict(fig_from=2, hook=('15＝3×5を', '量子はどう解く？'), 
 
 # 次回予告（最後の約20秒）: 次回の動く図を見せ、終了画面で次回の動画を表示する
 NEXT_TEASER = dict(title='第3回 量子コンピュータの作り方', from_script="../longform_quantum3/script.py", fig_from=4)
+
+# 縦長ショート（tools/shorts_from_longform.py で書き出す）
+SHORT = dict(fig_from=2, hook=('15＝3×5を', '量子はどう解く？'), lines=[
+    ('M', '7を何回もかけて、15で割った余りを並べると、1、7、4、13、また1。4つごとに同じ並びがくり返されるの。', None, 'explain'),
+    ('Z', 'この周期が、何の役に立つのだ？', None, 'think'),
+    ('M', '周期が分かると、15を3と5に分けられるの。量子コンピュータは、この周期を見つけるのが得意なのよ。', None, 'explain'),
+    ('Z', '続きは本編で見てほしいのだ！', None, 'smug'),
+])

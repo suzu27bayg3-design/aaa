@@ -131,3 +131,11 @@ COLD_OPEN = dict(fig_from=3, hook=('会ったことのない2つが', 'つなが
 
 # 次回予告（最後の約20秒）: 次回の動く図を見せ、終了画面で次回の動画を表示する
 NEXT_TEASER = dict(title='第9回 量子×AIの本当のところ', from_script="../longform_quantum9/script.py", fig_from=2)
+
+# 縦長ショート（tools/shorts_from_longform.py で書き出す）
+SHORT = dict(fig_from=3, hook=('会ったことのない2つが', 'つながる？'), lines=[
+    ('M', '長い道を短い区間に分けて、区間ごとに、もつれたペアを作るの。', None, 'explain'),
+    ('M', '真ん中の中継点が2つをまとめて測ると、両端が直接もつれるのよ。もつれ交換ね。', None, 'explain'),
+    ('Z', '会ったこともない両端が、つながるのだ！', None, 'panic'),
+    ('Z', '量子インターネットの回、見てほしいのだ！', None, 'smug'),
+])

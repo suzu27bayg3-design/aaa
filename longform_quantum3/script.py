@@ -126,3 +126,11 @@ COLD_OPEN = dict(fig_from=4, hook=('光のピンセットで', '原子を6100個
 
 # 次回予告（最後の約20秒）: 次回の動く図を見せ、終了画面で次回の動画を表示する
 NEXT_TEASER = dict(title='第4回 量子通信と量子暗号', from_script="../longform_quantum4/script.py", fig_from=3)
+
+# 縦長ショート（tools/shorts_from_longform.py で書き出す）
+SHORT = dict(fig_from=4, hook=('光のピンセットで', '原子を6100個並べる？'), lines=[
+    ('M', 'レーザーの光を細く絞ると、その焦点に原子が引き寄せられるの。光のピンセットね。', None, 'explain'),
+    ('Z', '光で原子をつかめるのだ！？', None, 'panic'),
+    ('M', '2025年、カルテックのチームは、6100個の原子を並べて、重ね合わせを約13秒も保ったと発表したわ。', None, 'explain'),
+    ('Z', '量子コンピュータの作り方は、本編でくらべているのだ！', None, 'smug'),
+])

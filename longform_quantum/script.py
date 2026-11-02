@@ -139,3 +139,11 @@ COLD_OPEN = dict(fig_from=4, hook=('量子コンピュータ最大の敵', 'エ�
 
 # 次回予告（最後の約20秒）: 次回の動く図を見せ、終了画面で次回の動画を表示する
 NEXT_TEASER = dict(title='第2回 量子コンピュータが得意な計算', from_script="../longform_quantum2/script.py", fig_from=2)
+
+# 縦長ショート（tools/shorts_from_longform.py で書き出す）
+SHORT = dict(fig_from=4, hook=('量子ビットを増やすと', 'エラーが減った？'), lines=[
+    ('Z', '量子ビットを増やすと、エラーも増えちゃうんじゃないのだ？', None, 'think'),
+    ('M', 'ずっとそれが悩みだったの。でも2024年、グーグルのウィローは、符号距離を3、5、7と大きくするたびに、エラー率がおよそ半分になったの。', None, 'explain'),
+    ('Z', '増やすほど、良くなったのだ！', None, 'smug'),
+    ('M', '誤り訂正のしくみから、本編でくわしく解説するわ。', None, 'happy'),
+])

@@ -120,3 +120,11 @@ COLD_OPEN = dict(fig_from=4, hook=('スカイツリーの上は', '1日4ナノ�
 
 # 次回予告（最後の約20秒）: 次回の動く図を見せ、終了画面で次回の動画を表示する
 NEXT_TEASER = dict(title='第6回 量子もつれとテレポーテーション', from_script="../longform_quantum6/script.py", fig_from=1)
+
+# 縦長ショート（tools/shorts_from_longform.py で書き出す）
+SHORT = dict(fig_from=4, hook=('スカイツリーの上は', '時間が速い？'), lines=[
+    ('M', '重力が弱い高い場所ほど、時間は速く進むの。アインシュタインの一般相対性理論ね。', None, 'explain'),
+    ('Z', '本当に、測れるのだ？', None, 'think'),
+    ('M', '2020年、地上と高さ450メートルの展望台で時計を比べたら、展望台の時計は、1日に約4ナノ秒速く進んでいたの。', None, 'explain'),
+    ('Z', '続きは本編、量子センサの回なのだ！', None, 'smug'),
+])

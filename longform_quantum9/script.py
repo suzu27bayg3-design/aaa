@@ -132,3 +132,11 @@ COLD_OPEN = dict(fig_from=2, hook=('量子でAIは', '爆速になる？'), line
 
 # 次回予告（最後の約20秒）: 次回の動く図を見せ、終了画面で次回の動画を表示する
 NEXT_TEASER = dict(title='第10回 総まとめ：2030年に何が起きる？', from_script="../longform_quantum10/script.py", fig_from=1)
+
+# 縦長ショート（tools/shorts_from_longform.py で書き出す）
+SHORT = dict(fig_from=2, hook=('量子でAIは', '爆速になる？'), lines=[
+    ('Z', '量子とAIが合体したら、最強なのだ！', '量子とエーアイが合体したら、最強なのだ！', 'smug'),
+    ('M', 'ところが、100万個の数字を量子の状態に入れるだけで、100万回分くらいの手間がかかるの。', None, 'explain'),
+    ('M', '答えを取り出すにも、何度もくり返し測る必要があるわ。真ん中が速くても、全体は速くならないこともあるのよ。', None, 'explain'),
+    ('Z', '期待と現実は、本編でくわしく話すのだ！', None, 'think'),
+])

@@ -133,3 +133,11 @@ COLD_OPEN = dict(fig_from=1, hook=('離れていても', '結果がそろう？'
 
 # 次回予告（最後の約20秒）: 次回の動く図を見せ、終了画面で次回の動画を表示する
 NEXT_TEASER = dict(title='第7回 量子アニーリング', from_script="../longform_quantum7/script.py", fig_from=2)
+
+# 縦長ショート（tools/shorts_from_longform.py で書き出す）
+SHORT = dict(fig_from=1, hook=('離れていても', '結果がそろう？'), lines=[
+    ('M', '2つの量子ビットを、もつれた状態にするの。片方を測って0が出たら、もう片方も必ず0になるわ。', None, 'explain'),
+    ('Z', 'どんなに離れていても、なのだ！？', None, 'panic'),
+    ('M', 'そう。でも、これを使っても、光より速く情報は送れないの。その理由は本編で話すわね。', None, 'explain'),
+    ('Z', '量子もつれの回、見てほしいのだ！', '量子の、もつれの回、見てほしいのだ！', 'smug'),
+])
