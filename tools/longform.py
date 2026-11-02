@@ -488,6 +488,25 @@ def fig_area(img, box, fig, cfg):
             d.text(((xs[1] + xs[2]) / 2, cy + 70 if row == 0 else cy - 62), "中継点", font=jp(26, True),
                    fill=(120, 200, 255), anchor="mm")
         d.text(((xs[0] + xs[3]) / 2, y0 + 460), "AとBが直接もつれる（もつれ交換）", font=jp(30, True), fill=GOLD, anchor="mm")
+    elif k == "pipeline":
+        # 入り口 → 量子で計算 → 出口 の3つの箱
+        items = fig["items"]
+        n = len(items)
+        bw = (x1 - x0 - 80 - (n - 1) * 60) / n
+        cols = [(255, 130, 130), (110, 220, 120), (255, 130, 130)]
+        for i, (t, sub) in enumerate(items):
+            bx = x0 + 40 + i * (bw + 60)
+            col = cols[i % len(cols)]
+            d.rounded_rectangle((bx, y0 + 60, bx + bw, y1 - 60), 24, fill=(255, 255, 255, 22), outline=col, width=5)
+            d.text((bx + bw / 2, y0 + 120), t, font=jp(36, True), fill=col, anchor="mm")
+            d.multiline_text((bx + bw / 2, y0 + 220), sub, font=jp(30, True), fill=WHITE, anchor="ma", align="center",
+                             spacing=12)
+            if i < n - 1:
+                ax = bx + bw + 8
+                cy = (y0 + y1) / 2
+                d.polygon([(ax, cy - 22), (ax + 44, cy), (ax, cy + 22)], fill=WHITE)
+        d.text(((x0 + x1) / 2, y1 - 25), "真ん中が速くなっても、入り口と出口で時間がかかると全体は速くならない",
+               font=jp(28, True), fill=GOLD, anchor="mm")
     elif k == "summary":
         for i, s in enumerate(fig["items"]):
             gap = min(112, (y1 - y0 - 30) / len(fig["items"]))  # 立ち絵ワイプと重ならないよう詰める
