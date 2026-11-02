@@ -235,12 +235,76 @@ def fig_area(img, box, fig, cfg):
             d.ellipse((cx - 22, ly - 22, cx + 22, ly + 22), fill=col)
             d.text((cx, ly - 70), yr, font=num(64), fill=col, anchor="mm")
             d.multiline_text((cx, ly + 60), s, font=jp(32, True), fill=WHITE, anchor="ma", align="center", spacing=8)
+    elif k == "platform":
+        # 方式ごとの簡単なイラスト（上）と数字のチップ（下）
+        cx, top = (x0 + x1) / 2, y0 + 20
+        ih = 300
+        st = fig["style"]
+        if st == "sc":  # 冷凍機の中のチップ
+            for i, wdt in enumerate((300, 250, 200, 150)):
+                yy = top + 10 + i * 62
+                d.rounded_rectangle((cx - wdt / 2, yy, cx + wdt / 2, yy + 46), 10, fill=(200, 170, 90, 200 - i * 25),
+                                    outline=(255, 220, 140), width=2)
+            for i in range(9):
+                d.line((cx - 60 + i * 15, top + 56, cx - 60 + i * 15, top + 250), fill=(150, 220, 255, 160), width=2)
+            d.rounded_rectangle((cx - 70, top + 250, cx + 70, top + 290), 6, fill=(90, 130, 230), outline=WHITE, width=3)
+            for i in range(5):
+                d.rectangle((cx - 55 + i * 25, top + 260, cx - 42 + i * 25, top + 280), fill=GOLD)
+            d.text((cx + 170, top + 270), "チップ", font=jp(28, True), fill=WHITE, anchor="lm")
+            d.text((cx + 170, top + 40), "冷凍機", font=jp(28, True), fill=WHITE, anchor="lm")
+        elif st == "ion":  # 電極の間に浮かぶイオンの列
+            for yy in (top + 90, top + 230):
+                d.rounded_rectangle((x0 + 60, yy - 18, x1 - 60, yy + 18), 10, fill=(170, 175, 190))
+            for i in range(9):
+                ax = x0 + 110 + i * (x1 - x0 - 220) / 8
+                d.ellipse((ax - 20, top + 140, ax + 20, top + 180), fill=(255, 120, 120), outline=WHITE, width=3)
+                d.text((ax, top + 160), "+", font=jp(26, True), fill=WHITE, anchor="mm")
+            d.line((x0 + 110, top + 20, x0 + 110 + 3 * (x1 - x0 - 220) / 8, top + 160), fill=(120, 255, 160), width=5)
+            d.text((x0 + 70, top + 20), "レーザー", font=jp(26, True), fill=(120, 255, 160), anchor="lm")
+            d.text((cx, top + 290), "電極（電場でイオンを浮かせる）", font=jp(28, True), fill=WHITE, anchor="mm")
+        elif st == "atom":  # 光ピンセットでつかんだ原子の格子
+            for r in range(5):
+                for c in range(11):
+                    ax = x0 + 90 + c * (x1 - x0 - 180) / 10
+                    ay = top + 30 + r * 55
+                    d.ellipse((ax - 24, ay - 24, ax + 24, ay + 24), fill=(255, 200, 60, 40))
+                    if (r * 11 + c) % 13 != 5:
+                        d.ellipse((ax - 11, ay - 11, ax + 11, ay + 11), fill=GOLD)
+            d.text((cx, top + 290), "光ピンセット1本に原子1個", font=jp(28, True), fill=WHITE, anchor="mm")
+        elif st == "photon":  # 光ファイバーを進む光の波
+            for j, col in enumerate(((120, 220, 255), (255, 140, 200))):
+                cy = top + 90 + j * 120
+                d.rounded_rectangle((x0 + 50, cy - 40, x1 - 50, cy + 40), 40, outline=(120, 140, 200), width=3)
+                pts = [(x0 + 70 + i * 2, cy - 25 * math.sin(i / 14 + j)) for i in range(int((x1 - x0 - 140) / 2))]
+                d.line(pts, fill=col, width=5)
+            d.text((cx, top + 290), "光の粒・光の波を量子ビットに", font=jp(28, True), fill=WHITE, anchor="mm")
+        cw = (x1 - x0 - 40) / len(fig["stats"])
+        for i, (lab, val) in enumerate(fig["stats"]):
+            bx = x0 + 20 + i * cw
+            d.rounded_rectangle((bx + 8, top + ih + 40, bx + cw - 8, top + ih + 170), 18, fill=(255, 255, 255, 30),
+                                outline=GOLD, width=3)
+            d.text((bx + cw / 2, top + ih + 75), lab, font=jp(24, True), fill=(200, 210, 240), anchor="mm")
+            d.text((bx + cw / 2, top + ih + 125), val, font=jp(30 if len(val) < 9 else 24, True), fill=WHITE, anchor="mm")
+    elif k == "table":
+        head, rows = fig["head"], fig["rows"]
+        cols = [x0 + 30, x0 + 330, x0 + 960, x1 - 30]
+        rh = (y1 - y0 - 100) / len(rows)
+        d.rounded_rectangle((cols[0], y0 + 10, cols[-1], y0 + 80), 16, fill=(66, 133, 244, 200))
+        for j, h in enumerate(head):
+            d.text(((cols[j] + cols[j + 1]) / 2, y0 + 45), h, font=jp(36, True), fill=WHITE, anchor="mm")
+        for i, row in enumerate(rows):
+            yy = y0 + 95 + i * rh
+            d.rounded_rectangle((cols[0], yy, cols[-1], yy + rh - 12), 14, fill=(255, 255, 255, 22 if i % 2 else 36))
+            for j, cell in enumerate(row):
+                d.text(((cols[j] + cols[j + 1]) / 2, yy + (rh - 12) / 2), cell, font=jp(34 if j == 0 else 31, True),
+                       fill=GOLD if j == 0 else WHITE, anchor="mm")
     elif k == "summary":
         for i, s in enumerate(fig["items"]):
-            yy = y0 + 30 + i * 112
-            d.rounded_rectangle((x0 + 60, yy, x1 - 60, yy + 92), 20, fill=(255, 255, 255, 24))
-            d.text((x0 + 110, yy + 46), "✓", font=jp(48), fill=GOLD, anchor="mm")
-            d.text((x0 + 160, yy + 46), s, font=jp(46), fill=WHITE, anchor="lm")
+            gap = min(112, (y1 - y0 - 30) / len(fig["items"]))  # 立ち絵ワイプと重ならないよう詰める
+            yy = y0 + 20 + i * gap
+            d.rounded_rectangle((x0 + 60, yy, x1 - 60, yy + gap - 16), 20, fill=(255, 255, 255, 24))
+            d.text((x0 + 110, yy + (gap - 16) / 2), "✓", font=jp(46), fill=GOLD, anchor="mm")
+            d.text((x0 + 160, yy + (gap - 16) / 2), s, font=jp(44), fill=WHITE, anchor="lm")
 
 
 def slide(bg, cfg, ch_i, ch):
