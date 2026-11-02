@@ -56,7 +56,7 @@ NICT（Tokyo QKD Network, 2010）https://www1.nict.go.jp/en/press/2010/10/14-1.h
 中国科学院（墨子 衛星‐地上 約1200km, Nature 2017）https://english.cas.cn/head/201801/t20180119_189420.shtml
 APS Physics（衛星中継の大陸間量子通信, 2018）https://physics.aps.org/articles/v11/7
 Optica（光ファイバー1002kmの量子鍵配送, 2023）https://www.optica-opn.org/home/newsroom/2023/june/qkd_experiment_breaks_distance_record
-NSA（量子鍵配送についての見解）https://www.nsa.gov/Cybersecurity/Quantum-Key-Distribution-QKD-and-Quantum-Cryptography-QC/
+NSA（量子鍵配送についての見解）https://www.nsa.gov/Cybersecurity/Post-Quantum-Cybersecurity-Resources/
 NSAの見解への反論 arXiv:2307.15116 https://arxiv.org/abs/2307.15116
 Cloud Security Alliance（NIST FIPS 203/204/205）https://cloudsecurityalliance.org/articles/nist-fips-203-204-and-205-finalized-an-important-step-towards-a-quantum-safe-future
 
