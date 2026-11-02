@@ -9,6 +9,8 @@ OUT = "quantum_longform2.mp4"
 THUMB = ("量子コンピュータ", "何が得意？", "暗号・探索・分子 ― 3つの得意技")
 TITLE_CHIPS = [("干渉", (66, 133, 244)), ("ショアの素因数分解", (230, 80, 80)),
                ("グローバーの探索", (255, 200, 60)), ("分子シミュレーション", (110, 200, 90))]
+THUMB_FACE = {"Z": "panic", "M": "explain"}
+THUMB_TAG = "量子解説 #2"
 
 CHAPTERS = [
     dict(title="オープニング", fig=dict(kind="title"), lines=[

@@ -7,6 +7,11 @@ TITLE = "量子コンピュータは、いつ役に立つのか？"
 SUBTITLE = "2024〜2025年の研究で分かったこと"
 OUT = "quantum_longform.mp4"
 
+# サムネイル: タイトル（エラーという壁）と役割を分け、こちらは「答えの目安」で興味を引く
+THUMB = ("量子コンピュータ", "いつ使える？", "目安は2030年前後？")
+THUMB_FACE = {"Z": "think", "M": "explain"}
+THUMB_TAG = "量子解説 #1"
+
 CHAPTERS = [
     dict(title="オープニング", fig=dict(kind="title"), lines=[
         ("Z", "めたん、量子コンピュータってニュースでよく聞くけど、結局いつ役に立つのだ？", None),

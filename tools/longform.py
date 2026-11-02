@@ -405,10 +405,17 @@ def thumbnail(bg, cfg, path):
         ex = portraits(k)
         if not ex:
             continue
-        e = face(k, "happy" if "happy" in ex else next(iter(ex)))
-        e = e.resize((400, int(e.height * 400 / e.width)), Image.LANCZOS)
-        e = e.crop((0, 0, 400, min(e.height, 560)))
-        img.alpha_composite(e, (0 if k == "Z" else W - 400, H - e.height))
+        want = getattr(cfg, "THUMB_FACE", {}).get(k, "happy")
+        e = face(k, want if want in ex else ("happy" if "happy" in ex else next(iter(ex))))
+        cw = 470
+        e = e.resize((cw, int(e.height * cw / e.width)), Image.LANCZOS)
+        e = e.crop((0, 0, cw, min(e.height, 600)))
+        if k == "Z":  # 素材の切り抜き端（右側の尻尾）が直線で切れて見えないよう、右端をフェード
+            a = np.array(e.split()[3], dtype=float)
+            fw = 90
+            a[:, -fw:] *= np.linspace(1, 0, fw)[None, :]
+            e.putalpha(Image.fromarray(a.astype(np.uint8)))
+        img.alpha_composite(e, (-20 if k == "Z" else W - cw + 20, H - e.height))
     d = ImageDraw.Draw(img)
     t1, t2, badge = getattr(cfg, "THUMB", ("量子コンピュータ", "いつ使える？", "2024〜2025年の最新研究で解説"))
     d.text((W / 2, 290), t1, font=jp(190), fill=WHITE, anchor="mm", stroke_width=14, stroke_fill=NAVY)
@@ -416,6 +423,11 @@ def thumbnail(bg, cfg, path):
     bw = d.textlength(badge, font=jp(66)) / 2 + 70
     d.rounded_rectangle((W / 2 - bw, 740, W / 2 + bw, 860), 60, fill=(230, 60, 80), outline=WHITE, width=6)
     d.text((W / 2, 800), badge, font=jp(66), fill=WHITE, anchor="mm")
+    tag = getattr(cfg, "THUMB_TAG", None)
+    if tag:  # シリーズ番号（左上）
+        tw = d.textlength(tag, font=jp(56)) + 70
+        d.rounded_rectangle((40, 40, 40 + tw, 140), 24, fill=(66, 133, 244), outline=WHITE, width=5)
+        d.text((40 + tw / 2, 90), tag, font=jp(56), fill=WHITE, anchor="mm")
     if not portraits("Z"):
         for k, (nm, c, _, _) in SPK.items():
             cx = 170 if k == "Z" else W - 170
