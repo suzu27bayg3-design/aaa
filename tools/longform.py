@@ -234,7 +234,8 @@ def fig_area(img, box, fig, cfg):
             col = (150, 160, 200) if plan else GOLD
             d.ellipse((cx - 22, ly - 22, cx + 22, ly + 22), fill=col)
             d.text((cx, ly - 70), yr, font=num(64), fill=col, anchor="mm")
-            d.multiline_text((cx, ly + 60), s, font=jp(32, True), fill=WHITE, anchor="ma", align="center", spacing=8)
+            d.multiline_text((cx, ly + 60), s, font=jp(32 if len(items) <= 4 else 27, True), fill=WHITE, anchor="ma",
+                             align="center", spacing=8)
     elif k == "platform":
         # 方式ごとの簡単なイラスト（上）と数字のチップ（下）
         cx, top = (x0 + x1) / 2, y0 + 20
@@ -312,9 +313,13 @@ def fig_area(img, box, fig, cfg):
             d.text(((cols[j] + cols[j + 1]) / 2, y0 + 45), h, font=jp(36, True), fill=WHITE, anchor="mm")
         for i, row in enumerate(rows):
             yy = y0 + 95 + i * rh
-            d.rounded_rectangle((cols[0], yy, cols[-1], yy + rh - 12), 14, fill=(255, 255, 255, 22 if i % 2 else 36))
+            d.rounded_rectangle((cols[0], yy, cols[-1], yy + rh - (12 if rh >= 70 else 5)), 14,
+                                fill=(255, 255, 255, 22 if i % 2 else 36))
             for j, cell in enumerate(row):
-                d.text(((cols[j] + cols[j + 1]) / 2, yy + (rh - 12) / 2), cell, font=jp(34 if j == 0 else 31, True),
+                fs = 34 if j == 0 else 31
+                if rh < 70:
+                    fs -= 6
+                d.text(((cols[j] + cols[j + 1]) / 2, yy + (rh - 12) / 2), cell, font=jp(fs, True),
                        fill=GOLD if j == 0 else WHITE, anchor="mm")
     elif k == "bb84":
         # BB84: 送り手のビットと測り方 → 光子の偏光 → 受け手の測り方と結果 → 鍵
