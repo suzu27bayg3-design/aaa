@@ -298,6 +298,46 @@ def fig_area(img, box, fig, cfg):
             for j, cell in enumerate(row):
                 d.text(((cols[j] + cols[j + 1]) / 2, yy + (rh - 12) / 2), cell, font=jp(34 if j == 0 else 31, True),
                        fill=GOLD if j == 0 else WHITE, anchor="mm")
+    elif k == "bb84":
+        # BB84: 送り手のビットと測り方 → 光子の偏光 → 受け手の測り方と結果 → 鍵
+        bits = [0, 1, 1, 0, 1, 0]
+        ab = ["+", "×", "+", "×", "×", "+"]
+        bb = ["+", "+", "+", "×", "+", "×"]
+        labels = ["送り手のビット", "送り手の測り方", "送る光子の向き", "受け手の測り方", "受け手の結果", "鍵に使う？"]
+        lw = 250
+        cw = (x1 - x0 - lw - 20) / len(bits)
+        rh = (y1 - y0 - 20) / len(labels)
+
+        def pol(cx, cy, basis, bit, col):
+            r = rh * 0.32
+            if basis == "+":
+                seg = (cx - r, cy, cx + r, cy) if bit == 0 else (cx, cy - r, cx, cy + r)
+            else:
+                seg = (cx - r * 0.7, cy + r * 0.7, cx + r * 0.7, cy - r * 0.7) if bit == 0 else \
+                      (cx - r * 0.7, cy - r * 0.7, cx + r * 0.7, cy + r * 0.7)
+            d.line(seg, fill=col, width=7)
+        for r, lab in enumerate(labels):
+            cy = y0 + 10 + (r + 0.5) * rh
+            d.rounded_rectangle((x0 + 10, cy - rh / 2 + 4, x1 - 10, cy + rh / 2 - 4), 12,
+                                fill=(255, 255, 255, 18 if r % 2 else 30))
+            d.text((x0 + 24, cy), lab, font=jp(26, True), fill=(200, 210, 240), anchor="lm")
+            for i in range(len(bits)):
+                cx = x0 + lw + (i + 0.5) * cw
+                same = ab[i] == bb[i]
+                if r == 0:
+                    d.text((cx, cy), str(bits[i]), font=num(44), fill=WHITE, anchor="mm")
+                elif r == 1:
+                    d.text((cx, cy), ab[i], font=jp(40, True), fill=(120, 200, 255), anchor="mm")
+                elif r == 2:
+                    pol(cx, cy, ab[i], bits[i], GOLD)
+                elif r == 3:
+                    d.text((cx, cy), bb[i], font=jp(40, True), fill=(255, 150, 200), anchor="mm")
+                elif r == 4:
+                    d.text((cx, cy), str(bits[i]) if same else "?", font=num(44) if same else jp(40, True),
+                           fill=WHITE if same else (150, 150, 170), anchor="mm")
+                else:
+                    d.text((cx, cy), "○" if same else "×", font=jp(40, True),
+                           fill=(110, 220, 120) if same else (230, 90, 90), anchor="mm")
     elif k == "summary":
         for i, s in enumerate(fig["items"]):
             gap = min(112, (y1 - y0 - 30) / len(fig["items"]))  # 立ち絵ワイプと重ならないよう詰める
