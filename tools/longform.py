@@ -181,8 +181,10 @@ def fig_area(img, box, fig, cfg):
         for i, (t, s) in enumerate(items):
             yy = y0 + 20 + i * hh
             d.rounded_rectangle((x0 + 40, yy, x1 - 40, yy + hh - 30), 24, fill=(255, 255, 255, 28), outline=GOLD, width=3)
-            d.text((x0 + 80, yy + 26), t, font=jp(34, True), fill=GOLD)
-            d.multiline_text((x0 + 80, yy + 80), s, font=jp(46), fill=WHITE, spacing=10)
+            small = hh < 190
+            d.text((x0 + 80, yy + (16 if small else 26)), t, font=jp(30 if small else 34, True), fill=GOLD)
+            d.multiline_text((x0 + 80, yy + (60 if small else 80)), s, font=jp(32 if small else 46), fill=WHITE,
+                             spacing=6 if small else 10)
     elif k == "timeline":
         items = fig["items"]
         ly = (y0 + y1) / 2 - 40
@@ -209,43 +211,116 @@ def slide(bg, cfg, ch_i, ch):
     ImageDraw.Draw(lay).rounded_rectangle(panel, 30, fill=(0, 0, 0, 90))
     img = Image.alpha_composite(img, lay)
     d = ImageDraw.Draw(img)
+    has_port = bool(portraits("Z")) or bool(portraits("M"))
+    bottom = 680 if has_port else 790  # 立ち絵ワイプと重ならないよう、図の下端を上げる
     if ch.get("bullets"):
         # 左: 箇条書き / 右: 図
         for i, b in enumerate(ch["bullets"]):
-            yy = 190 + i * 140
+            yy = 175 + i * (120 if has_port else 140)
             d.rounded_rectangle((100, yy, 112, yy + 70), 6, fill=GOLD)
-            for j, ln in enumerate(wrap(d, b, jp(44), 760)):
-                d.text((135, yy + 4 + j * 56), ln, font=jp(44), fill=WHITE)
-        box = (920, 150, W - 80, 790)
+            bf = jp(40) if has_port else jp(44)
+            for j, ln in enumerate(wrap(d, b, bf, 760)):
+                d.text((135, yy + 4 + j * 50), ln, font=bf, fill=WHITE)
+        box = (920, 150, W - 80, bottom)
     else:
-        box = (100, 150, W - 100, 790)
+        box = (100, 150, W - 100, bottom)
     # 図は透明なレイヤーに描いてから重ねる（半透明の塗りを正しく合成するため）
     fl = Image.new("RGBA", (W, H))
     fig_area(fl, box, ch["fig"], cfg)
     return Image.alpha_composite(img, fl)
 
 
-def with_line(sl, spk, text):
+# ---- 立ち絵（assets/characters/<名前>/<表情>.png があれば使う） ------------------------
+CHAR_DIR = {"Z": "zundamon", "M": "metan"}
+_PORT = {}
+
+
+def portraits(spk):
+    """話者の表情画像を {表情名: RGBA画像} で返す（枠に収まるよう拡大済み）"""
+    if spk not in _PORT:
+        d = os.path.join(ROOT, "assets", "characters", CHAR_DIR[spk])
+        out = {}
+        if os.path.isdir(d):
+            for f in sorted(os.listdir(d)):
+                if f.endswith(".png"):
+                    im = Image.open(os.path.join(d, f)).convert("RGBA")
+                    sc = PW / im.width
+                    out[f[:-4]] = im.resize((PW, int(im.height * sc)), Image.LANCZOS)
+        _PORT[spk] = out
+    return _PORT[spk]
+
+
+def subtitle_pages(text):
+    """字幕が3行を超える場合のページ分け。各ページの文字数を返す（表示時間の配分に使う）"""
+    use_port = bool(portraits("Z")) or bool(portraits("M"))
+    bx0, bx1 = (360, W - 360) if use_port else (60, W - 60)
+    tx = bx0 + 40 if use_port else 260
+    d = ImageDraw.Draw(Image.new("RGB", (8, 8)))
+    ls = wrap(d, text, jp(46, True), bx1 - tx - 40)
+    return [sum(len(x) for x in ls[i:i + 3]) for i in range(0, len(ls), 3)]
+
+
+def expression(spk, text, tag=None):
+    """表情の選び方: 台本の指定 > 文末の記号から推定 > 既定"""
+    ex = portraits(spk)
+    if not ex:
+        return None
+    if tag in ex:
+        return tag
+    if "……" in text and "panic" in ex:
+        return "panic"
+    if text.endswith("！") and "smug" in ex:
+        return "smug"
+    return "happy" if "happy" in ex else next(iter(ex))
+
+
+PW, PH = 290, 340  # 立ち絵ワイプの大きさ
+
+
+def with_line(sl, spk, text, expr=None, bob=0, page=0):
     img = sl.copy()
     lay = Image.new("RGBA", (W, H))
     d = ImageDraw.Draw(lay)
     name, col, _, _ = SPK[spk]
-    d.rounded_rectangle((60, 830, W - 60, 1040), 28, fill=(255, 255, 255, 235), outline=col, width=8)
-    # 話者アイコン（左右に配置。話している方を強調）
+    use_port = bool(portraits("Z")) or bool(portraits("M"))
+    bx0, bx1 = (360, W - 360) if use_port else (60, W - 60)
+    d.rounded_rectangle((bx0, 830, bx1, 1040), 28, fill=(255, 255, 255, 235), outline=col, width=8)
     for k, (nm, c, _, _) in SPK.items():
-        cx = 150 if k == "Z" else W - 150
         active = k == spk
-        rr = 70 if active else 54
-        d.ellipse((cx - rr, 935 - rr, cx + rr, 935 + rr), fill=c + ((255,) if active else (110,)),
-                  outline=WHITE, width=5 if active else 2)
-        d.text((cx, 935), nm[0], font=jp(64 if active else 48), fill=WHITE, anchor="mm")
-    d.rounded_rectangle((250, 800, 250 + d.textlength(name, font=jp(36)) + 60, 856), 18, fill=col)
-    d.text((280, 828), name, font=jp(36), fill=WHITE, anchor="lm")
+        ex = portraits(k)
+        if ex:
+            # 立ち絵ワイプ: 話している方は明るく、声に合わせて弾む
+            x0 = 40 if k == "Z" else W - 40 - PW
+            y0 = 700 - (14 if (active and bob) else 0)
+            win = Image.new("RGBA", (PW, PH), c + (255,))
+            wd = ImageDraw.Draw(win)
+            for yy in range(PH):
+                wd.line((0, yy, PW, yy), fill=tuple(int(v * (0.55 + 0.45 * yy / PH)) for v in c) + (255,))
+            e = ex[expression(k, text if active else "", None) if not active or expr is None else expr]
+            win.alpha_composite(e, (0, max(0, PH - e.height + 30) if e.height < PH else 0))
+            if not active:
+                win = Image.alpha_composite(win, Image.new("RGBA", (PW, PH), (0, 0, 0, 120)))
+            m = Image.new("L", (PW, PH), 0)
+            ImageDraw.Draw(m).rounded_rectangle((0, 0, PW - 1, PH - 1), 36, fill=255)
+            lay.paste(win, (x0, y0), m)
+            d.rounded_rectangle((x0, y0, x0 + PW, y0 + PH), 36, outline=WHITE if active else (150, 150, 170),
+                                width=6 if active else 3)
+            d.rounded_rectangle((x0 + 20, y0 + PH - 58, x0 + PW - 20, y0 + PH - 12), 16, fill=c)
+            d.text((x0 + PW / 2, y0 + PH - 35), nm, font=jp(30), fill=WHITE, anchor="mm")
+        else:
+            cx = 150 if k == "Z" else W - 150
+            rr = 70 if active else 54
+            d.ellipse((cx - rr, 935 - rr, cx + rr, 935 + rr), fill=c + ((255,) if active else (110,)),
+                      outline=WHITE, width=5 if active else 2)
+            d.text((cx, 935), nm[0], font=jp(64 if active else 48), fill=WHITE, anchor="mm")
+    tx = bx0 + 40 if use_port else 260
+    d.rounded_rectangle((tx - 10, 800, tx - 10 + d.textlength(name, font=jp(36)) + 60, 856), 18, fill=col)
+    d.text((tx + 20, 828), name, font=jp(36), fill=WHITE, anchor="lm")
     f = jp(46, True)
-    lines = wrap(d, text, f, W - 560)[:3]
+    lines = wrap(d, text, f, bx1 - tx - 40)[page * 3: page * 3 + 3]
     ty = 935 - (len(lines) * 58) / 2
     for i, ln in enumerate(lines):
-        d.text((260, ty + i * 58), ln, font=f, fill=NAVY)
+        d.text((tx, ty + i * 58), ln, font=f, fill=NAVY)
     return Image.alpha_composite(img, lay)
 
 
@@ -265,15 +340,25 @@ def tts(text, spk, path, host="http://127.0.0.1:50021"):
 
 def thumbnail(bg, cfg, path):
     img = Image.alpha_composite(bg.copy(), Image.new("RGBA", (W, H), (0, 0, 0, 60)))
-    d = ImageDraw.Draw(img)
-    d.text((W / 2, 300), "量子コンピュータ", font=jp(190), fill=WHITE, anchor="mm", stroke_width=14, stroke_fill=NAVY)
-    d.text((W / 2, 560), "いつ使える？", font=jp(220), fill=GOLD, anchor="mm", stroke_width=16, stroke_fill=NAVY)
-    d.rounded_rectangle((W / 2 - 700, 760, W / 2 + 700, 900), 70, fill=(230, 60, 80))
-    d.text((W / 2, 830), "2024〜2025年の最新研究で解説", font=jp(76), fill=WHITE, anchor="mm")
+    # 立ち絵（先に描いて、文字を上に重ねる）
     for k, (nm, c, _, _) in SPK.items():
-        cx = 170 if k == "Z" else W - 170
-        d.ellipse((cx - 130, 900 - 130, cx + 130, 900 + 130), fill=c, outline=WHITE, width=8)
-        d.text((cx, 900), nm[0], font=jp(130), fill=WHITE, anchor="mm")
+        ex = portraits(k)
+        if not ex:
+            continue
+        e = ex.get("happy") or next(iter(ex.values()))
+        e = e.resize((400, int(e.height * 400 / e.width)), Image.LANCZOS)
+        e = e.crop((0, 0, 400, min(e.height, 560)))
+        img.alpha_composite(e, (0 if k == "Z" else W - 400, H - e.height))
+    d = ImageDraw.Draw(img)
+    d.text((W / 2, 290), "量子コンピュータ", font=jp(190), fill=WHITE, anchor="mm", stroke_width=14, stroke_fill=NAVY)
+    d.text((W / 2, 540), "いつ使える？", font=jp(220), fill=GOLD, anchor="mm", stroke_width=16, stroke_fill=NAVY)
+    d.rounded_rectangle((W / 2 - 560, 740, W / 2 + 560, 860), 60, fill=(230, 60, 80), outline=WHITE, width=6)
+    d.text((W / 2, 800), "2024〜2025年の最新研究で解説", font=jp(66), fill=WHITE, anchor="mm")
+    if not portraits("Z"):
+        for k, (nm, c, _, _) in SPK.items():
+            cx = 170 if k == "Z" else W - 170
+            d.ellipse((cx - 130, 900 - 130, cx + 130, 900 + 130), fill=c, outline=WHITE, width=8)
+            d.text((cx, 900), nm[0], font=jp(130), fill=WHITE, anchor="mm")
     img.convert("RGB").resize((1280, 720), Image.LANCZOS).save(path)
 
 
@@ -288,8 +373,9 @@ def main():
     here = os.path.dirname(os.path.abspath(a.script))
     vdir = os.path.join(here, "voicevox")
     os.makedirs(vdir, exist_ok=True)
-    lines = [(ci, li, spk, disp, say or disp) for ci, ch in enumerate(cfg.CHAPTERS)
-             for li, (spk, disp, say) in enumerate(ch["lines"])]
+    lines = [(ci, li, row[0], row[1], row[2] or row[1]) for ci, ch in enumerate(cfg.CHAPTERS)
+             for li, row in enumerate(ch["lines"])]
+    tags = [row[3] if len(row) > 3 else None for ch in cfg.CHAPTERS for row in ch["lines"]]
     if not a.no_tts:
         for f in os.listdir(vdir):
             os.remove(os.path.join(vdir, f))
@@ -309,12 +395,35 @@ def main():
             chapter_starts[ci] = t
         if ci not in slides:
             slides[ci] = slide(bg, cfg, ci, cfg.CHAPTERS[ci])
-        p = os.path.join(tmp, f"f{n:03d}.png")
-        with_line(slides[ci], spk, disp).convert("RGB").save(p)
-        concat.append(f"file '{p}'\nduration {dur:.3f}")
+        ex = expression(spk, disp, tags[n])
+        pages = subtitle_pages(disp)
+        bounds = np.cumsum([0] + pages) / sum(pages) * (dur - 0.3)  # ページの切り替え時刻
+        cache = {}
+
+        def img(page, bob):
+            k = (page, bob)
+            if k not in cache:
+                cache[k] = os.path.join(tmp, f"f{n:03d}_{page}_{bob}.png")
+                with_line(slides[ci], spk, disp, ex, bob, page).convert("RGB").save(cache[k])
+            return cache[k]
+        # 0.1秒ごとに「どのページを出すか」「声に合わせて弾むか」を決める
+        step, tt, prev = 0.1, 0.0, None
+        while tt < dur - 1e-6:
+            page = max(0, min(len(pages) - 1, int(np.searchsorted(bounds, tt, side="right")) - 1))
+            seg = v[int(max(0, tt - 0.1) * SR): int(max(0, tt - 0.1 + step) * SR)]
+            loud = portraits(spk) and len(seg) and np.sqrt((seg ** 2).mean()) > 0.04
+            cur = img(page, 1 if (loud and int(tt / step) % 2 == 0) else 0)
+            dd = min(step, dur - tt)
+            if cur == prev:
+                concat[-1] = concat[-1].rsplit("duration", 1)[0] + f"duration {float(concat[-1].rsplit(' ', 1)[1]) + dd:.3f}"
+            else:
+                concat.append(f"file '{cur}'\nduration {dd:.3f}")
+            prev = cur
+            tt += step
+        last_img = prev
         durs.append(dur)
         t += dur
-    concat.append(f"file '{os.path.join(tmp, f'f{len(lines) - 1:03d}.png')}'")
+    concat.append(f"file '{last_img}'")
     open(os.path.join(tmp, "list.txt"), "w").write("\n".join(concat) + "\n")
     total = t
     print(f"total {total / 60:.1f} min")
