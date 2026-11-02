@@ -1,0 +1,78 @@
+# 解説動画 第2回：量子コンピュータが得意な計算（ずんだもん×四国めたん）
+
+- 動画: `quantum_longform2.mp4`（1920×1080 横長 / 約5分25秒 / H.264 + AAC）
+- サムネイル: `thumbnail.png`（1280×720）
+- 生成: `bash ../tools/voicevox_engine.sh` → `python3 ../tools/longform.py script.py`（台本・図は `script.py`）
+- チャプター: `chapters.txt`
+- 立ち絵: 坂本アヒルさんのPSD素材から書き出したパーツ（`../assets/characters/`）
+  - **口パク**: 0.1秒ごとに声の大きさ（RMS）を測り、口を「閉じ／半開き／開き」の3段階で切り替え
+  - **まばたき**: ずんだもん約3.7秒・めたん約4.3秒ごとに0.1秒だけ目を閉じる
+  - **表情**: 台本の指定（4番目の要素）か、文末の記号・文の長さから自動で選ぶ
+- 新しい図: `interfere`（波の干渉）、`period`（7をかけて15で割った余りの周期 → 15 = 3 × 5）
+
+---
+
+## 投稿用メタデータ
+
+### タイトル（候補）
+```
+【ずんだもん解説】量子コンピュータは何が得意？ 暗号・探索・分子シミュレーションの3つの得意技
+```
+```
+量子コンピュータは「何でも速い」は誤解！ 本当に得意な計算と苦手なこと【ずんだもん】
+```
+
+### 説明欄
+```
+【量子コンピュータは何が得意？】ずんだもんと四国めたんが約5分で解説します。
+量子コンピュータが速くなる原理「干渉」から、素因数分解（ショアのアルゴリズム）、探索（グローバーのアルゴリズム）、分子のシミュレーション、そして実は苦手なことまで紹介します。
+
+▼チャプター
+0:00 オープニング
+0:24 基本の原理：干渉
+1:01 得意技① 素因数分解（ショア 1994）
+2:08 得意技② 探索（グローバー 1996）
+2:51 得意技③ 分子・物質のシミュレーション
+3:37 実際に示された「量子の優位性」
+4:27 実は苦手なこと
+5:02 まとめ
+
+▼この動画で紹介した研究
+・ショアのアルゴリズム（1994年）：素因数分解を「周期を見つける問題」に変えて効率よく解く
+・グローバーのアルゴリズム（1996年）：N個から1つを約√N回（π/4×√N回）で探す。この種の探索では最適
+・ファインマン「Simulating Physics with Computers」（1981年講演、1982年論文）
+・窒素固定酵素（FeMoco）の量子計算の見積もり（Reiher ほか, PNAS 2017）
+・Google Sycamore（2019年, Nature）：200秒 vs スパコン1万年（IBMは約2.5日と反論）
+・Google Willow（2024年）：5分 vs スパコン10^25年（ランダム回路サンプリング）
+・Google Quantum Echoes（2025年10月, Nature）：OTOCの計算でスパコンの約1万3000倍
+
+💬 量子コンピュータで一番解いてほしい問題は？ コメントで教えてください！
+▶ 第1回「量子コンピュータは、いつ役に立つのか？」も公開中
+
+出典:
+Shor (1994/1995) arXiv:quant-ph/9508027 https://arxiv.org/abs/quant-ph/9508027
+Grover (1996) arXiv:quant-ph/9605043 https://arxiv.org/abs/quant-ph/9605043
+IBM Quantum Learning（グローバーのアルゴリズム）https://quantum.cloud.ibm.com/learning/en/modules/computer-science/grovers
+Feynman (1982) Int. J. Theor. Phys. 21, 467 https://doi.org/10.1007/BF02650179
+Reiher et al. (2017) PNAS 114, 7555 https://doi.org/10.1073/pnas.1619152114
+Arute et al. (2019) Nature 574, 505 https://doi.org/10.1038/s41586-019-1666-5
+Google（Willow, 2024）https://blog.google/technology/research/google-willow-quantum-chip/
+Google Quantum AI (2025) Nature 646, 825 https://doi.org/10.1038/s41586-025-09526-6
+Google（Quantum Echoes, 2025）https://blog.google/technology/research/quantum-echoes-willow-verifiable-quantum-advantage/
+The Quantum Insider（13,000倍・Frontier 3.2年 vs 約2時間）https://thequantuminsider.com/?p=2381758
+Aaronson (2015) "Read the fine print" Nature Physics 11, 291 https://doi.org/10.1038/nphys3272
+
+音声: VOICEVOX:ずんだもん / VOICEVOX:四国めたん
+立ち絵: 坂本アヒル（ずんだもん立ち絵素材 / 四国めたん立ち絵素材）
+
+#量子コンピュータ #ずんだもん #科学解説
+```
+
+### 固定コメント
+```
+量子コンピュータで一番解いてほしい問題は？ 次に解説してほしいテーマもコメントで！
+```
+
+### 投稿時の設定
+- **終了画面**: 第1回の動画を表示
+- **再生リスト**: 「ずんだもんの量子技術解説」にまとめる

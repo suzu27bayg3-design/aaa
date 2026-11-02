@@ -55,14 +55,16 @@ def num(s):
 
 
 def wrap(d, text, font, width):
+    """1文字ずつ詰めて折り返す。句読点は行頭に置かず、英数字の単語（IBMなど）は途中で切らない"""
+    import re
     lines, cur = [], ""
-    for ch in text:
-        if ch == "\n":
+    for tok in re.findall(r"[A-Za-z0-9.,%^]+|\n|.", text):
+        if tok == "\n":
             lines.append(cur); cur = ""; continue
-        if d.textlength(cur + ch, font=font) > width and cur and ch not in "、。！？」）":
-            lines.append(cur); cur = ch
+        if d.textlength(cur + tok, font=font) > width and cur and tok not in "、。！？」）":
+            lines.append(cur); cur = tok
         else:
-            cur += ch
+            cur += tok
     lines.append(cur)
     return lines
 
@@ -107,11 +109,13 @@ def fig_area(img, box, fig, cfg):
     if k == "title":
         d.text((W / 2, 330), cfg.TITLE, font=jp(96), fill=WHITE, anchor="mm", stroke_width=6, stroke_fill=NAVY)
         d.text((W / 2, 460), cfg.SUBTITLE, font=jp(54, True), fill=GOLD, anchor="mm")
-        for i, (n, c) in enumerate((("Google Willow", (66, 133, 244)), ("ノーベル物理学賞", GOLD),
-                                    ("理研×富士通", (230, 80, 80)), ("耐量子暗号", (110, 200, 90)))):
-            bx = W / 2 - 760 + i * 390
-            d.rounded_rectangle((bx, 560, bx + 360, 640), 40, outline=c, width=5, fill=(0, 0, 0, 120))
-            d.text((bx + 180, 600), n, font=jp(38, True), fill=WHITE, anchor="mm")
+        chips = getattr(cfg, "TITLE_CHIPS", [("Google Willow", (66, 133, 244)), ("ノーベル物理学賞", GOLD),
+                                             ("理研×富士通", (230, 80, 80)), ("耐量子暗号", (110, 200, 90))])
+        cw = (W - 240) / len(chips)
+        for i, (n, c) in enumerate(chips):
+            bx = 120 + i * cw
+            d.rounded_rectangle((bx + 10, 560, bx + cw - 10, 640), 40, outline=c, width=5, fill=(0, 0, 0, 120))
+            d.text((bx + cw / 2, 600), n, font=jp(36, True), fill=WHITE, anchor="mm")
     elif k == "qubit":
         cy = (y0 + y1) / 2
         # 古典ビット
@@ -146,6 +150,41 @@ def fig_area(img, box, fig, cfg):
                 d.text((cx, yy + 50), v, font=num(64), fill=NAVY if single else WHITE, anchor="mm")
             if i < len(rows) - 1:
                 d.text((x0 + 540, yy + 125), "↓", font=jp(36), fill=(180, 195, 240), anchor="mm")
+    elif k == "interfere":
+        # 上: 山と山（強め合う）/ 下: 山と谷（打ち消し合う）
+        hh = (y1 - y0) / 2
+        for row, (lab, shift, col) in enumerate((("強め合う（正解）", 0.0, GOLD), ("打ち消し合う（不正解）", math.pi, (255, 120, 120)))):
+            cy = y0 + hh * row + hh / 2 + 25
+            xs = [x0 + 40 + i * (x1 - x0 - 80) / 300 for i in range(301)]
+            a = [(x, cy - 37 * math.sin(i / 300 * 4 * math.pi)) for i, x in enumerate(xs)]
+            b = [(x, cy - 37 * math.sin(i / 300 * 4 * math.pi + shift)) for i, x in enumerate(xs)]
+            sm = [(x, cy - 75 * math.sin(i / 300 * 4 * math.pi) * (1 if shift == 0 else 0)) for i, x in enumerate(xs)]
+            d.line(a, fill=(120, 170, 255, 170), width=3)
+            d.line(b, fill=(170, 220, 255, 170), width=3)
+            d.line(sm, fill=col, width=7)
+            d.text((x0 + 40, cy - hh / 2 + 6), lab, font=jp(32, True), fill=col)
+    elif k == "period":
+        a, n = fig["a"], fig["n"]
+        vals = [pow(a, x, n) for x in range(9)]
+        cw = (x1 - x0 - 40) / len(vals)
+        top = y0 + 30
+        d.text((x0 + 20, top), f"{a}をx回かけて{n}で割った余り", font=jp(32, True), fill=(180, 195, 240))
+        for i, v in enumerate(vals):
+            cx = x0 + 20 + (i + 0.5) * cw
+            d.text((cx, top + 80), f"x={i}", font=jp(26, True), fill=(180, 195, 240), anchor="mm")
+            d.rounded_rectangle((cx - cw / 2 + 6, top + 110, cx + cw / 2 - 6, top + 200), 14,
+                                fill=GOLD if v == 1 else (90, 130, 230), outline=WHITE, width=2)
+            d.text((cx, top + 155), str(v), font=num(48), fill=NAVY if v == 1 else WHITE, anchor="mm")
+        p = vals[1:].index(1) + 1
+        for j in range(0, 8, p):
+            bx0 = x0 + 20 + j * cw + 6
+            d.line((bx0, top + 225, bx0 + p * cw - 12, top + 225), fill=GOLD, width=5)
+        d.text(((x0 + x1) / 2, top + 260), f"周期 r = {p}", font=jp(40, True), fill=GOLD, anchor="mm")
+        h = pow(a, p // 2)
+        d.text(((x0 + x1) / 2, top + 330), f"{a}^{p // 2} = {h} → {h - 1} と {h + 1}", font=jp(36, True), fill=WHITE, anchor="mm")
+        g1, g2 = math.gcd(h - 1, n), math.gcd(h + 1, n)
+        d.text(((x0 + x1) / 2, top + 390), f"{n}との最大公約数 → {g1} と {g2}（{n} = {g1} × {g2}）",
+               font=jp(36, True), fill=GOLD, anchor="mm")
     elif k == "noise":
         cy = (y0 + y1) / 2 - 40
         pts_c, pts_n = [], []
@@ -182,9 +221,9 @@ def fig_area(img, box, fig, cfg):
             yy = y0 + 20 + i * hh
             d.rounded_rectangle((x0 + 40, yy, x1 - 40, yy + hh - 30), 24, fill=(255, 255, 255, 28), outline=GOLD, width=3)
             small = hh < 190
-            d.text((x0 + 80, yy + (16 if small else 26)), t, font=jp(30 if small else 34, True), fill=GOLD)
-            d.multiline_text((x0 + 80, yy + (60 if small else 80)), s, font=jp(32 if small else 46), fill=WHITE,
-                             spacing=6 if small else 10)
+            d.text((x0 + 80, yy + (10 if small else 26)), t, font=jp(28 if small else 34, True), fill=GOLD)
+            d.multiline_text((x0 + 80, yy + (48 if small else 80)), s, font=jp(29 if small else 46), fill=WHITE,
+                             spacing=4 if small else 10)
     elif k == "timeline":
         items = fig["items"]
         ly = (y0 + y1) / 2 - 40
@@ -236,18 +275,36 @@ _PORT = {}
 
 
 def portraits(spk):
-    """話者の表情画像を {表情名: RGBA画像} で返す（枠に収まるよう拡大済み）"""
+    """話者の立ち絵を {表情: {目口: RGBA画像}} で返す（枠の幅に合わせて縮小済み）。
+    ファイル名は <表情>__<目o|c><口0|1|2>.png（tools/psd_parts.py が書き出す）。
+    目口の指定がない <表情>.png は「目を開けて口を閉じた絵」として扱う。"""
     if spk not in _PORT:
         d = os.path.join(ROOT, "assets", "characters", CHAR_DIR[spk])
         out = {}
         if os.path.isdir(d):
             for f in sorted(os.listdir(d)):
                 if f.endswith(".png"):
+                    ex, _, var = f[:-4].partition("__")
                     im = Image.open(os.path.join(d, f)).convert("RGBA")
                     sc = PW / im.width
-                    out[f[:-4]] = im.resize((PW, int(im.height * sc)), Image.LANCZOS)
+                    out.setdefault(ex, {})[var or "o0"] = im.resize((PW, int(im.height * sc)), Image.LANCZOS)
         _PORT[spk] = out
     return _PORT[spk]
+
+
+def face(spk, ex, eye_closed=False, mouth=0):
+    """表情・まばたき・口の開き(0〜2)に合う絵を選ぶ。無い組み合わせは近いもので代用"""
+    vs = portraits(spk)[ex]
+    for key in (f"{'c' if eye_closed else 'o'}{mouth}", f"o{mouth}", f"o{min(mouth, 1)}", "o0"):
+        if key in vs:
+            return vs[key]
+    return next(iter(vs.values()))
+
+
+def blinking(spk, t):
+    """まばたき: 話者ごとに少しずらした周期で、0.1秒だけ目を閉じる"""
+    period = 3.7 if spk == "Z" else 4.3
+    return (t + (0.0 if spk == "Z" else 1.6)) % period < 0.1
 
 
 def subtitle_pages(text):
@@ -269,15 +326,17 @@ def expression(spk, text, tag=None):
         return tag
     if "……" in text and "panic" in ex:
         return "panic"
-    if text.endswith("！") and "smug" in ex:
+    if text.endswith("！") and "smug" in ex and spk == "Z":
         return "smug"
+    if spk == "M" and len(text) >= 45 and "explain" in ex:
+        return "explain"  # 長い説明のときは指差しポーズ
     return "happy" if "happy" in ex else next(iter(ex))
 
 
 PW, PH = 290, 340  # 立ち絵ワイプの大きさ
 
 
-def with_line(sl, spk, text, expr=None, bob=0, page=0):
+def with_line(sl, spk, text, expr=None, mouth=0, page=0, blink=()):
     img = sl.copy()
     lay = Image.new("RGBA", (W, H))
     d = ImageDraw.Draw(lay)
@@ -289,15 +348,16 @@ def with_line(sl, spk, text, expr=None, bob=0, page=0):
         active = k == spk
         ex = portraits(k)
         if ex:
-            # 立ち絵ワイプ: 話している方は明るく、声に合わせて弾む
+            # 立ち絵ワイプ: 話している方は明るく、声に合わせて口が動く
             x0 = 40 if k == "Z" else W - 40 - PW
-            y0 = 700 - (14 if (active and bob) else 0)
+            y0 = 700
             win = Image.new("RGBA", (PW, PH), c + (255,))
             wd = ImageDraw.Draw(win)
             for yy in range(PH):
                 wd.line((0, yy, PW, yy), fill=tuple(int(v * (0.55 + 0.45 * yy / PH)) for v in c) + (255,))
-            e = ex[expression(k, text if active else "", None) if not active or expr is None else expr]
-            win.alpha_composite(e, (0, max(0, PH - e.height + 30) if e.height < PH else 0))
+            e = face(k, expression(k, "", None) if not active else (expr or expression(k, text)),
+                     k in blink, mouth if active else 0)
+            win.alpha_composite(e, (0, max(0, PH - e.height) if e.height < PH else 0))
             if not active:
                 win = Image.alpha_composite(win, Image.new("RGBA", (PW, PH), (0, 0, 0, 120)))
             m = Image.new("L", (PW, PH), 0)
@@ -345,15 +405,17 @@ def thumbnail(bg, cfg, path):
         ex = portraits(k)
         if not ex:
             continue
-        e = ex.get("happy") or next(iter(ex.values()))
+        e = face(k, "happy" if "happy" in ex else next(iter(ex)))
         e = e.resize((400, int(e.height * 400 / e.width)), Image.LANCZOS)
         e = e.crop((0, 0, 400, min(e.height, 560)))
         img.alpha_composite(e, (0 if k == "Z" else W - 400, H - e.height))
     d = ImageDraw.Draw(img)
-    d.text((W / 2, 290), "量子コンピュータ", font=jp(190), fill=WHITE, anchor="mm", stroke_width=14, stroke_fill=NAVY)
-    d.text((W / 2, 540), "いつ使える？", font=jp(220), fill=GOLD, anchor="mm", stroke_width=16, stroke_fill=NAVY)
-    d.rounded_rectangle((W / 2 - 560, 740, W / 2 + 560, 860), 60, fill=(230, 60, 80), outline=WHITE, width=6)
-    d.text((W / 2, 800), "2024〜2025年の最新研究で解説", font=jp(66), fill=WHITE, anchor="mm")
+    t1, t2, badge = getattr(cfg, "THUMB", ("量子コンピュータ", "いつ使える？", "2024〜2025年の最新研究で解説"))
+    d.text((W / 2, 290), t1, font=jp(190), fill=WHITE, anchor="mm", stroke_width=14, stroke_fill=NAVY)
+    d.text((W / 2, 540), t2, font=jp(220), fill=GOLD, anchor="mm", stroke_width=16, stroke_fill=NAVY)
+    bw = d.textlength(badge, font=jp(66)) / 2 + 70
+    d.rounded_rectangle((W / 2 - bw, 740, W / 2 + bw, 860), 60, fill=(230, 60, 80), outline=WHITE, width=6)
+    d.text((W / 2, 800), badge, font=jp(66), fill=WHITE, anchor="mm")
     if not portraits("Z"):
         for k, (nm, c, _, _) in SPK.items():
             cx = 170 if k == "Z" else W - 170
@@ -400,19 +462,22 @@ def main():
         bounds = np.cumsum([0] + pages) / sum(pages) * (dur - 0.3)  # ページの切り替え時刻
         cache = {}
 
-        def img(page, bob):
-            k = (page, bob)
+        def img(page, mouth, blink):
+            k = (page, mouth, blink)
             if k not in cache:
-                cache[k] = os.path.join(tmp, f"f{n:03d}_{page}_{bob}.png")
-                with_line(slides[ci], spk, disp, ex, bob, page).convert("RGB").save(cache[k])
+                cache[k] = os.path.join(tmp, f"f{n:03d}_{page}_{mouth}_{''.join(blink)}.png")
+                with_line(slides[ci], spk, disp, ex, mouth, page, blink).convert("RGB").save(cache[k])
             return cache[k]
-        # 0.1秒ごとに「どのページを出すか」「声に合わせて弾むか」を決める
+        # 0.1秒ごとに「どのページを出すか」「口をどれだけ開けるか」「まばたき中か」を決める
+        # 口の開きは、その0.1秒の声の大きさ（RMS = 二乗平均の平方根）で3段階に分ける
         step, tt, prev = 0.1, 0.0, None
         while tt < dur - 1e-6:
             page = max(0, min(len(pages) - 1, int(np.searchsorted(bounds, tt, side="right")) - 1))
             seg = v[int(max(0, tt - 0.1) * SR): int(max(0, tt - 0.1 + step) * SR)]
-            loud = portraits(spk) and len(seg) and np.sqrt((seg ** 2).mean()) > 0.04
-            cur = img(page, 1 if (loud and int(tt / step) % 2 == 0) else 0)
+            rms = float(np.sqrt((seg ** 2).mean())) if len(seg) else 0.0
+            mouth = 0 if rms < 0.025 else (1 if rms < 0.07 else 2)
+            blink = tuple(k for k in SPK if portraits(k) and blinking(k, t + tt))
+            cur = img(page, mouth if portraits(spk) else 0, blink)
             dd = min(step, dur - tt)
             if cur == prev:
                 concat[-1] = concat[-1].rsplit("duration", 1)[0] + f"duration {float(concat[-1].rsplit(' ', 1)[1]) + dd:.3f}"
