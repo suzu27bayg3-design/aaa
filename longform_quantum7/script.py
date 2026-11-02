@@ -124,3 +124,12 @@ for _ch in CHAPTERS:
             _say = _say.replace(_a, _b)
         _new.append((_row[0], _row[1], _say) + tuple(_row[3:]))
     _ch["lines"] = _new
+
+# 冒頭の予告（最初の約10秒）: いちばん驚く場面を先に見せる
+COLD_OPEN = dict(fig_from=2, hook=('30都市の道順で', '1400億年？'), lines=[
+    ('Z', '道順を全部試すと、1400億年もかかるのだ！？', None, 'panic'),
+    ('M', 'そういう選び方の問題に、量子のゆらぎで挑むのが、量子アニーリングよ。', None, 'explain'),
+])
+
+# 次回予告（最後の約20秒）: 次回の動く図を見せ、終了画面で次回の動画を表示する
+NEXT_TEASER = dict(title='第8回 量子インターネット', from_script="../longform_quantum8/script.py", fig_from=3)

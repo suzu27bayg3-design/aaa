@@ -123,3 +123,12 @@ for _ch in CHAPTERS:
             _say = _say.replace(_a, _b)
         _new.append((_row[0], _row[1], _say) + tuple(_row[3:]))
     _ch["lines"] = _new
+
+# 冒頭の予告（最初の約10秒）: いちばん驚く場面を先に見せる
+COLD_OPEN = dict(fig_from=2, hook=('量子でAIは', '爆速になる？'), lines=[
+    ('Z', '量子とAIが合体したら、最強なのだ！', '量子とエーアイが合体したら、最強なのだ！', 'smug'),
+    ('M', 'ところが、そう簡単じゃないの。データの入り口と出口に、大きな壁があるのよ。', None, 'explain'),
+])
+
+# 次回予告（最後の約20秒）: 次回の動く図を見せ、終了画面で次回の動画を表示する
+NEXT_TEASER = dict(title='第10回 総まとめ：2030年に何が起きる？', from_script="../longform_quantum10/script.py", fig_from=1)

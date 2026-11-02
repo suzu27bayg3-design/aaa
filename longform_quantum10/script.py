@@ -136,3 +136,9 @@ for _ch in CHAPTERS:
             _say = _say.replace(_a, _b)
         _new.append((_row[0], _row[1], _say) + tuple(_row[3:]))
     _ch["lines"] = _new
+
+# 冒頭の予告（最初の約10秒）: いちばん驚く場面を先に見せる
+COLD_OPEN = dict(fig_from=1, hook=('2030年', '量子はどうなる？'), lines=[
+    ('Z', 'ついに最終回なのだ！ 2030年には、何が起きるのだ？', None, 'smug'),
+    ('M', 'これまでの9回を、3つの原理と予定表でまとめるわ。', None, 'explain'),
+])

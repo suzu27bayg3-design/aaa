@@ -123,3 +123,12 @@ CHAPTERS = [
         ("Z", "チャンネル登録して、待っててほしいのだ！", None),
     ]),
 ]
+
+# 冒頭の予告（最初の約10秒）: いちばん驚く場面を先に見せる
+COLD_OPEN = dict(fig_from=3, hook=('盗み見すると', '誤りが増える通信？'), lines=[
+    ('Z', 'こっそり盗み見したら、気づかれちゃう通信があるのだ？', None, 'think'),
+    ('M', '光の粒を1個ずつ送って鍵を作ると、それができるの。ただし、弱点もあるわ。', None, 'explain'),
+])
+
+# 次回予告（最後の約20秒）: 次回の動く図を見せ、終了画面で次回の動画を表示する
+NEXT_TEASER = dict(title='第5回 量子センサ', from_script="../longform_quantum5/script.py", fig_from=4)

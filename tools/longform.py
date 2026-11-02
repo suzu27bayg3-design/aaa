@@ -203,10 +203,11 @@ def frame_base(bg, cfg, ch_i, ch):
     d = ImageDraw.Draw(img)
     # 上部バー（章番号・章タイトル・シリーズ名）
     d.rectangle((0, 0, W, 96), fill=(6, 10, 30, 235))
-    if ch_i > 0:
+    no = ch.get("_no", ch_i)
+    if no > 0:
         d.rounded_rectangle((40, 22, 140, 74), 12, fill=GOLD)
-        d.text((90, 48), f"{ch_i}", font=num(40), fill=NAVY, anchor="mm")
-    d.text((170 if ch_i > 0 else 40, 48), ch["title"], font=jp(44), fill=WHITE, anchor="lm")
+        d.text((90, 48), f"{no}", font=num(40), fill=NAVY, anchor="mm")
+    d.text((170 if no > 0 else 40, 48), ch["title"], font=jp(44), fill=WHITE, anchor="lm")
     d.text((W - 40, 48), cfg.TITLE, font=jp(28, True), fill=(180, 195, 240), anchor="rm")
     # 進行バー（章の位置）
     n = len(cfg.CHAPTERS)
@@ -816,6 +817,17 @@ def fig_area(img, box, fig, cfg):
 
 def slide_parts(bg, cfg, ch_i, ch):
     """章の画面を部品に分けて返す: 背景（動かない）/ 箇条書きのレイヤー / 図を描く枠"""
+    if ch.get("cold"):
+        # 冒頭の予告: 上に大きな問いかけ、真ん中に動く図。上部のバーや章番号は出さない
+        img = bg.copy()
+        d = ImageDraw.Draw(img)
+        h1, h2 = ch["hook"]
+        d.text((W / 2, 105), h1, font=jp(88), fill=WHITE, anchor="mm", stroke_width=8, stroke_fill=NAVY)
+        d.text((W / 2, 225), h2, font=jp(104), fill=GOLD, anchor="mm", stroke_width=9, stroke_fill=NAVY)
+        d.rounded_rectangle((W - 330, 26, W - 30, 86), 30, fill=(230, 60, 80))
+        d.text((W - 180, 56), "このあと本編", font=jp(30, True), fill=WHITE, anchor="mm")
+        return {"base": img, "bul": Image.new("RGBA", (W, H)), "bul_rects": [], "box": (300, 290, W - 300, 720),
+                "fig": ch["fig"]}
     img = frame_base(bg, cfg, ch_i, ch)
     panel = (60, 130, W - 60, 800)
     lay = Image.new("RGBA", (W, H))
@@ -826,6 +838,13 @@ def slide_parts(bg, cfg, ch_i, ch):
     has_port = bool(portraits("Z")) or bool(portraits("M"))
     bottom = 680 if has_port else 790  # 立ち絵ワイプと重ならないよう、図の下端を上げる
     rects = []
+    if ch.get("teaser"):
+        # 次回予告: 赤い札と次回の題名。図は題名の下
+        d.rounded_rectangle((90, 150, 400, 215), 32, fill=(230, 60, 80))
+        d.text((245, 182), "次回予告", font=jp(40), fill=WHITE, anchor="mm")
+        d.text((440, 182), ch["teaser"], font=jp(52), fill=GOLD, anchor="lm", stroke_width=5, stroke_fill=NAVY)
+        return {"base": Image.alpha_composite(img, bul), "bul": Image.new("RGBA", (W, H)), "bul_rects": [],
+                "box": (140, 250, W - 140, bottom), "fig": ch["fig"]}
     if ch.get("bullets"):
         # 左: 箇条書き / 右: 図
         nb = len(ch["bullets"])
@@ -1149,6 +1168,44 @@ def thumbnail(bg, cfg, path):
     img.convert("RGB").resize((1280, 720), Image.LANCZOS).save(path)
 
 
+def _fig_from(spec, here):
+    """図の指定: fig があればそれ、なければ from_script の fig_from 番目の章の図"""
+    if "fig" in spec:
+        return spec["fig"]
+    path = os.path.join(here, spec["from_script"]) if "from_script" in spec else None
+    if path:
+        sp = importlib.util.spec_from_file_location("cfg_other", path)
+        other = importlib.util.module_from_spec(sp)
+        sp.loader.exec_module(other)
+        return other.CHAPTERS[spec["fig_from"]]["fig"]
+    return None
+
+
+def expand_specials(cfg, here):
+    """台本の COLD_OPEN（冒頭の予告）と NEXT_TEASER（次回予告）を、章として前後に足す"""
+    chs = list(cfg.CHAPTERS)
+    for i, ch in enumerate(chs):
+        ch.setdefault("_no", i)
+    if getattr(cfg, "NEXT_TEASER", None):
+        nt = cfg.NEXT_TEASER
+        last = chs[-1]
+        # まとめの最後の「次回は〜」「チャンネル登録〜」のセリフを、次回予告の章へ移す
+        moved = []
+        while last["lines"] and any(w in last["lines"][-1][1] for w in ("次回", "次は", "チャンネル登録")):
+            moved.insert(0, last["lines"].pop())
+        fig = _fig_from(nt, here) if "fig_from" in nt else (nt.get("fig") or last["fig"])
+        if isinstance(fig, dict) and "fig_from" in nt and "from_script" not in nt:
+            fig = chs[nt["fig_from"]]["fig"]
+        chs.append({"title": "次回予告", "teaser": nt["title"], "fig": fig, "lines": list(nt.get("lines", [])) + moved,
+                    "_no": 0, "hold": nt.get("hold", 6.0)})
+    if getattr(cfg, "COLD_OPEN", None):
+        co = cfg.COLD_OPEN
+        fig = chs[co["fig_from"]]["fig"] if "fig_from" in co else co["fig"]
+        chs.insert(0, {"title": "予告", "cold": True, "hook": co["hook"], "fig": fig, "lines": list(co["lines"]),
+                       "_no": 0, "hold": co.get("hold", 0.8)})
+    cfg.CHAPTERS = chs
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("script")
@@ -1158,6 +1215,7 @@ def main():
     cfg = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(cfg)
     here = os.path.dirname(os.path.abspath(a.script))
+    expand_specials(cfg, here)
     vdir = os.path.join(here, "voicevox")
     os.makedirs(vdir, exist_ok=True)
     lines = [(ci, li, row[0], row[1], row[2] or row[1]) for ci, ch in enumerate(cfg.CHAPTERS)
@@ -1176,6 +1234,8 @@ def main():
     durs, starts, chapter_starts, t = [], [], {}, 0.0
     for n, ((ci, li, spk, disp, say), v) in enumerate(zip(lines, voices)):
         dur = len(v) / SR + 0.35 + (0.6 if li == len(cfg.CHAPTERS[ci]["lines"]) - 1 else 0)
+        if li == len(cfg.CHAPTERS[ci]["lines"]) - 1:
+            dur += cfg.CHAPTERS[ci].get("hold", 0)
         if li == 0:
             chapter_starts[ci] = t
         starts.append(t)

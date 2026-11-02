@@ -122,3 +122,12 @@ for _ch in CHAPTERS:
             _say = _say.replace(_a, _b)
         _new.append((_row[0], _row[1], _say) + tuple(_row[3:]))
     _ch["lines"] = _new
+
+# 冒頭の予告（最初の約10秒）: いちばん驚く場面を先に見せる
+COLD_OPEN = dict(fig_from=3, hook=('会ったことのない2つが', 'つながる？'), lines=[
+    ('Z', '会ったこともない両端が、もつれでつながるのだ？', None, 'think'),
+    ('M', 'それが量子インターネットのかぎ、もつれ交換よ。', None, 'explain'),
+])
+
+# 次回予告（最後の約20秒）: 次回の動く図を見せ、終了画面で次回の動画を表示する
+NEXT_TEASER = dict(title='第9回 量子×AIの本当のところ', from_script="../longform_quantum9/script.py", fig_from=2)
