@@ -1332,9 +1332,19 @@ def main():
     if proc.wait() != 0:
         raise SystemExit("ffmpeg failed")
     thumbnail(bg, cfg, os.path.join(here, "thumbnail.png"))
+    # YouTube のチャプターは各10秒以上が必要なので、短い章（冒頭の予告など）は次の章とまとめて書く
+    marks = [[st, cfg.CHAPTERS[ci]["title"]] for ci, st in chapter_starts.items()]
+    merged = []
+    for i, (st, title) in enumerate(marks):
+        nxt = marks[i + 1][0] if i + 1 < len(marks) else total
+        if merged and merged[-1][2]:
+            merged[-1][1] += "・" + title
+            merged[-1][2] = nxt - merged[-1][0] < 10
+            continue
+        merged.append([st, title, nxt - st < 10])
     with open(os.path.join(here, "chapters.txt"), "w") as f:
-        for ci, st in chapter_starts.items():
-            f.write(f"{int(st // 60)}:{int(st % 60):02d} {cfg.CHAPTERS[ci]['title']}\n")
+        for st, title, _ in merged:
+            f.write(f"{int(st // 60)}:{int(st % 60):02d} {title}\n")
     print("wrote", out)
 
 
