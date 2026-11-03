@@ -934,25 +934,102 @@ def item_rects(fig, box):
     return None
 
 
-def fig_mask(fig, box, tc, tch):
-    """経過時間 tc での図の見え方（白=見える）。全部見えていれば None"""
+def item_texts(fig):
+    """順番に登場させる項目の文字（セリフと照らし合わせて、出す時刻を決めるのに使う）"""
+    k = fig["kind"]
+    if k == "cards":
+        return [it[0] + " " + it[1] for it in fig["items"]]
+    if k == "summary":
+        return list(fig["items"])
+    if k == "table":
+        return [" ".join(r) for r in fig["rows"]]
+    if k == "vote":
+        return ["送りたい値", "3つにして送る", "1つが壊れた", "多数決で復元"]
+    if k == "platform":
+        return [a + " " + b for a, b in fig["stats"]]
+    if k == "repeater":
+        return ["区間ごとにもつれたペアを作る", "中継点がまとめて測る 両端が直接もつれる"]
+    if k == "tiles":
+        return [f"第{no}回 {t} {s_}" for no, t, s_ in fig["items"]]
+    if k == "bars":
+        return [lab + " " + txt for lab, _, txt in fig["items"]]
+    if k == "timeline":
+        return [yr + " " + t for yr, t in fig["items"]]
+    return None
+
+
+def _bigrams(t):
+    """文字の2文字ずつの組（数字だけの組は除き、数字は「2029」のように丸ごと1つの手がかりにする）"""
+    import re
+    nums = {"#" + m for m in re.findall(r"\d+(?:\.\d+)?", t)}
+    t = re.sub(r"[\s、。・，．！？「」（）()…：:／/〜~\-—]", "", t)
+    grams = {t[i:i + 2] for i in range(len(t) - 1) if not t[i:i + 2].isdigit()}
+    return grams | nums
+
+
+def match_times(texts, lines, rel_starts, summary=False, ordered=True):
+    """項目ごとに「その項目の言葉が出てくるセリフ」を探し、そのセリフが始まる時刻を返す。
+    項目の順番は守る（前の項目より前には出さない）。見つからない項目は前の項目と同時に出す"""
+    if not texts:
+        return None
+    if summary:  # まとめは、章の始めに順番にさっと出す
+        return [0.3 + 0.7 * i for i in range(len(texts))]
+    lb = [_bigrams(l) for l in lines]
+    # 「表を見て」「画面を見て」「こうなるわ」のように画面を指すセリフがあれば、そこまでに全部出す
+    cue = next((j for j, l in enumerate(lines) if any(w in l for w in ("表を見て", "画面を見て", "こうなるわ", "こうなるの"))), None)
+    out, prev = [], 0
+    for t in texts:
+        ib = _bigrams(t)
+        scores = [len(ib & lb[j]) for j in range(len(lines))]
+        rng = range(prev if ordered else 0, len(lines))
+        best = max((scores[j] for j in rng), default=0)
+        if best >= 2:
+            j = next(j for j in rng if scores[j] >= max(2, 0.5 * best))
+        else:
+            j = prev
+        if cue is not None:
+            j = min(j, cue)
+        out.append(rel_starts[j] + 0.25)
+        if ordered:
+            prev = j
+    return out
+
+
+def fig_mask(fig, box, tc, tch, times=None):
+    """経過時間 tc での図の見え方（白=見える）。全部見えていれば None。
+    times があれば、項目 i を times[i] 秒に出す（セリフに合わせる）"""
     x0, y0, x1, y1 = box
     k = fig["kind"]
     if k == "bars":
         items = fig["items"]; n = len(items)
         bw = min(220, (x1 - x0 - 120) / n - 60); base_y = y1 - 120
-        if tc > 0.4 + 0.35 * n + 1.5:
+        t0 = times or [0.4 + 0.35 * i for i in range(n)]
+        if tc > max(t0) + 1.5:
             return None
         m = Image.new("L", (W, H), 255); dm = ImageDraw.Draw(m)
         sp = (x1 - x0 - 200) / n
         hw = min(bw / 2 + 60, sp / 2)  # 隣の棒にかからない幅
         for i in range(n):
             cx = x0 + 100 + (i + 0.5) * sp
-            g = ease((tc - 0.4 - 0.35 * i) / 1.3)
+            g = ease((tc - t0[i]) / 1.3)
             dm.rectangle((cx - hw, y0 + 60, cx + hw, base_y - 3), fill=0)
             top = base_y - g * (base_y - y0 - 60)
             if top < base_y - 3:
                 dm.rectangle((cx - hw, top, cx + hw, base_y - 3), fill=255)
+        return m
+    if k == "timeline" and times:
+        n = len(fig["items"])
+        if tc >= max(times) + 0.45:
+            return None
+        step = (x1 - x0 - 320) / max(1, n - 1)
+        m = Image.new("L", (W, H), 255); dm = ImageDraw.Draw(m)
+        for i in range(n):
+            a = ease((tc - times[i]) / 0.45)
+            if a < 1:
+                cx = x0 + 160 + i * step
+                l = x0 - 10 if i == 0 else cx - step / 2
+                r = x1 + 10 if i == n - 1 else cx + step / 2
+                dm.rectangle((l, y0 - 10, r, y1 + 10), fill=int(255 * a))
         return m
     if k == "timeline":
         span = max(1.5, min(tch * 0.5, 1.4 * len(fig["items"])))
@@ -965,11 +1042,13 @@ def fig_mask(fig, box, tc, tch):
     rects = item_rects(fig, box)
     if rects:
         n = len(rects)
-        if item_alpha(n - 1, n, tc, tch) >= 1:
+        al = (lambda i: ease((tc - times[i]) / 0.45)) if times and len(times) == n else \
+            (lambda i: item_alpha(i, n, tc, tch))
+        if all(al(i) >= 1 for i in range(n)):
             return None
         m = Image.new("L", (W, H), 255); dm = ImageDraw.Draw(m)
         for i, r in enumerate(rects):
-            a = item_alpha(i, n, tc, tch)
+            a = al(i)
             if a < 1:
                 dm.rectangle(r, fill=int(255 * a))
         return m
@@ -977,13 +1056,15 @@ def fig_mask(fig, box, tc, tch):
     return None if a >= 1 else Image.new("L", (W, H), int(255 * a))
 
 
-def bullets_mask(rects, tc, tch):
+def bullets_mask(rects, tc, tch, times=None):
     n = len(rects)
-    if not n or item_alpha(n - 1, n, tc, tch) >= 1:
+    al = (lambda i: ease((tc - times[i]) / 0.45)) if times and len(times) == n else \
+        (lambda i: item_alpha(i, n, tc, tch))
+    if not n or all(al(i) >= 1 for i in range(n)):
         return None
     m = Image.new("L", (W, H), 255); dm = ImageDraw.Draw(m)
     for i, r in enumerate(rects):
-        a = item_alpha(i, n, tc, tch)
+        a = al(i)
         if a < 1:
             dm.rectangle(r, fill=int(255 * a))
     return m
@@ -1292,7 +1373,19 @@ def main():
                 p["fl"] = Image.new("RGBA", (W, H))
                 fig_area(p["fl"], p["box"], fig, cfg)
             fl = p["fl"]
-        fm, bm = fig_mask(fig, p["box"], tc, tch), bullets_mask(p["bul_rects"], tc, tch)
+        if "fig_times" not in p:
+            ch = cfg.CHAPTERS[ci]
+            texts = [r[1] for r in ch["lines"]]
+            rel = [starts[n] - chapter_starts[ci] for n, l in enumerate(lines) if l[0] == ci]
+            p["fig_times"] = match_times(item_texts(fig), texts, rel, summary=fig["kind"] == "summary",
+                                         ordered=fig["kind"] not in ("timeline", "bars"))
+            if fig["kind"] == "table" and p["fig_times"]:
+                # 表は、最初の行が話題に出たところから、上から順にさっと出す
+                t0 = min(p["fig_times"])
+                p["fig_times"] = [t0 + 0.5 * i for i in range(len(p["fig_times"]))]
+            p["bul_times"] = match_times(ch.get("bullets"), texts, rel) if p["bul_rects"] else None
+        fm = fig_mask(fig, p["box"], tc, tch, p["fig_times"])
+        bm = bullets_mask(p["bul_rects"], tc, tch, p["bul_times"])
         img = Image.alpha_composite(Image.alpha_composite(p["base"], masked(p["bul"], bm)), masked(fl, fm))
         if not live and fm is None and bm is None:
             settled[ci] = img  # これ以上変化しない章は、使い回す
