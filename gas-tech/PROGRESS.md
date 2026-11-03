@@ -16,6 +16,7 @@
 | 12 | 気化器（ORV・SCV・IFV） | 2026-10-30 | [12-vaporizers.md](lessons/12-vaporizers.md) |
 | 13 | 熱量調整（LPG 増熱）と付臭 | 2026-10-31 | [13-calorie-adjustment-odorization.md](lessons/13-calorie-adjustment-odorization.md) |
 | 14 | 圧縮機とガスホルダー | 2026-11-01 | [14-compressors-gasholders.md](lessons/14-compressors-gasholders.md) |
+| 15 | 計装・制御（PID） | 2026-11-03 | [15-instrumentation-control.md](lessons/15-instrumentation-control.md) |
 | 27（旧・参考） | ガス事業法の目的と事業区分 | 2026-10-19 | [27-gas-business-act-purpose.md](lessons/27-gas-business-act-purpose.md) |
 
 ## 法令トラック：高圧ガス保安法（甲種機械）
