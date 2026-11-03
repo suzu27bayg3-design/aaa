@@ -89,6 +89,8 @@ footer { font-size: 13px; color: var(--muted); display: grid; gap: 6px; }
     <span><span class="tag fix">修正</span> ノートから直した所（最後に一覧）</span>
     <span><span class="tag chk">要確認</span> 法規集で確かめてほしい所</span>
     <span><span class="tag rev">改正</span> 令和5年12月の改正で変わった所</span>
+    <span><span class="tag chk">ノート</span> 過去問の解説では確かめられず、ノートの記載のまま載せた所</span>
+    <span>（H24問14 などの番号は、その内容を解説で確かめた過去問）</span>
   </div>
 </header>
 
@@ -156,7 +158,7 @@ footer { font-size: 13px; color: var(--muted); display: grid; gap: 6px; }
   <h3>変更・廃止</h3>
   <ul>
     <li>位置・構造・設備の変更、製造するガスの種類・製造方法の変更は<b>許可</b>（届出ではない。H25問1、R4問2）。</li>
-    <li>軽微な変更は許可不要で、完成後遅滞なく<b>届出</b>。例：高圧ガス設備以外のガス設備の変更、機能に支障のない高圧ガス設備の撤去（R5問13）。</li>
+    <li>軽微な変更は許可不要で、完成後遅滞なく<b>届出</b>。例：高圧ガス設備以外のガス設備の変更（R7問13）、機能に支障のない高圧ガス設備の撤去（R5問13）。高圧ガス設備の変更は軽微ではない（R6問13）。</li>
     <li>特定設備の取替えは、<b>処理能力の変更がなければ</b>軽微な変更（X問12）。<span class="tag fix">修正</span></li>
     <li>処理能力が増える変更は軽微ではない（許可）。</li>
     <li>製造の開始・廃止は遅滞なく届出（廃止は許可ではない。R7問3）。</li>
@@ -241,7 +243,7 @@ footer { font-size: 13px; color: var(--muted); display: grid; gap: 6px; }
   <ul>
     <li>特定不活性ガス以外の<b>不活性ガス</b>には、廃棄の技術基準がない（R3問4、R7問4）。</li>
     <li>可燃性・毒性を継続・反復して廃棄するときは、滞留を検知する措置をとる。酸素にはこの定めはない（H24問4）。</li>
-    <li>酸素・三フッ化窒素を廃棄するときは、バルブや器具の石油類・油脂類など可燃性の物を除去してから（H25問3）。</li>
+    <li>酸素を廃棄するときは、バルブや器具の石油類・油脂類など可燃性の物を除去してから（H25問3）。三フッ化窒素も同じ <span class="tag chk">ノート</span></li>
     <li>容器とともに廃棄しない。通風のよい場所で少しずつ廃棄する。加熱するときは熱湿布か 40 ℃以下の温湯を使う。</li>
   </ul>
   <h3>帳簿</h3>
@@ -321,7 +323,7 @@ footer { font-size: 13px; color: var(--muted); display: grid; gap: 6px; }
   <h3>充填</h3>
   <ul>
     <li>圧縮ガス：刻印された最高充填圧力（FP）以下。</li>
-    <li>液化ガス：質量 G = V / C（C はガスごとの定数）。0.9wV は超低温容器などの式（R5問6）。</li>
+    <li>液化ガス：質量 G = V / C（C はガスごとの定数）。0.9wV は低温容器に充填する場合の式（R5問6）。超低温容器では C を「比重×9/10 の逆数」とする（R6問6）。</li>
     <li>損傷を受けた容器は、容器再検査に合格し刻印等がされるまで充填できない（R4問5、R7問5）。</li>
   </ul>
   <h3>容器再検査の期間</h3>
@@ -349,8 +351,8 @@ footer { font-size: 13px; color: var(--muted); display: grid; gap: 6px; }
     <thead><tr><th>規定</th><th>可燃性（アンモニア含む）</th><th>毒性</th><th>酸素</th><th>窒素</th><th>メモ</th></tr></thead>
     <tbody>
       <tr><td>防消火設備</td><td class="y">○</td><td class="x">×</td><td class="y">○</td><td class="x">×</td><td>三フッ化窒素も○ <span class="tag fix">修正</span></td></tr>
-      <tr><td>火気取扱施設まで 8 m（又は流動防止措置）</td><td class="y">○</td><td class="x">×</td><td class="x">×</td><td class="x">×</td><td>酸素は対象外 <span class="tag fix">修正</span></td></tr>
-      <tr><td>漏えい検知警報設備</td><td class="y">○</td><td class="y">○</td><td class="x">×</td><td class="x">×</td><td></td></tr>
+      <tr><td>火気取扱施設まで 8 m（又は流動防止措置）</td><td class="y">○</td><td class="x">×</td><td class="x">×</td><td class="x">×</td><td>酸素は対象外（H24問14、R4問14）。毒性ガス × は解説で未確認 <span class="tag fix">修正</span></td></tr>
+      <tr><td>漏えい検知警報設備</td><td class="y">○</td><td class="y">○</td><td class="x">×</td><td class="x">×</td><td>毒性は「経済産業大臣が定める毒性ガス」（H24問15）</td></tr>
       <tr><td>漏えいしたガスが滞留しない構造の室</td><td class="y">○</td><td class="x">×</td><td class="x">×</td><td class="x">×</td><td>特定不活性ガスも○ <span class="tag fix">修正</span></td></tr>
       <tr><td>除害措置</td><td class="x">×</td><td class="y">○</td><td class="x">×</td><td class="x">×</td><td>製造設備と<b>容器置場</b>の両方</td></tr>
       <tr><td>危険標識＋外部から識別できる措置</td><td class="x">×</td><td class="y">○（両方必要）</td><td class="x">×</td><td class="x">×</td><td></td></tr>
@@ -369,7 +371,7 @@ footer { font-size: 13px; color: var(--muted); display: grid; gap: 6px; }
   <ul>
     <li>安全装置（圧力が<b>許容圧力</b>を超えたら直ちに戻す。常用の圧力ではない）と圧力計。</li>
     <li>安全弁・逃し弁に付けた止め弁は、修理・清掃で特に必要なとき以外<b>常に全開</b>（運転中だけでなく）。</li>
-    <li>耐震設計：貯槽（所定の規模以上）・塔・所定の配管とその支持構造物・基礎。ポンプ・圧縮機・蒸発器・容器置場は対象外。</li>
+    <li>耐震設計：貯槽（所定の規模以上）・塔・所定の配管とその支持構造物・基礎。ポンプ・圧縮機・蒸発器・容器置場・防火設備は対象外（H24問15、H25問14、R4問15、R7問17）。</li>
     <li>貯槽の支柱は同一の基礎に緊結し、沈下状況を測定（貯蔵能力 100 m³ 又は 1 t 以上。耐震性能があっても必要）。</li>
     <li>停電等で保安設備の機能を失わない措置（夜間稼働しなくても）。</li>
     <li>バルブを適切に操作できる措置（製造設備に設けたバルブすべて）。</li>
@@ -402,7 +404,7 @@ footer { font-size: 13px; color: var(--muted); display: grid; gap: 6px; }
   </table></div>
   <h3>試験と構造</h3>
   <ul>
-    <li>耐圧試験：水など安全な液体で常用の圧力の <b>1.5倍</b>以上。液体が困難なときだけ気体で <b>1.25倍</b>以上（アセチレンでも水は禁止されていない）。第二種特定設備は液体 1.3倍・気体 1.1倍。</li>
+    <li>耐圧試験：水など安全な液体で常用の圧力の <b>1.5倍</b>以上。液体が困難なときだけ気体で <b>1.25倍</b>以上（アセチレンでも水は禁止されていない）。第二種特定設備は液体 1.3倍・気体 1.1倍 <span class="tag chk">ノート</span>。</li>
     <li>特定設備検査合格証の有効期間内の設備は、完成検査で耐圧試験を省略できる（R7問15）。</li>
     <li>気密試験：常用の圧力以上。気体で耐圧試験をしても省略できない。</li>
     <li>液化ガス貯槽の液面計：液化アンモニアなどでは丸形ガラス管液面計は使えない。ガラス液面計には破損防止と漏えい防止の措置。</li>
