@@ -1,0 +1,472 @@
+<title>甲機 法令まとめ</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+New:wght@500;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one reading column, a chip index on top, each topic a section with tables; corrections are flagged inline with a red "修正" tag and a footnote list at the end. */
+:root {
+  --bg: #F3F5F6;
+  --surface: #FFFFFF;
+  --ink: #1B232B;
+  --muted: #5A6672;
+  --line: #D4DBE1;
+  --accent: #1E4F7C;
+  --accent-soft: #E3ECF5;
+  --sign: #C4271D;
+  --sign-soft: #FBE9E7;
+  --warn: #8A5A00;
+  --warn-soft: #FFF3D6;
+  --ok: #1D7447;
+  --f-display: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", sans-serif;
+  --f-body: "BIZ UDPGothic", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11161B; --surface: #1A2129; --ink: #E5EAF0; --muted: #9BA7B3; --line: #2E3843;
+    --accent: #84B4E3; --accent-soft: #1E2D3C; --sign: #F2675C; --sign-soft: #3A1E1B;
+    --warn: #F0C062; --warn-soft: #3A2E14; --ok: #52C48D;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11161B; --surface: #1A2129; --ink: #E5EAF0; --muted: #9BA7B3; --line: #2E3843;
+  --accent: #84B4E3; --accent-soft: #1E2D3C; --sign: #F2675C; --sign-soft: #3A1E1B;
+  --warn: #F0C062; --warn-soft: #3A2E14; --ok: #52C48D;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: 15.5px; line-height: 1.75;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 56px;
+}
+.wrap { max-width: 860px; margin: 0 auto; display: grid; gap: 22px; }
+a { color: var(--accent); }
+a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+header { display: grid; gap: 8px; }
+.brand { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.sign { font-family: var(--f-display); font-weight: 700; color: var(--sign); border: 2px solid var(--sign); padding: 0 8px; letter-spacing: .12em; font-size: 15px; background: var(--surface); }
+h1 { font-family: var(--f-display); font-size: 26px; margin: 0; text-wrap: balance; }
+.lede { margin: 0; color: var(--muted); font-size: 14px; max-width: 65ch; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 13px; color: var(--muted); }
+nav.toc { display: flex; flex-wrap: wrap; gap: 8px; }
+nav.toc a { text-decoration: none; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 4px 12px; font-size: 13.5px; color: var(--ink); }
+nav.toc a .no { font-family: var(--f-mono); color: var(--muted); margin-right: 6px; font-size: 12px; }
+section { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: grid; gap: 14px; min-width: 0; scroll-margin-top: 12px; }
+h2 { font-family: var(--f-display); font-size: 20px; margin: 0; display: flex; gap: 10px; align-items: baseline; text-wrap: balance; }
+h2 .no { font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+h3 { font-family: var(--f-display); font-size: 16px; margin: 6px 0 0; color: var(--accent); }
+p { margin: 0; }
+ul { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
+.why { border-left: 3px solid var(--accent); background: var(--accent-soft); padding: 10px 14px; border-radius: 0 6px 6px 0; font-size: 14.5px; }
+.why b { font-family: var(--f-display); }
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 520px; }
+th, td { border-bottom: 1px solid var(--line); padding: 7px 8px; text-align: left; vertical-align: top; }
+th { font-family: var(--f-display); font-weight: 700; font-size: 13px; color: var(--muted); background: var(--bg); }
+td.n, .num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.y { color: var(--ok); font-weight: 700; }
+.x { color: var(--muted); }
+.tag { display: inline-block; font-size: 11.5px; font-weight: 700; border-radius: 4px; padding: 0 6px; margin-left: 4px; vertical-align: 1px; letter-spacing: .04em; white-space: nowrap; }
+.fix { color: var(--sign); background: var(--sign-soft); }
+.chk { color: var(--warn); background: var(--warn-soft); }
+.rev { color: var(--accent); background: var(--accent-soft); }
+.src { font-size: 12.5px; color: var(--muted); }
+.fixlist li { font-size: 14.5px; }
+footer { font-size: 13px; color: var(--muted); display: grid; gap: 6px; }
+@media (max-width: 520px) { h1 { font-size: 22px; } section { padding: 16px; } }
+</style>
+
+<div class="wrap">
+<header>
+  <div class="brand"><span class="sign">高圧ガス</span><h1>甲機 法令まとめ</h1></div>
+  <p class="lede">高圧ガス製造保安責任者（甲種機械）の法令を、手書きノートをもとに分野ごとに整理し直したものです。ノートの内容を過去問（H24〜R7）の解説と照らし合わせ、違っていた所は直してあります。</p>
+  <div class="legend">
+    <span><span class="tag fix">修正</span> ノートから直した所（最後に一覧）</span>
+    <span><span class="tag chk">要確認</span> 法規集で確かめてほしい所</span>
+    <span><span class="tag rev">改正</span> 令和5年12月の改正で変わった所</span>
+  </div>
+</header>
+
+<nav class="toc" aria-label="目次">
+  <a href="#def"><span class="no">1</span>定義・適用除外</a>
+  <a href="#permit"><span class="no">2</span>許可・届出</a>
+  <a href="#store"><span class="no">3</span>貯蔵・販売・消費</a>
+  <a href="#move"><span class="no">4</span>輸入・移動・廃棄・帳簿</a>
+  <a href="#staff"><span class="no">5</span>保安体制・検査</a>
+  <a href="#cyl"><span class="no">6</span>容器</a>
+  <a href="#ippan"><span class="no">7</span>一般則の技術基準</a>
+  <a href="#kombi"><span class="no">8</span>コンビ則</a>
+  <a href="#ekiseki"><span class="no">9</span>液石則</a>
+  <a href="#fixes"><span class="no">10</span>修正一覧</a>
+</nav>
+
+<section id="def">
+  <h2><span class="no">1</span>高圧ガスの定義と適用除外</h2>
+  <div class="why"><b>考え方</b>　「常用の温度で今その圧力か」と「基準温度にしたらその圧力になるか」の二本立てです。どちらか一方に当てはまれば高圧ガスです。条文の「又は」の前後で2回判定する、と覚えます。</div>
+  <div class="tbl"><table>
+    <thead><tr><th>ガス</th><th>常用の温度で（又は前）</th><th>基準温度で（又は後）</th></tr></thead>
+    <tbody>
+      <tr><td>圧縮ガス（アセチレン除く）</td><td>1 MPa 以上（現にその圧力）</td><td>35 ℃で 1 MPa 以上</td></tr>
+      <tr><td>圧縮アセチレンガス</td><td>0.2 MPa 以上（現にその圧力）</td><td><b>15 ℃</b>で 0.2 MPa 以上</td></tr>
+      <tr><td>液化ガス</td><td>0.2 MPa 以上（現にその圧力）</td><td>0.2 MPa となる温度が <b>35 ℃以下</b></td></tr>
+      <tr><td>液化シアン化水素・液化ブロムメチル・液化酸化エチレン</td><td colspan="2">35 ℃で 0 Pa を超えるもの</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li>液化ガスで「0.2 MPa になる温度が 35 ℃以下」なら、今の圧力が 0.1 MPa でも高圧ガス（H26問1、R7問1）。</li>
+    <li>常用 40 ℃で 1 MPa の圧縮ガスで、今 0.9 MPa なら高圧ガスではない（35 ℃ではもっと低いから。R3問1、R5問1）。</li>
+  </ul>
+  <h3>適用除外（第3条）<span class="tag rev">改正</span></h3>
+  <ul>
+    <li>オートクレーブ内の高圧ガスは適用除外。ただし<b>水素・アセチレン・塩化ビニル</b>は除外されない（法の適用を受ける）。</li>
+    <li>圧縮装置（空気分離装置のものを除く）内の圧縮空気で、35 ℃で 5 MPa 以下のものは適用除外（R7問2）。</li>
+    <li>内容積 1 dL 以下の容器の高圧ガスは、法の<b>一部</b>だけが適用除外。全部ではない（R5問3、R7問2）。</li>
+    <li>不活性ガスだからといって適用除外にはならない。</li>
+    <li>第3条は令和5年12月に書き換えられ、号の番号が変わった（旧 第1項第8号 → 新 第1項第9号など）。</li>
+  </ul>
+</section>
+
+<section id="permit">
+  <h2><span class="no">2</span>製造の許可・届出、承継、変更</h2>
+  <div class="why"><b>考え方</b>　危険の小さい「第一種ガス」は基準が甘く（300 m³）、それ以外は厳しい（100 m³）。量が多いほど「届出」から「許可」へ、手続きが重くなります。</div>
+  <p>第一種ガス：窒素、空気、二酸化炭素、ヘリウム・ネオン・アルゴン・クリプトン・キセノン・ラドン（希ガス）、フルオロカーボン（可燃性のものを除く）。酸素や液化石油ガスは「その他のガス」。</p>
+  <div class="tbl"><table>
+    <thead><tr><th>1日の処理能力</th><th>第一種ガス</th><th>その他のガス</th><th>区分・手続き</th></tr></thead>
+    <tbody>
+      <tr><td>多い</td><td class="n">300 m³ 以上</td><td class="n">100 m³ 以上</td><td>第一種製造者（知事等の<b>許可</b>）</td></tr>
+      <tr><td>中</td><td class="n">30 以上 300 未満</td><td class="n">30 以上 100 未満</td><td>第二種製造者（事業開始の <b>20日前まで</b>に届出）</td></tr>
+      <tr><td>少ない</td><td class="n">30 未満</td><td class="n">30 未満</td><td>その他の製造者（技術上の基準のみ）</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li>300 m³ 以上なら、ガスの種類に関係なく許可が必要（R3問2）。</li>
+    <li>第一種ガスとその他のガスを混ぜて扱うとき：許可が要る境目 I = 100 + (2/3)×S（S＝第一種ガスの処理容積）。合計の処理容積が I 以上なら許可。<span class="tag chk">要確認</span>
+      <br><span class="src">例：第一種ガス 150 + その他 30 = 180 m³。I = 100 + 100 = 200。180 &lt; 200 なので許可は不要（第二種製造者）。</span></li>
+  </ul>
+  <h3>承継</h3>
+  <ul>
+    <li>第一種製造者：<b>相続・合併・分割</b>で承継する。事業を<b>譲り受けた</b>だけでは承継しない（新たに許可が必要。R3問2）。承継したら遅滞なく届出（R7問3）。</li>
+    <li>第二種製造者：事業の全部の譲受けでも承継する。</li>
+  </ul>
+  <h3>変更・廃止</h3>
+  <ul>
+    <li>位置・構造・設備の変更、製造するガスの種類・製造方法の変更は<b>許可</b>（届出ではない。H25問1、R4問2）。</li>
+    <li>軽微な変更は許可不要で、完成後遅滞なく<b>届出</b>。例：高圧ガス設備以外のガス設備の変更、機能に支障のない高圧ガス設備の撤去（R5問13）。</li>
+    <li>特定設備の取替えは、<b>処理能力の変更がなければ</b>軽微な変更（X問12）。<span class="tag fix">修正</span></li>
+    <li>処理能力が増える変更は軽微ではない（許可）。</li>
+    <li>製造の開始・廃止は遅滞なく届出（廃止は許可ではない。R7問3）。</li>
+    <li>許可を取り消された者は、取消しから <b>2年</b> は再び許可を受けられない。</li>
+  </ul>
+  <h3>完成検査</h3>
+  <ul>
+    <li>特定変更工事の完成後は完成検査が必要。知事等のほか、高圧ガス保安協会や指定完成検査機関の検査を受けて知事等に届け出てもよい（R6問13）。</li>
+    <li>許可を受けた工事でも、完成検査が要らないものがある（特定設備検査合格の設備への取替えで処理能力の変更が所定の範囲のものなど。R3問12、R5問13）。ただし<b>耐震設計構造物</b>に係る工事は完成検査が必要（R7問13）。</li>
+    <li>認定完成検査実施者の制度 <span class="tag rev">改正</span>：自ら完成検査をして記録を届け出れば知事の検査は不要。新たな製造施設の追加は対象外、継続して2年以上製造している施設に限る。令和5年12月に廃止され、<a href="https://www.meti.go.jp/policy/safety_security/industrial_safety/sangyo/hipregas/sinnintei/index.html" target="_blank" rel="noopener">認定高度保安実施者（経済産業省）</a>に移った。</li>
+  </ul>
+</section>
+
+<section id="store">
+  <h2><span class="no">3</span>貯蔵所・販売・消費</h2>
+  <div class="why"><b>考え方</b>　貯蔵も製造と同じく「量が多いほど重い手続き」。液化ガスは <b>10 kg ＝ 1 m³</b> に換算して比べます。</div>
+  <div class="tbl"><table>
+    <thead><tr><th>貯蔵量</th><th>第一種ガス</th><th>その他のガス</th><th>区分・手続き</th></tr></thead>
+    <tbody>
+      <tr><td>多い</td><td class="n">3000 m³ 以上</td><td class="n">1000 m³ 以上</td><td>第一種貯蔵所（知事等の<b>許可</b>）</td></tr>
+      <tr><td>中</td><td class="n">300 以上 3000 未満</td><td class="n">300 以上 1000 未満</td><td>第二種貯蔵所（<b>届出</b>）</td></tr>
+      <tr><td>少ない</td><td class="n">0.15 超 300 未満</td><td class="n">0.15 超 300 未満</td><td>技術上の基準のみ</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li>混合して貯蔵するとき：N = 1000 + (2/3)×M（M＝第一種ガスの容積）以上なら第一種貯蔵所（R5問4）。</li>
+    <li>第一種製造者が、製造の許可どおりに貯蔵するときは、貯蔵所の許可は不要（R4問2、R6問2）。</li>
+    <li>第二種貯蔵所の技術基準は、第一種貯蔵所の基準を準用する（R3問2）。</li>
+  </ul>
+  <h3>販売</h3>
+  <ul>
+    <li>販売所ごとに、事業開始の <b>20日前まで</b>に届出（開始後ではない）。</li>
+    <li>第一種製造者が、その事業所で製造したガスをその事業所で販売するときは届出不要。第二種製造者には免除がない（H26問4）。</li>
+  </ul>
+  <h3>特定高圧ガスの消費</h3>
+  <ul>
+    <li>特定高圧ガス消費者は、消費開始の <b>20日前まで</b>に知事等に届出。第一種製造者でも例外はない（R6問4）。</li>
+    <li>他の事業所から<b>導管で</b>受け入れて消費する者も特定高圧ガス消費者になる（R5問2）。</li>
+  </ul>
+  <div class="tbl"><table>
+    <thead><tr><th>ガス</th><th>特定高圧ガス消費者になる貯蔵能力</th></tr></thead>
+    <tbody>
+      <tr><td>特殊高圧ガス7種（モノシラン、ホスフィン、アルシン、ジボラン、セレン化水素、モノゲルマン、ジシラン）</td><td>量に関係なく</td></tr>
+      <tr><td>圧縮水素、圧縮天然ガス</td><td class="n">容積 300 m³ 以上</td></tr>
+      <tr><td>液化酸素、液化アンモニア、液化石油ガス</td><td class="n">質量 3000 kg 以上</td></tr>
+      <tr><td>液化塩素</td><td class="n">質量 1000 kg 以上</td></tr>
+    </tbody>
+  </table></div>
+  <h3>製造・貯蔵・消費の手続きのまとめ</h3>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>許可</th><th>届出</th><th>手続き不要（基準のみ）</th></tr></thead>
+    <tbody>
+      <tr><td>製造</td><td>第一種製造者</td><td>第二種製造者</td><td>その他</td></tr>
+      <tr><td>貯蔵</td><td>第一種貯蔵所</td><td>第二種貯蔵所</td><td>その他</td></tr>
+      <tr><td>消費</td><td>—</td><td>特定高圧ガス消費者</td><td>その他</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="move">
+  <h2><span class="no">4</span>輸入・移動・廃棄・帳簿・事故届</h2>
+  <h3>輸入検査</h3>
+  <ul>
+    <li>輸入した<b>高圧ガスとその容器</b>の両方が検査の対象（ガスだけではない。H26問4、R5問2、R7問4）。</li>
+    <li>知事等の検査のほか、高圧ガス保安協会・指定輸入検査機関の検査を受けて届け出れば移動できる（R4問2）。</li>
+    <li>船から導管で陸揚げする場合は輸入検査不要（R6問2）。</li>
+  </ul>
+  <h3>移動（車両）</h3>
+  <ul>
+    <li>ガスの種類・量に関係なく、技術上の基準に従って移動する。</li>
+  </ul>
+  <div class="tbl"><table>
+    <thead><tr><th>移動監視者が必要な量</th><th>圧縮ガス</th><th>液化ガス</th></tr></thead>
+    <tbody>
+      <tr><td>可燃性・酸素（液化石油ガスを含む）</td><td class="n">300 m³ 以上</td><td class="n">3000 kg 以上</td></tr>
+      <tr><td>毒性</td><td class="n">100 m³ 以上</td><td class="n">1000 kg 以上</td></tr>
+      <tr><td>特殊高圧ガス</td><td colspan="2">0 を超えるすべて</td></tr>
+    </tbody>
+  </table></div>
+  <p class="src">例：液化塩素 2000 kg を移動するなら移動監視者が必要（H24問4）。</p>
+  <h3>廃棄</h3>
+  <ul>
+    <li>特定不活性ガス以外の<b>不活性ガス</b>には、廃棄の技術基準がない（R3問4、R7問4）。</li>
+    <li>可燃性・毒性を継続・反復して廃棄するときは、滞留を検知する措置をとる。酸素にはこの定めはない（H24問4）。</li>
+    <li>酸素・三フッ化窒素を廃棄するときは、バルブや器具の石油類・油脂類など可燃性の物を除去してから（H25問3）。</li>
+    <li>容器とともに廃棄しない。通風のよい場所で少しずつ廃棄する。加熱するときは熱湿布か 40 ℃以下の温湯を使う。</li>
+  </ul>
+  <h3>帳簿</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>記載すること</th><th>保存期間</th></tr></thead>
+    <tbody>
+      <tr><td>容器に充填した、容器で授受した（冷凍を除く第一種製造者）</td><td class="n">記載の日から 2年</td></tr>
+      <tr><td>製造施設に異常があった年月日と措置</td><td class="n">記載の日から 10年</td></tr>
+    </tbody>
+  </table></div>
+  <p class="src">「製造開始の日から」ではなく「記載の日から」（R4問1）。容器での授受も記載が必要（R6問4、R7問4）。</p>
+  <h3>危険時の措置と事故届</h3>
+  <ul>
+    <li>危険時の応急措置は、製造施設だけでなく、貯蔵所・販売所・特定高圧ガスの消費施設の所有者・占有者も行う（H26問2、R6問4）。</li>
+    <li>災害の発生、高圧ガスや容器の喪失・盗難は、遅滞なく知事等又は警察官に届出。製造者・販売業者以外の者も対象（H26問4、R5問2）。</li>
+    <li>容器の喪失・盗難は、ガスが<b>入っていなくても</b>届出が必要（R6問2）。</li>
+    <li>事業所で指定した場所では、従業者を含め<b>何人も</b>火気を取り扱えない（H25問4、R4問3）。</li>
+  </ul>
+</section>
+
+<section id="staff">
+  <h2><span class="no">5</span>保安体制・保安教育・検査</h2>
+  <div class="why"><b>考え方</b>　「定めて、届け出る」のが危害予防規程、「定めて、守る」だけなのが保安教育計画。誰が何を届けるのかを区別します。</div>
+  <h3>危害予防規程と保安教育</h3>
+  <ul>
+    <li>危害予防規程：第一種製造者が定めて知事等に<b>届出</b>（認可・許可ではない）。変更したときも届出。守るのは<b>事業者と従業者</b>で、協力会社の従業者は含まない（H26問3、R5問12、R7問12）。</li>
+    <li>知事等は、必要と認めるときは危害予防規程の変更を命じることができる（R6問12）。</li>
+    <li>保安教育計画：第一種製造者が定めて忠実に実行する。<b>届出は不要</b>（計画も実行結果も。R3問9、R5問12）。第二種製造者等は計画は不要で、保安教育を施す。</li>
+    <li>計画を実行していないと、知事等から勧告されることがある（R7問12）。</li>
+  </ul>
+  <h3>保安統括者など（コンビ則の大規模事業所の例）</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>職</th><th>選任の単位</th><th>資格</th><th>講習</th><th>代理者の届出</th><th>職務の例</th></tr></thead>
+    <tbody>
+      <tr><td>保安統括者</td><td>事業所</td><td>免状不要（事業を統括管理する者）</td><td class="x">なし</td><td class="y">必要</td><td>保安の統括管理</td></tr>
+      <tr><td>保安技術管理者</td><td>事業所</td><td>処理能力 100万 m³/日以上は甲種化学・甲種機械＋経験</td><td class="x">なし</td><td class="x">不要</td><td>統括者を補佐して技術的事項を管理</td></tr>
+      <tr><td>保安企画推進員</td><td>事業所</td><td>免状不要（企画・指導の業務経験）</td><td class="y">あり</td><td class="x">不要</td><td>危害予防規程の立案、設計・施工への助言・勧告、災害の原因調査</td></tr>
+      <tr><td>保安主任者</td><td>製造施設区分</td><td>甲種・乙種（化学・機械）＋経験。丙種化学（特別試験科目）は不可</td><td class="y">あり</td><td class="x">不要</td><td>技術管理者を補佐し、保安係員を指揮</td></tr>
+      <tr><td>保安係員</td><td>製造施設区分</td><td>甲・乙・丙種＋<b>1年以上</b>の経験（両方必要）</td><td class="y">あり</td><td class="x">不要</td><td>定期自主検査の監督、作業標準などの作成への助言</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li>統括者に所定の免状と経験があれば、保安技術管理者は選任しなくてよい。保安企画推進員は免除されない（H26問10、R7問10）。</li>
+    <li>選任・解任は遅滞なく知事等に届出。代理者の届出が要るのは<b>保安統括者の代理者だけ</b>（H25問10、H26問11、R5問10）。<span class="tag fix">修正</span></li>
+    <li>2以上の製造施設が一体で同じ計器室で制御されるなら、同一の製造施設区分とみなして選任できる（H26問11、R7問10）。</li>
+    <li>講習の時期：選任後、所定の期間内に受けさせる（期間はノートの「3年以内」「5年以内」の扱いを法規集で確認）。<span class="tag chk">要確認</span></li>
+  </ul>
+  <h3>保安検査と定期自主検査</h3>
+  <ul>
+    <li>保安検査：第一種製造者の特定施設が、定期に知事等・協会・指定保安検査機関の検査を受ける。指定機関の検査を受けたら、受けた旨を知事等に<b>届出</b>（R7問11）。</li>
+    <li>定期自主検査：ガス設備が技術基準（耐圧試験を除く）に適合しているか、1年に1回以上。記録を作成・保存し、<b>届出は不要</b>（R5問11）。検査は保安係員が監督（R4問8）。</li>
+    <li>記録の内容：検査をしたガス設備、設備ごとの検査の方法と結果、検査年月日、監督した保安係員の氏名（R7問11）。</li>
+    <li>認定保安検査実施者 <span class="tag rev">改正</span>：経済産業大臣の認定。組織・方法の変更は遅滞なく届出（更新時ではない）。現在は認定高度保安実施者に移行。</li>
+  </ul>
+</section>
+
+<section id="cyl">
+  <h2><span class="no">6</span>容器</h2>
+  <div class="why"><b>考え方</b>　容器は「製造・輸入 → 容器検査 → 合格 → 刻印・表示 → 譲渡・引渡し」の順。刻印は容器そのものの性能、表示は中身のガスの情報です。</div>
+  <ul>
+    <li>容器検査に合格し刻印等がされていなければ、譲渡・引渡しできない（外国登録容器製造業者の自主検査刻印等のものは可）。</li>
+    <li>高圧ガスを充填して輸入し、輸入検査に合格した容器は、容器検査なしで譲渡できる（R3問5）。</li>
+    <li>種類：溶接容器、継目なし容器、複合容器など。</li>
+  </ul>
+  <h3>刻印と表示</h3>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>含まれるもの</th><th>含まれないもの（ひっかけ）</th></tr></thead>
+    <tbody>
+      <tr><td>容器の刻印</td><td>充填するガスの種類、内容積（V）、質量（W：附属品を含まない容器の質量）、容器検査の年月、耐圧試験圧力（TP）、最高充填圧力（FP：圧縮ガス）など</td><td>最大充填質量、気密試験圧力、容器再検査の年月</td></tr>
+      <tr><td>附属品の刻印</td><td>耐圧試験圧力（TP）、装置される容器の種類の記号（PG 圧縮ガス、LG 液化ガス、LPG 液化石油ガスなど）</td><td>気密試験圧力</td></tr>
+      <tr><td>容器の表示</td><td>表面積の 1/2 以上の塗色（水素は赤、液化炭酸ガスは緑）、ガスの名称、性質を示す文字（燃・毒）</td><td>「爆」「危」などの文字</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li>表示が消えたら、所有者等が表示をし直す（H25問5）。</li>
+  </ul>
+  <h3>充填</h3>
+  <ul>
+    <li>圧縮ガス：刻印された最高充填圧力（FP）以下。</li>
+    <li>液化ガス：質量 G = V / C（C はガスごとの定数）。0.9wV は超低温容器などの式（R5問6）。</li>
+    <li>損傷を受けた容器は、容器再検査に合格し刻印等がされるまで充填できない（R4問5、R7問5）。</li>
+  </ul>
+  <h3>容器再検査の期間</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>容器・附属品</th><th>期間</th></tr></thead>
+    <tbody>
+      <tr><td>一般継目なし容器</td><td>経過年数に関係なく <b>5年</b>（刻印の月の<b>前月の末日</b>から。R6問6）</td></tr>
+      <tr><td>溶接容器など</td><td>製造後 20年未満は 5年、20年以上は 2年（経過年数で変わる）</td></tr>
+      <tr><td>容器に装置されている附属品</td><td>その容器の再検査のときに一緒に</td></tr>
+      <tr><td>容器に装置されていない附属品</td><td>一律 2年</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li>再検査に不合格で所定の期間内に刻印等がされなかった容器は、遅滞なく<b>くず化</b>（「使用禁止」の表示ではない。R6問5、R7問5）。</li>
+    <li>容器も附属品も、廃棄するときはくず化して使えないようにする（H25問6、R4問5）。</li>
+    <li>超低温容器の再検査には断熱性能試験がある（R7問6）。耐圧試験は容器ごとに行う（H25問6）。</li>
+  </ul>
+</section>
+
+<section id="ippan">
+  <h2><span class="no">7</span>一般則の技術上の基準（問14〜20の［例］の事業所）</h2>
+  <div class="why"><b>考え方</b>　規定ごとに「どの危険を防ぐためか」を考えると、対象ガスが決まります。火事を防ぐなら可燃性（と燃焼を助ける酸素）、中毒を防ぐなら毒性、漏れの広がりを防ぐなら液化ガス、機械的な破壊を防ぐならすべてのガス、という具合です。</div>
+  <h3>ガスの種類ごとの規定（もっとも出題が多い表）</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>規定</th><th>可燃性（アンモニア含む）</th><th>毒性</th><th>酸素</th><th>窒素</th><th>メモ</th></tr></thead>
+    <tbody>
+      <tr><td>防消火設備</td><td class="y">○</td><td class="x">×</td><td class="y">○</td><td class="x">×</td><td>三フッ化窒素も○ <span class="tag fix">修正</span></td></tr>
+      <tr><td>火気取扱施設まで 8 m（又は流動防止措置）</td><td class="y">○</td><td class="x">×</td><td class="x">×</td><td class="x">×</td><td>酸素は対象外 <span class="tag fix">修正</span></td></tr>
+      <tr><td>漏えい検知警報設備</td><td class="y">○</td><td class="y">○</td><td class="x">×</td><td class="x">×</td><td></td></tr>
+      <tr><td>漏えいしたガスが滞留しない構造の室</td><td class="y">○</td><td class="x">×</td><td class="x">×</td><td class="x">×</td><td>特定不活性ガスも○ <span class="tag fix">修正</span></td></tr>
+      <tr><td>除害措置</td><td class="x">×</td><td class="y">○</td><td class="x">×</td><td class="x">×</td><td>製造設備と<b>容器置場</b>の両方</td></tr>
+      <tr><td>危険標識＋外部から識別できる措置</td><td class="x">×</td><td class="y">○（両方必要）</td><td class="x">×</td><td class="x">×</td><td></td></tr>
+      <tr><td>配管の接合は原則溶接</td><td class="x">×</td><td class="y">○</td><td class="x">×</td><td class="x">×</td><td>適当でないときはフランジ・ねじ接合も可</td></tr>
+      <tr><td>貯槽の流出防止措置（防液堤）</td><td class="y">1000 t 以上</td><td class="y">5 t 以上</td><td class="y">1000 t 以上</td><td class="x">×</td><td></td></tr>
+      <tr><td>貯槽配管の緊急遮断措置（内容積 5000 L 以上）</td><td class="y">○</td><td class="y">○</td><td class="y">○</td><td class="x">×</td><td>送り出し・受け入れの<b>両方</b>の配管</td></tr>
+      <tr><td>貯槽の温度上昇防止措置</td><td class="y">常に</td><td class="y">常に</td><td colspan="2">周辺に可燃性物質を扱う設備があるとき</td><td>貯槽と<b>支柱</b>の両方</td></tr>
+      <tr><td>90% 超を自動検知・警報</td><td class="x">×</td><td class="y">○</td><td class="x">×</td><td class="x">×</td><td>90% 以下に充填する定めは<b>すべて</b>の液化ガス</td></tr>
+      <tr><td>材料の規制</td><td colspan="3">ガス設備全体</td><td>高圧ガス設備のみ</td><td></td></tr>
+      <tr><td>安全弁の放出管</td><td class="y">○</td><td class="y">○</td><td class="y">○</td><td class="x">×</td><td>不活性ガス（特定不活性除く）・空気は不要</td></tr>
+      <tr><td>修理時の危険防止措置（ガス置換など）</td><td class="y">○</td><td class="y">○</td><td class="y">○</td><td class="x">×</td><td><span class="tag fix">修正</span></td></tr>
+    </tbody>
+  </table></div>
+  <h3>すべてのガスに必要なもの</h3>
+  <ul>
+    <li>安全装置（圧力が<b>許容圧力</b>を超えたら直ちに戻す。常用の圧力ではない）と圧力計。</li>
+    <li>安全弁・逃し弁に付けた止め弁は、修理・清掃で特に必要なとき以外<b>常に全開</b>（運転中だけでなく）。</li>
+    <li>耐震設計：貯槽（所定の規模以上）・塔・所定の配管とその支持構造物・基礎。ポンプ・圧縮機・蒸発器・容器置場は対象外。</li>
+    <li>貯槽の支柱は同一の基礎に緊結し、沈下状況を測定（貯蔵能力 100 m³ 又は 1 t 以上。耐震性能があっても必要）。</li>
+    <li>停電等で保安設備の機能を失わない措置（夜間稼働しなくても）。</li>
+    <li>バルブを適切に操作できる措置（製造設備に設けたバルブすべて）。</li>
+    <li>使用開始時・終了時の点検に<b>加えて</b>、1日1回以上の作動状況の点検。</li>
+    <li>修理・清掃：作業計画と責任者を定める、開放部分への漏えい防止、終了後の正常作動の確認（清掃も含む）。</li>
+  </ul>
+  <h3>距離</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>何から何まで</th><th>距離</th><th>緩和</th></tr></thead>
+    <tbody>
+      <tr><td>貯蔵設備・処理設備 → 第一種・第二種保安物件</td><td>第一種・第二種設備距離（能力で決まる）</td><td></td></tr>
+      <tr><td>容器置場 → 保安物件</td><td>置場距離（<b>容器置場の面積</b>で決まる）</td><td>障壁で第一種置場距離の 1/2 まで短縮可</td></tr>
+      <tr><td>可燃性の高圧ガス設備 → 他の可燃性の高圧ガス設備</td><td class="n">5 m 以上</td><td rowspan="2">障壁による緩和<b>なし</b>。ポンプも対象（H24問18）<span class="tag fix">修正</span></td></tr>
+      <tr><td>可燃性の高圧ガス設備 → 酸素の高圧ガス設備</td><td class="n">10 m 以上</td></tr>
+      <tr><td>可燃性ガス・酸素の貯槽どうし（300 m³・3 t 以上）</td><td>1 m 又は 最大直径の和の 1/4 の大きい方</td><td>一般則では防火・消火上有効な措置で不要（コンビ則では不可）</td></tr>
+      <tr><td>可燃性ガスの製造設備 → 火気取扱施設</td><td class="n">8 m 以上</td><td>流動防止措置か、漏えい時に連動して火気を消す措置</td></tr>
+      <tr><td>容器置場の周囲（可燃性・酸素など）</td><td class="n">2 m 以内は火気・引火性物禁止</td><td>有効に遮る措置をすれば可</td></tr>
+    </tbody>
+  </table></div>
+  <h3>試験と構造</h3>
+  <ul>
+    <li>耐圧試験：水など安全な液体で常用の圧力の <b>1.5倍</b>以上。液体が困難なときだけ気体で <b>1.25倍</b>以上（アセチレンでも水は禁止されていない）。第二種特定設備は液体 1.3倍・気体 1.1倍。</li>
+    <li>特定設備検査合格証の有効期間内の設備は、完成検査で耐圧試験を省略できる（R7問15）。</li>
+    <li>気密試験：常用の圧力以上。気体で耐圧試験をしても省略できない。</li>
+    <li>液化ガス貯槽の液面計：液化アンモニアなどでは丸形ガラス管液面計は使えない。ガラス液面計には破損防止と漏えい防止の措置。</li>
+    <li>貯槽の配管：直近のバルブ＋1つ以上のバルブ。直近のバルブは使用時以外は閉止。</li>
+    <li>障壁：圧縮アセチレンの圧縮機・充填場所・容器置場の間すべて（10 MPa 以上の圧縮ガスの圧縮機と充填場所の間も）。</li>
+  </ul>
+  <h3>貯蔵・容器置場</h3>
+  <ul>
+    <li>充填容器と残ガス容器は区分して置く（窒素も含め<b>すべてのガス</b>）。可燃性・毒性・酸素の容器はそれぞれ区分（窒素は区分不要）。</li>
+    <li>充填容器も残ガス容器も常に <b>40 ℃以下</b>。内容積 5 L 超は転落・転倒防止とバルブの損傷防止。</li>
+    <li>容器置場には計量器など作業に必要な物以外を置かない（すべてのガス）。可燃性ガスの容器置場には携帯電燈以外の燈火を持ち込まない。</li>
+    <li>充填容器：充填質量の 1/2 以上が残っているもの。残ガス容器：それ以外でガスが残っているもの。</li>
+    <li>車両に固定した容器（内容積 4000 L 以上）から受け入れるときは、貯槽の大きさに関係なく車止めなどで車両を固定。<span class="tag fix">修正</span></li>
+    <li>酸素を充填するときは、バルブ・容器・配管の石油類・油脂類を除去。</li>
+  </ul>
+</section>
+
+<section id="kombi">
+  <h2><span class="no">8</span>コンビ則（問8〜12・13の［例］の事業所）</h2>
+  <div class="why"><b>考え方</b>　コンビナートは設備が密集し、1か所の事故が周りに広がります。そのため一般則より厳しく、<b>防火・消火上の措置や障壁による距離の緩和がない</b>のが基本です。</div>
+  <h3>特定製造事業所になる条件</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>場所</th><th>可燃性ガスなど（不活性・空気以外）</th><th>不活性ガス・空気</th></tr></thead>
+    <tbody>
+      <tr><td>コンビナート地域内</td><td colspan="2">原則として該当</td></tr>
+      <tr><td>コンビナート地域外</td><td class="n">100万 m³/日 以上（貯槽を設置して専ら充填するなら 200万）<span class="tag fix">修正</span></td><td class="n">400万（800万）以上 <span class="tag chk">要確認</span></td></tr>
+      <tr><td>準工業地域・商業地域など</td><td class="n">50万 m³/日 以上（専ら充填なら 100万）</td><td class="n">200万（400万）以上</td></tr>
+    </tbody>
+  </table></div>
+  <p class="src">過去問の解説（H24問14、R7問13）：「地域外で、専ら充填する事業所で 2,000,000 m³/日未満なのでロに該当しない。準工業地域等でも 1,000,000 m³/日未満なのでハにも該当しない」。</p>
+  <h3>主な基準</h3>
+  <ul>
+    <li>保安区画内の高圧ガス設備 → 隣の保安区画の高圧ガス設備：燃焼熱量に関係なく<b>一律 30 m 以上</b>。保安用不活性ガスの設備も保安区画内に置く。</li>
+    <li>燃焼熱量が所定値以上の貯槽 → 貯槽以外の高圧ガス設備・圧縮機：30 m 以上（R5問8）。</li>
+    <li>保安物件までの距離：50 m 又は算式の大きい方。新設の貯槽は事業所の境界線まで。敷地外の保安のための宿直施設にも距離が必要。保安用不活性ガスの施設にも距離の規定がある。</li>
+    <li>可燃性ガス貯槽どうし：1 m 又は最大直径の和の 1/4。防火・消火上の措置をしても<b>緩和なし</b>。</li>
+    <li>計器室：危険の程度と距離に応じた安全な位置・構造とし、さらに扉と窓は耐火性。外部からのガス侵入を防ぐ。</li>
+    <li>特殊反応設備：内部反応監視装置（自動警報、最も早く検知するものは自動記録）と、計器室で操作できるか自動の緊急遮断措置。</li>
+    <li>可燃性・毒性の製造設備の計装回路にはインターロック。</li>
+    <li>防消火設備と、その作動に必要な水を常時保有。保安用不活性ガスは<b>全ての製造設備</b>が危険になったときに必要な量。</li>
+    <li>事業所間の導管：地盤面の上下に関係なく標識。市街地・主要河川・湖沼などを横断する導管に緊急遮断装置。感震装置。輸送停止時は関連事業所に連絡。</li>
+    <li>ベントスタックや屋外消火栓を境界線の近くに設けたら、隣の事業所に書面を送付。</li>
+    <li>防液堤：可燃性ガスは一般則より小さい貯槽から必要（ノートでは 500 t 以上）。<span class="tag chk">要確認</span></li>
+    <li>危害予防規程には、新設・変更時の安全審査、津波浸水想定区域なら津波警報時の避難のことも定める。</li>
+  </ul>
+</section>
+
+<section id="ekiseki">
+  <h2><span class="no">9</span>液石則（問7・特定高圧ガス消費者）</h2>
+  <ul>
+    <li>減圧設備の外面から第一種・第二種保安物件まで、第一種・第二種設備距離。距離は減圧設備の<b>処理能力ではなく</b>、接続する<b>貯蔵設備の貯蔵能力</b>で決まる（H25問7、R7問7）。</li>
+    <li>この距離に、障壁・地盤面下への埋設などによる緩和はない（H26問7、R3問7、R5問7）。</li>
+    <li>貯槽の支柱は、地盤が堅固でも同一の基礎に緊結（H26問7、R3問7、R6問7）。</li>
+    <li>貯蔵設備等（貯蔵設備・導管・減圧設備とその間の配管）の周囲 5 m 以内は、火気と引火性・発火性の物を禁止。流動防止措置などがあれば例外。防消火設備があっても例外にならない（R4問7、R6問7）。</li>
+    <li>取扱主任者：製造保安責任者免状（丙種化学を含む）の保有者、又は液化石油ガスの製造・消費に 1年以上の経験がある者。選任・解任は知事等に届出（R5問7）。</li>
+  </ul>
+</section>
+
+<section id="fixes">
+  <h2><span class="no">10</span>ノートから直した所</h2>
+  <ul class="fixlist">
+    <li><b>コンビ則の特定製造事業所（地域外）</b>：ノートの「1000万（2000万）m³/日」は1桁大きい。<b>100万（200万）m³/日</b>（過去問 H24問14・R7問13 の解説で確認）。不活性ガスの「4000万（8000万）」も同じく 400万（800万）と思われる（要確認）。</li>
+    <li><b>防消火設備</b>：「可燃性・毒性・酸素」ではなく<b>可燃性・酸素・三フッ化窒素</b>。毒性ガスだけのガスは対象外（H24問14、R4問14）。</li>
+    <li><b>火気取扱施設まで 8 m</b>：対象は<b>可燃性ガス</b>の製造設備。毒性・酸素は対象外（H24問14、R4問14）。</li>
+    <li><b>滞留しない構造</b>と<b>漏えい検知警報</b>は対象が違う：滞留しない構造は可燃性・特定不活性、検知警報は可燃性・毒性（R5問17、H24問15）。</li>
+    <li><b>修理・清掃</b>：作業計画・漏えい防止・正常作動の確認は<b>すべてのガス</b>。ガス置換などの危険防止措置は可燃性・毒性・酸素（H24問17、R3問20、R4問19）。</li>
+    <li><b>設備間距離（可燃性と酸素 10 m）</b>はポンプどうしにも適用（H24問18）。</li>
+    <li><b>代理者の届出</b>：届出が要るのは保安統括者の代理者だけ。他の職の代理者は届出不要（H25問10、H26問11）。</li>
+    <li><b>特定設備の取替え</b>：軽微な変更になるのは処理能力の変更がないものだけ（X問12）。</li>
+    <li><b>車止め</b>：条件は貯槽の容量ではなく、車両に固定した容器の内容積（4000 L 以上）（H24問16）。</li>
+    <li><b>認定完成検査実施者・認定保安検査実施者</b>：令和5年12月21日に廃止され、認定高度保安実施者に移った。R5以前の過去問は旧制度で出題（<a href="https://www.meti.go.jp/policy/safety_security/industrial_safety/sangyo/hipregas/sinnintei/index.html" target="_blank" rel="noopener">経済産業省</a>）。</li>
+  </ul>
+</section>
+
+<footer>
+  <p>根拠の条文は <a href="https://laws.e-gov.go.jp/law/326AC0000000204" target="_blank" rel="noopener">e-Gov 法令検索：高圧ガス保安法</a>、本試験の問題と正解は <a href="http://shiken.khk.or.jp/shiken.html" target="_blank" rel="noopener">KHK の公表ページ</a> で確認してください。「H24問14」などは、過去問題集から書き起こした<a href="https://claude.ai/artifact/SDd1CPzWsrskYYvzXE1nPL" target="_blank" rel="noopener">甲機 法令ドリル</a>の問題番号です。</p>
+  <p>試験は、その年の4月1日時点の法令で出題されます。</p>
+</footer>
+</div>
