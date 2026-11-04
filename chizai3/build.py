@@ -759,15 +759,51 @@ def kana(i, n):
     return "アイウエオ"[i] if n > 2 else ""
 
 
-def build():
-    for s in SETS:
-        s["url"] = REPO_BLOB + f"set-{s['id']}.md"
+def past_sets(parsed_path, expl):
+    """公式過去問（parse 済み JSON）と解説 dict から過去問セットを作る。"""
+    meta = {
+        "251116": ("第52回", "2025年11月16日", "2025年5月1日"),
+        "260308": ("第53回", "2026年3月8日", "2025年9月1日"),
+        "260712": ("第54回", "2026年7月12日", "2026年1月1日"),
+    }
+    parsed = json.loads(pathlib.Path(parsed_path).read_text(encoding="utf-8"))
+    out = []
+    for key in sorted(parsed, reverse=True):
+        date, kind = key.split("_3Q_")
+        no, day, base = meta[date]
+        kname = "学科" if kind == "g" else "実技"
+        qs = []
+        for q in parsed[key]:
+            item = {"topic": f"{no} {kname} 問{q['n']}", "ask": q["stem"], "choices": q["choices"],
+                    "answer": q["answer"], "type": q["type"], "explain": expl[key][q["n"]]}
+            if q["scenario"]:
+                item["scenario"] = p(q["scenario"])
+            qs.append(item)
+        out.append({
+            "id": f"{date}{kind.upper()}", "kind": "過去問", "chip": f"{no} {kname}",
+            "topic": f"過去問 {no}（{day}）{kname}",
+            "url": "https://www.kentei-info-ip-edu.org/",
+            "principle": p(f"{no}（{day}実施）の公式問題です。法令は<strong>{base}現在</strong>で施行されているものが基準。"
+                           "「最も不適切なもの」を選ぶ問題では、誤っている記述が正解になります。解説では各記述の正誤と根拠条文を示しています。"
+                           "選択肢の数字（期間・起算点）と、手続を「誰が」「いつまでに」できるかが頻出です。"),
+            "questions": qs,
+        })
+    return out
+
+
+def build(extra_sets=None, out_html=None):
+    for s in SETS + (extra_sets or []):
+        s.setdefault("url", REPO_BLOB + f"set-{s['id']}.md")
         for i, q in enumerate(s["questions"], 1):
             q["n"] = i
     # HTML
     tpl = (HERE / "drill_template.html").read_text(encoding="utf-8")
     data = json.dumps(SETS, ensure_ascii=False).replace("</", "<\\/")
-    (HERE / "drill.html").write_text(tpl.replace("/*__SETS__*/[]", data), encoding="utf-8")
+    if extra_sets:
+        data = json.dumps(SETS + extra_sets, ensure_ascii=False).replace("</", "<\\/")
+    pathlib.Path(out_html or HERE / "drill.html").write_text(tpl.replace("/*__SETS__*/[]", data), encoding="utf-8")
+    if extra_sets:
+        return
     # Markdown
     for s in SETS:
         out = [f"# 知財検定3級 法令ドリル セット {s['id']}：{s['topic']}", "",
@@ -787,4 +823,12 @@ def build():
 
 
 if __name__ == "__main__":
-    build()
+    import sys
+    if len(sys.argv) == 4:
+        # 公式過去問を含む版: build.py <parsed.json> <kexpl.py のあるディレクトリ> <出力 html>
+        sys.path.insert(0, sys.argv[2])
+        import kexpl
+        build(past_sets(sys.argv[1], kexpl.E), sys.argv[3])
+        print("with past exams ->", sys.argv[3])
+    else:
+        build()

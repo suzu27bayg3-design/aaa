@@ -106,6 +106,15 @@ h1 { font-family: var(--f-display); font-weight: 700; font-size: 26px; margin: 0
 .opt.right { border-color: var(--ok); background: var(--ok-soft); }
 .opt.wrong { border-color: var(--ng); background: var(--ng-soft); }
 .opt.dim { opacity: .5; }
+.inrow { display: flex; gap: 10px; flex-wrap: wrap; }
+.inrow input { flex: 1 1 160px; min-width: 0; font: inherit; font-family: var(--f-mono); font-size: 18px; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); }
+.inrow input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.inrow.right input { border-color: var(--ok); background: var(--ok-soft); }
+.inrow.wrong input { border-color: var(--ng); background: var(--ng-soft); }
+.btn:disabled { opacity: .5; cursor: default; }
+.ask table { border-collapse: collapse; margin-top: 8px; font-size: 14px; }
+.ask td, .ask th { border: 1px solid var(--line); padding: 4px 8px; text-align: left; }
+.tablewrap { overflow-x: auto; }
 
 .verdict { display: flex; gap: 10px; align-items: center; font-weight: 700; font-family: var(--f-display); font-size: 18px; }
 .verdict .mark { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; color: var(--surface); font-size: 16px; flex: none; }
@@ -136,7 +145,7 @@ footer p { margin: 0; }
 <div class="wrap">
   <header>
     <div class="brand"><span class="seal">知財</span><h1>知財検定3級 法令ドリル</h1></div>
-    <p class="lede">知的財産管理技能検定3級。学科は本試験と同じ3肢択一（ア・イ・ウから1つ）、実技は架空企業の事例で3肢択一と○×。各セットの冒頭に「この分野の原理」、各問の解説に根拠条文へのリンクがあります。合格基準は学科・実技とも満点の70%以上です。</p>
+    <p class="lede">知的財産管理技能検定3級。学科は本試験と同じ3肢択一（ア・イ・ウから1つ）、実技は事例問題で3肢択一・○×・理由選択・数字記入。01〜J2 は練習問題、過去問は公式問題の第52〜54回です。各セットの冒頭に「この分野の原理」、各問の解説に根拠条文へのリンクがあります。合格基準は学科・実技とも満点の70%以上です。</p>
   </header>
 
   <nav class="sets" id="sets" aria-label="演習セット"></nav>
@@ -150,7 +159,7 @@ footer p { margin: 0; }
   <main id="stage"></main>
 
   <footer>
-    <p>全問オリジナルの練習問題です（公式過去問の転載ではありません）。法令は2026年11月時点。公式の過去問題と試験要項は<a href="https://www.kentei-info-ip-edu.org/" target="_blank" rel="noopener">知的財産教育協会</a>、条文は<a href="https://laws.e-gov.go.jp/" target="_blank" rel="noopener">e-Gov法令検索</a>で確認してください。セット名のリンクから、同じ問題のMarkdown版を開けます。</p>
+    <p>01〜J2 はオリジナルの練習問題で、法令は2026年11月時点です。過去問の問題文と正解は<a href="https://www.kentei-info-ip-edu.org/" target="_blank" rel="noopener">知的財産教育協会</a>の公式問題によるもので、出題時点の法令に基づきます（解説は本ドリルで作成）。条文は<a href="https://laws.e-gov.go.jp/" target="_blank" rel="noopener">e-Gov法令検索</a>で確認してください。</p>
     <p>成績はこのブラウザにだけ保存されます。<button class="btn ghost" id="reset" type="button" style="padding:2px 10px;font-weight:400">成績を消す</button> <span id="resetMsg" role="status"></span></p>
   </footer>
 </div>
@@ -158,14 +167,14 @@ footer p { margin: 0; }
 <script>
 const SETS = /*__SETS__*/[];
 const KEY = 'chizai3-quiz-v1';
-const KANA = ['ア', 'イ', 'ウ', 'エ', 'オ'];
+const KANA = ['ア', 'イ', 'ウ', 'エ', 'オ', 'カ', 'キ', 'ク', 'ケ', 'コ'];
 const PASS = 0.7;
 
 function load() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
 function save(r) { try { localStorage.setItem(KEY, JSON.stringify(r)); } catch (e) {} }
 let record = load();
 
-const all = SETS.flatMap(s => s.questions.map(q => ({ ...q, set: s.id, setTopic: s.topic, setUrl: s.url, scenario: s.scenario, id: s.id + '-' + q.n })));
+const all = SETS.flatMap(s => s.questions.map(q => ({ ...q, set: s.id, setTopic: s.topic, setUrl: s.url, scenario: q.scenario || s.scenario, id: s.id + '-' + q.n })));
 const byId = Object.fromEntries(all.map(q => [q.id, q]));
 const setById = Object.fromEntries(SETS.map(s => [s.id, s]));
 
@@ -173,7 +182,11 @@ let state = null;
 
 function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 function missedIds() { return all.filter(q => record[q.id] && record[q.id].ok === false).map(q => q.id); }
-function label(q, i) { return q.choices.length > 2 ? KANA[i] : q.choices[i]; }
+function isOX(q) { return q.type === 'ox' || (q.choices.length === 2 && q.choices[0] === '○'); }
+function label(q, i) { return isOX(q) ? q.choices[i] : KANA[i]; }
+function normIn(v) { return String(v).normalize('NFKC').replace(/[^0-9]/g, ''); }
+function isRight(q, v) { return q.type === 'input' ? normIn(v) === String(q.answer) : v === q.answer; }
+function answerText(q) { return q.type === 'input' ? String(q.answer) : label(q, q.answer - 1); }
 
 function start(key) {
   let order, lbl;
@@ -210,6 +223,8 @@ function renderSets() {
   SETS.filter(s => s.kind === '学科').forEach(s => add(r1, s.id, s.id, short(s.topic), setScore(s)));
   const r2 = row('実技');
   SETS.filter(s => s.kind === '実技').forEach(s => add(r2, s.id, s.id, s.topic.replace(/^実技 /, ''), setScore(s)));
+  const past = SETS.filter(s => s.kind === '過去問');
+  if (past.length) { const rp = row('過去問'); past.forEach(s => add(rp, s.id, '', s.chip, setScore(s))); }
   const r3 = row('演習');
   add(r3, 'mock', '', '学科 模擬試験 30問', '');
   add(r3, 'mix', '', '全セットから 10 問', '');
@@ -251,9 +266,17 @@ function renderQuestion() {
     sc.open = true;
     card.appendChild(sc);
   }
-  card.appendChild(el('p', 'ask', q.ask));
+  card.appendChild(el('div', 'ask tablewrap', q.ask));
 
-  const ox = q.choices.length === 2;
+  const ox = isOX(q);
+  if (q.type === 'input') {
+    const f = el('form', 'inrow');
+    f.innerHTML = '<input id="ans-input" inputmode="numeric" autocomplete="off" placeholder="例 202001" aria-label="解答を入力"><button class="btn" type="submit">解答する</button>';
+    const inp = f.querySelector('input');
+    if (picked != null) { inp.value = picked; inp.disabled = true; f.querySelector('button').disabled = true; f.classList.add(isRight(q, picked) ? 'right' : 'wrong'); }
+    f.addEventListener('submit', e => { e.preventDefault(); if (normIn(inp.value)) answer(id, normIn(inp.value)); });
+    card.appendChild(f);
+  }
   const ch = el('div', 'choices' + (ox ? ' ox' : ''));
   ch.setAttribute('role', 'group'); ch.setAttribute('aria-label', '選択肢');
   q.choices.forEach((c, i) => {
@@ -270,11 +293,11 @@ function renderQuestion() {
     }
     ch.appendChild(b);
   });
-  card.appendChild(ch);
+  if (q.type !== 'input') card.appendChild(ch);
 
-  if (picked) {
-    const ok = picked === q.answer;
-    const v = el('div', 'verdict ' + (ok ? 'ok' : 'ng'), '<span class="mark" aria-hidden="true">' + (ok ? '○' : '×') + '</span>' + (ok ? '正解' : '不正解　正解は ' + label(q, q.answer - 1)));
+  if (picked != null) {
+    const ok = isRight(q, picked);
+    const v = el('div', 'verdict ' + (ok ? 'ok' : 'ng'), '<span class="mark" aria-hidden="true">' + (ok ? '○' : '×') + '</span>' + (ok ? '正解' : '不正解　正解は ' + answerText(q)));
     v.setAttribute('role', 'status');
     card.appendChild(v);
     card.appendChild(el('div', 'explain', q.explain));
@@ -291,16 +314,16 @@ function renderQuestion() {
 
 function renderResult() {
   const ids = state.order;
-  const right = ids.filter(id => state.picked[id] === byId[id].answer).length;
+  const right = ids.filter(id => isRight(byId[id], state.picked[id])).length;
   const card = el('section', 'card result');
   card.appendChild(el('div', 'score', right + '<small> / ' + ids.length + ' 問</small>'));
   const rate = ids.length ? right / ids.length : 0;
   const pass = rate >= PASS;
   card.appendChild(el('p', 'pass', '正答率 ' + Math.round(rate * 100) + '%　<b class="' + (pass ? '' : 'ng') + '">' + (pass ? '合格ライン（70%）到達' : '合格ライン（70%）まであと ' + Math.max(0, Math.ceil(ids.length * PASS) - right) + ' 問') + '</b>'));
-  const miss = ids.filter(id => state.picked[id] !== byId[id].answer);
+  const miss = ids.filter(id => !isRight(byId[id], state.picked[id]));
   if (miss.length) {
     const ul = el('ul', 'missed');
-    miss.forEach(id => { const q = byId[id]; ul.appendChild(el('li', '', '<span class="k">セット' + q.set + ' 問' + q.n + '</span>' + q.topic + '　正解 ' + label(q, q.answer - 1))); });
+    miss.forEach(id => { const q = byId[id]; ul.appendChild(el('li', '', '<span class="k">セット' + q.set + ' 問' + q.n + '</span>' + q.topic + '　正解 ' + answerText(q))); });
     card.appendChild(ul);
   }
   const act = el('div', 'actions');
@@ -319,7 +342,7 @@ function renderResult() {
 
 function answer(id, n) {
   state.picked[id] = n;
-  record[id] = { ok: n === byId[id].answer, at: Date.now() };
+  record[id] = { ok: isRight(byId[id], n), at: Date.now() };
   save(record);
   render();
 }
