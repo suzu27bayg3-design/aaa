@@ -99,9 +99,6 @@ def banner(path, l1, l2, tagline):
         c = c.resize((290, int(c.height * 290 / c.width)), Image.LANCZOS)
         c = c.crop((0, 0, c.width, min(c.height, 423 + 40)))
         im.alpha_composite(c, (int(x), sy0 - 20))
-    for e, x in (("🐙", sx0 - 300), ("🔬", sx0 - 520), ("🍯", sx0 + 1546 + 400), ("🚀", sx0 + 1546 + 150)):
-        em = T.emoji_img(e, 150)
-        im.alpha_composite(em, (int(x), BH // 2 - 75))
     im.convert("RGB").save(path)
     # スマホで見える範囲に枠を描いた確認用
     chk = im.copy()
