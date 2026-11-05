@@ -56,9 +56,8 @@ def icon(path):
     im = Image.alpha_composite(im, glow.filter(ImageFilter.GaussianBlur(60)))
     bulb = T.emoji_img("💡", 190)
     im.alpha_composite(bulb, (S // 2 - bulb.width // 2, 70))
-    z = char("zundamon", "happy", mirror=True)
     m = char("metan", "happy")
-    for c, x, w in ((m, 380, 430), (z, -20, 450)):
+    for c, x, w in ((m, 140, 680),):
         c = c.resize((w, int(c.height * w / c.width)), Image.LANCZOS)
         im.alpha_composite(c.crop((0, 0, w, min(c.height, S - 230))), (x, 230))
     # 円形に切り抜いたときの見え方も保存（確認用）
@@ -83,20 +82,19 @@ def banner(path, l1, l2, tagline):
     sparkles(im, 90, 7)
     sx0, sy0 = (BW - 1546) // 2, (BH - 423) // 2  # スマホでも見える範囲
     glow = Image.new("RGBA", (BW, BH))
-    ImageDraw.Draw(glow).rounded_rectangle((sx0 + 230, sy0 + 10, sx0 + 1316, sy0 + 413), 80, fill=(255, 255, 255, 40))
+    ImageDraw.Draw(glow).rounded_rectangle((sx0 + 100, sy0 + 10, sx0 + 1180, sy0 + 413), 80, fill=(255, 255, 255, 40))
     im = Image.alpha_composite(im, glow.filter(ImageFilter.GaussianBlur(30)))
     d = ImageDraw.Draw(im)
-    cx = BW / 2
+    cx = sx0 + 640  # 文字は左寄り、右にめたん
     d.text((cx, sy0 + 90), l1, font=L.jp(72), fill=GREEN, anchor="mm", stroke_width=8, stroke_fill=L.NAVY)
     d.text((cx, sy0 + 200), l2, font=L.jp(118), fill=L.WHITE, anchor="mm", stroke_width=12, stroke_fill=L.NAVY)
     f = L.jp(36, True)
     tw = d.textlength(tagline, font=f)
     d.rounded_rectangle((cx - tw / 2 - 40, sy0 + 300, cx + tw / 2 + 40, sy0 + 370), 40, fill=L.GOLD)
     d.text((cx, sy0 + 335), tagline, font=f, fill=L.NAVY, anchor="mm")
-    z = char("zundamon", "happy", mirror=True)
     m = char("metan", "explain")
-    for c, x in ((z, sx0 - 60), (m, sx0 + 1546 - 230)):
-        c = c.resize((290, int(c.height * 290 / c.width)), Image.LANCZOS)
+    for c, x in ((m, sx0 + 1546 - 330),):
+        c = c.resize((360, int(c.height * 360 / c.width)), Image.LANCZOS)
         c = c.crop((0, 0, c.width, min(c.height, 423 + 40)))
         im.alpha_composite(c, (int(x), sy0 - 20))
     im.convert("RGB").save(path)
