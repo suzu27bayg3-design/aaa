@@ -226,8 +226,14 @@ for spec in cfg['pages']:
     shapes_el = proot.find(V + 'Shapes')
     tops = shapes_el.findall(V + 'Shape')
     # drop excluded shapes
+    drop = set(spec.get('drop_ids', []))
+    if spec.get('drop_ids_file'): drop |= set(json.load(open(spec['drop_ids_file'])))
     for s in tops:
-        if s.get('ID') in spec.get('drop_ids', []): shapes_el.remove(s)
+        if s.get('ID') in drop: shapes_el.remove(s)
+    cs = proot.find(V + 'Connects')
+    if cs is not None:
+        for c in list(cs):
+            if c.get('FromSheet') in drop or c.get('ToSheet') in drop: cs.remove(c)
     tops = shapes_el.findall(V + 'Shape')
     bx0, by0, bx1, by1 = bbox(tops)
     old_scale = cv(op.find(V + 'PageSheet'), 'DrawingScale') / cv(op.find(V + 'PageSheet'), 'PageScale')

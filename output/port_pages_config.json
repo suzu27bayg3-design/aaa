@@ -1,5 +1,57 @@
-{"template_page_id":"47","title_from_page":"page4.xml","area_mm":[14,58,406,286],
- "pages":[
-  {"old_page_id":"41","name":"全体系統図","titles":[["977","Flowsheet 全体系統図\n原料ガス, 精製器, 分析計, VENTライン"],["978","SIB00104"]]},
-  {"old_page_id":"27","name":"H2 C/C","max_paper_scale":1.3,"titles":[["977","Flowsheet H2 C/C\n原料水素, 標準ガス, パージライン"],["978","SIB00105"]]}
- ]}
+{
+ "template_page_id": "47",
+ "title_from_page": "page4.xml",
+ "area_mm": [
+  14,
+  58,
+  406,
+  286
+ ],
+ "pages": [
+  {
+   "old_page_id": "41",
+   "name": "全体系統図",
+   "titles": [
+    [
+     "977",
+     "Flowsheet 全体系統図\n原料ガス, 精製器, 分析計, VENTライン"
+    ],
+    [
+     "978",
+     "SIB00104"
+    ]
+   ]
+  },
+  {
+   "old_page_id": "27",
+   "name": "H2 C/C",
+   "max_paper_scale": 1.3,
+   "titles": [
+    [
+     "977",
+     "Flowsheet H2 C/C\n原料水素, 標準ガス, パージライン"
+    ],
+    [
+     "978",
+     "SIB00105"
+    ]
+   ]
+  },
+  {
+   "old_page_id": "42",
+   "name": "C/R, C/C ガス供給",
+   "drop_ids_file": "pid/drop10.json",
+   "max_paper_scale": 1.3,
+   "titles": [
+    [
+     "977",
+     "Flowsheet C/R, C/C ガス供給\nC/R原料ガス, C/C, H2遮断BOXライン"
+    ],
+    [
+     "978",
+     "SIB00106"
+    ]
+   ]
+  }
+ ]
+}
