@@ -69,12 +69,18 @@ def base_frame(hook, tag, cta):
     return im
 
 
-def fig_layer(fig, cfg, t, scale=1.12):
+def fig_layer(fig, cfg, t, scale=1.12, reveal=None):
+    """図のレイヤー。reveal=(経過秒, 項目ごとの表示時刻, 全体の長さ) があれば、セリフに合わせて項目を順に出す"""
     bw, bh = FIG_SIZE.get(fig["kind"], (900, 580))
     lay = Image.new("RGBA", (bw + 40, bh + 40))
     L.ANIM_T = t if fig["kind"] in L.LIVE_KINDS else None
     L.fig_area(lay, (20, 20, bw + 20, bh + 20), fig, cfg)
     L.ANIM_T = None
+    if reveal is not None:
+        tc, times, tch = reveal
+        m = L.fig_mask(fig, (20, 20, bw + 20, bh + 20), tc, tch, times)
+        if m is not None:
+            lay = L.masked(lay, m.crop((0, 0, lay.width, lay.height)))
     lay = lay.resize((int(lay.width * scale), int(lay.height * scale)), Image.LANCZOS)
     out = Image.new("RGBA", (SW, SH))
     out.alpha_composite(lay, (int((SW - lay.width) / 2), int(860 - lay.height / 2)))
@@ -150,7 +156,13 @@ def main():
                              "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", out],
                             stdin=subprocess.PIPE)
     live = fig["kind"] in L.LIVE_KINDS
-    static_fig = None if live else fig_layer(fig, cfg, 0)
+    # 図の項目は、その言葉が出てくるセリフの始まりで出す（本編と同じ決め方）
+    times = L.match_times(L.item_texts(fig), [r[1] for r in lines], list(starts), summary=fig["kind"] == "summary",
+                          ordered=fig["kind"] not in ("timeline", "bars"), min_score=3)
+    if fig["kind"] == "table" and times:
+        times = [min(times) + 0.5 * i for i in range(len(times))]
+    static_fig = None
+    settled = None
     nfr = int(total * L.FPS)
     cache = {}
     for k in range(nfr):
@@ -170,7 +182,14 @@ def main():
         if key not in cache:
             cache.clear()
             cache[key] = speaker_layer(spk, ex, disp, mouth, blink, page)
-        fl = fig_layer(fig, cfg, t + 1.0) if live else static_fig
+        if live:
+            fl = fig_layer(fig, cfg, t + 1.0, reveal=(t, times, total))
+        elif settled is not None:
+            fl = settled
+        else:
+            fl = fig_layer(fig, cfg, 0, reveal=(t, times, total))
+            if L.fig_mask(fig, (20, 20, 920, 620), t, total, times) is None:
+                settled = fl
         img = Image.alpha_composite(Image.alpha_composite(base, fl), cache[key])
         d = ImageDraw.Draw(img)
         d.rectangle((0, SH - 20, SW * (t / total), SH), fill=L.GOLD)

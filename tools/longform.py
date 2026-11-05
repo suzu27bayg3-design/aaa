@@ -967,7 +967,7 @@ def _bigrams(t):
     return grams | nums
 
 
-def match_times(texts, lines, rel_starts, summary=False, ordered=True):
+def match_times(texts, lines, rel_starts, summary=False, ordered=True, min_score=2):
     """項目ごとに「その項目の言葉が出てくるセリフ」を探し、そのセリフが始まる時刻を返す。
     項目の順番は守る（前の項目より前には出さない）。見つからない項目は前の項目と同時に出す"""
     if not texts:
@@ -983,8 +983,8 @@ def match_times(texts, lines, rel_starts, summary=False, ordered=True):
         scores = [len(ib & lb[j]) for j in range(len(lines))]
         rng = range(prev if ordered else 0, len(lines))
         best = max((scores[j] for j in rng), default=0)
-        if best >= 2:
-            j = next(j for j in rng if scores[j] >= max(2, 0.5 * best))
+        if best >= min_score:
+            j = next(j for j in rng if scores[j] >= max(min_score, 0.5 * best))
         else:
             j = prev
         if cue is not None:
