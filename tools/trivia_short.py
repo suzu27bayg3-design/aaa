@@ -143,7 +143,7 @@ def write_metadata(cfg, here, total):
     src = "\n".join(f"{lab}\n{url}" for lab, url in m["sources"])
     desc = (m["lead"] + "\n\n" + "\n".join("・" + p for p in m["points"]) + "\n\n"
             + "【しくみ】" + m["principle"] + "\n\n"
-            + "📅 毎日1本、雑学ショートを投稿中。フォローで明日の雑学も！\n\n"
+            + "📅 毎日21時、科学の雑学ショートを投稿中。フォローで明日の「なるほど」も！\n\n"
             + "出典:\n" + src + "\n\n"
             + "音声: VOICEVOX:ずんだもん / VOICEVOX:四国めたん\n立ち絵: 坂本アヒル\n\n"
             + " ".join(m["hashtags"]))
@@ -158,7 +158,7 @@ def write_metadata(cfg, here, total):
         md += ["**ほかの候補**\n"] + [code(t) for t in m["alt_titles"]]
     md += ["**説明欄**\n", code(desc), "**タグ**（タグ欄に貼る）\n", code(tags),
            "**固定コメント**\n", code(m["pinned"]),
-           "**設定**：カテゴリ「教育」/ 再生リスト「毎日雑学ショート」/ ショートの説明欄のURLは押せないので、"
+           "**設定**：カテゴリ「教育」/ 再生リスト「毎日の科学雑学」/ ショートの説明欄のURLは押せないので、"
            "長尺につなぐときは「関連動画」で設定する\n"]
     if m.get("notes"):
         md += ["\n**事実確認のメモ**\n"] + [f"- {n}\n" for n in m["notes"]]

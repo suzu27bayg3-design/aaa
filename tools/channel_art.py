@@ -127,7 +127,7 @@ def banner(path, l1, l2, tagline):
 
 def main():
     l1, l2 = (sys.argv[1], sys.argv[2]) if len(sys.argv) > 2 else ("ずんだもんの", "なるほど研究所")
-    tag = sys.argv[3] if len(sys.argv) > 3 else "毎日21時 雑学ショート ／ 量子技術をやさしく解説"
+    tag = sys.argv[3] if len(sys.argv) > 3 else "毎日21時 科学の雑学ショート ／ 量子技術をやさしく解説"
     os.makedirs(OUT, exist_ok=True)
     icon(os.path.join(OUT, "icon.png"))
     banner(os.path.join(OUT, "banner.png"), l1, l2, tag)
