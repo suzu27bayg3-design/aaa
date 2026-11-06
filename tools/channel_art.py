@@ -47,6 +47,33 @@ def sparkles(im, n, seed=1, box=None):
     im.alpha_composite(lay)
 
 
+def draw_bulb(S):
+    """電球を図形で描く（絵文字を拡大するとぼやけるため）。4倍の大きさで描いてから縮小し、ふちを滑らかに"""
+    k = 4
+    B = Image.new("RGBA", (S * k, S * k))
+    d = ImageDraw.Draw(B)
+    c, r = S * k / 2, 175 * k
+    cy = 360 * k
+    gold, dark = (255, 205, 40), (60, 40, 10)
+    d.ellipse((c - r, cy - r, c + r, cy + r), fill=gold, outline=dark, width=10 * k)
+    d.polygon([(c - 120 * k, cy + 120 * k), (c + 120 * k, cy + 120 * k), (c + 85 * k, 600 * k), (c - 85 * k, 600 * k)],
+              fill=gold)
+    d.line([(c - 128 * k, cy + 128 * k), (c - 85 * k, 600 * k)], fill=dark, width=10 * k)
+    d.line([(c + 128 * k, cy + 128 * k), (c + 85 * k, 600 * k)], fill=dark, width=10 * k)
+    d.ellipse((c - 120 * k, cy - 130 * k, c - 40 * k, cy - 20 * k), fill=(255, 245, 190))  # 光の反射
+    # フィラメント（ジグザグ）と支柱
+    pts = [(c - 60 * k + i * 20 * k, cy + (40 if i % 2 else 0) * k) for i in range(7)]
+    d.line(pts, fill=(255, 255, 255), width=12 * k, joint="curve")
+    d.line([(c - 60 * k, cy), (c - 40 * k, 600 * k)], fill=dark, width=8 * k)
+    d.line([(c + 60 * k, cy), (c + 40 * k, 600 * k)], fill=dark, width=8 * k)
+    # 口金
+    for i in range(3):
+        y = (600 + i * 38) * k
+        d.rounded_rectangle((c - 95 * k, y, c + 95 * k, y + 32 * k), 14 * k, fill=(150, 170, 190), outline=dark, width=6 * k)
+    d.polygon([(c - 50 * k, 714 * k), (c + 50 * k, 714 * k), (c, 750 * k)], fill=dark)
+    return B.resize((S, S), Image.LANCZOS)
+
+
 def icon(path):
     S = 800
     im = grad(S, S, (40, 70, 160), (12, 20, 60))
@@ -54,12 +81,11 @@ def icon(path):
     glow = Image.new("RGBA", (S, S))
     ImageDraw.Draw(glow).ellipse((120, 140, 680, 700), fill=(255, 230, 120, 90))
     im = Image.alpha_composite(im, glow.filter(ImageFilter.GaussianBlur(60)))
-    bulb = T.emoji_img("💡", 190)
-    im.alpha_composite(bulb, (S // 2 - bulb.width // 2, 70))
-    m = char("metan", "happy")
-    for c, x, w in ((m, 140, 680),):
-        c = c.resize((w, int(c.height * w / c.width)), Image.LANCZOS)
-        im.alpha_composite(c.crop((0, 0, w, min(c.height, S - 230))), (x, 230))
+    # キャラクターは使わず、「なるほど！」をあらわす電球だけを大きく置く（小さく表示されても形がわかる）
+    ring = Image.new("RGBA", (S, S))
+    ImageDraw.Draw(ring).ellipse((150, 150, 650, 650), outline=(255, 220, 110, 160), width=14)
+    im.alpha_composite(ring)
+    im.alpha_composite(draw_bulb(S))
     # 円形に切り抜いたときの見え方も保存（確認用）
     mask = Image.new("L", (S, S))
     ImageDraw.Draw(mask).ellipse((0, 0, S, S), fill=255)
@@ -82,21 +108,16 @@ def banner(path, l1, l2, tagline):
     sparkles(im, 90, 7)
     sx0, sy0 = (BW - 1546) // 2, (BH - 423) // 2  # スマホでも見える範囲
     glow = Image.new("RGBA", (BW, BH))
-    ImageDraw.Draw(glow).rounded_rectangle((sx0 + 100, sy0 + 10, sx0 + 1180, sy0 + 413), 80, fill=(255, 255, 255, 40))
+    ImageDraw.Draw(glow).rounded_rectangle((sx0 + 230, sy0 + 10, sx0 + 1316, sy0 + 413), 80, fill=(255, 255, 255, 40))
     im = Image.alpha_composite(im, glow.filter(ImageFilter.GaussianBlur(30)))
     d = ImageDraw.Draw(im)
-    cx = sx0 + 640  # 文字は左寄り、右にめたん
+    cx = BW / 2
     d.text((cx, sy0 + 90), l1, font=L.jp(72), fill=GREEN, anchor="mm", stroke_width=8, stroke_fill=L.NAVY)
     d.text((cx, sy0 + 200), l2, font=L.jp(118), fill=L.WHITE, anchor="mm", stroke_width=12, stroke_fill=L.NAVY)
     f = L.jp(36, True)
     tw = d.textlength(tagline, font=f)
     d.rounded_rectangle((cx - tw / 2 - 40, sy0 + 300, cx + tw / 2 + 40, sy0 + 370), 40, fill=L.GOLD)
     d.text((cx, sy0 + 335), tagline, font=f, fill=L.NAVY, anchor="mm")
-    m = char("metan", "explain")
-    for c, x in ((m, sx0 + 1546 - 330),):
-        c = c.resize((360, int(c.height * 360 / c.width)), Image.LANCZOS)
-        c = c.crop((0, 0, c.width, min(c.height, 423 + 40)))
-        im.alpha_composite(c, (int(x), sy0 - 20))
     im.convert("RGB").save(path)
     # スマホで見える範囲に枠を描いた確認用
     chk = im.copy()
