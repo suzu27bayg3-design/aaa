@@ -15,6 +15,8 @@ import longform as L
 
 TITLE = "ふしぎな絶景の科学"
 ACCENT = (255, 190, 90)
+MAP_CREDITS = ["航空写真・陰影起伏: 出典 国土地理院（地理院タイルを加工して作成）",
+               "地質図: 出典 産総研地質調査総合センター 20万分の1日本シームレス地質図V2（CC BY 4.0、玄武岩の範囲を抽出して加工）"]
 PLACE = dict(name="玄武洞", pref="兵庫県豊岡市", lat=35.594, lon=134.808)
 
 
@@ -105,23 +107,97 @@ def magnet(t, lt):
     return im
 
 
-FIGS = {"cooling": cooling, "columns": columns, "magnet": magnet}
+import json
+import os
+
+from PIL import ImageFilter
+
+_M = os.path.join(os.path.dirname(os.path.abspath(__file__)), "maps")
+_AER = Image.open(os.path.join(_M, "aerial.jpg")).convert("RGBA")
+_MASK = Image.open(os.path.join(_M, "basalt_mask.png")).convert("L")
+_INFO = json.load(open(os.path.join(_M, "aerial.json")))
+CROP = (250, 380, 1650, 1780)  # 航空写真（1792px四方）から使う範囲
+
+
+def _px(lat, lon):
+    z, (ox, oy) = _INFO["z"], _INFO["origin"]
+    n = 2 ** z
+    x = (lon + 180) / 360 * n
+    y = (1 - math.log(math.tan(math.radians(lat)) + 1 / math.cos(math.radians(lat))) / math.pi) / 2 * n
+    return (x - ox) * 256, (y - oy) * 256
+
+
+def realmap(t, lt):
+    """国土地理院の航空写真（陰影起伏を重ねて立体感）に、産総研の地質図から取り出した
+    約160万年前の玄武岩の分布（むらさき）を重ねる。円山川の両岸に同じ溶岩がある"""
+    S = 900
+    x0, y0, x1, y1 = CROP
+    z = 1.0 - 0.06 * min(1, lt / 6)  # ゆっくりズーム
+    cw = (x1 - x0) * z
+    cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
+    box = (cx - cw / 2, cy - cw / 2, cx + cw / 2, cy + cw / 2)
+    sc = S / cw
+    base = _AER.crop(tuple(int(v) for v in box)).resize((S, S), Image.BILINEAR)
+    a = min(1.0, max(0.0, (lt - 1.0) / 0.8))
+    if a > 0:
+        m = _MASK.crop(tuple(int(v) for v in box)).resize((S, S), Image.BILINEAR).point(lambda v: int(v * 0.55 * a))
+        base = Image.composite(Image.new("RGBA", (S, S), (210, 70, 210, 255)), base, m)
+    im = Image.new("RGBA", (S, S + 60))
+    im.paste(base, (0, 0))
+    d = ImageDraw.Draw(im)
+    to = lambda lat, lon: ((_px(lat, lon)[0] - box[0]) * sc, (_px(lat, lon)[1] - box[1]) * sc)  # noqa: E731
+    # 円山川
+    rx, ry = to(35.598, 134.803)
+    _label(d, (rx - 40, ry - 40), "円山川", 32, (150, 210, 255))
+    # 西岸の溶岩（二見山付近）
+    if a > 0.5:
+        wx, wy = to(35.5797, 134.7882)
+        _label(d, (wx, wy - 10), "二見山付近", 34)
+        _label(d, (wx, wy + 32), "（西岸の溶岩）", 28)
+    # 流れの向き（推定）
+    k = min(1.0, max(0.0, (lt - 2.4) / 1.0))
+    if k > 0:
+        sx, sy = to(35.5835, 134.7955)
+        ex, ey = to(35.5925, 134.8045)
+        mx, my = sx + (ex - sx) * k, sy + (ey - sy) * k
+        d.line([(sx, sy), (mx, my)], fill=(255, 210, 80), width=10)
+        if k >= 1:
+            ang = math.atan2(ey - sy, ex - sx)
+            d.polygon([(ex, ey), (ex - 30 * math.cos(ang - 0.5), ey - 30 * math.sin(ang - 0.5)),
+                       (ex - 30 * math.cos(ang + 0.5), ey - 30 * math.sin(ang + 0.5))], fill=(255, 210, 80))
+    # 玄武洞のピン
+    gx, gy = to(35.594, 134.808)
+    d.ellipse((gx - 18, gy - 58, gx + 18, gy - 22), fill=(230, 50, 60))
+    d.polygon([(gx - 15, gy - 34), (gx + 15, gy - 34), (gx, gy)], fill=(230, 50, 60))
+    _label(d, (gx + 95, gy - 40), "玄武洞", 36)
+    # 凡例と出典
+    if a > 0:
+        d.rounded_rectangle((16, 16, 470, 70), 16, fill=(0, 0, 0, 170))
+        d.rectangle((30, 30, 60, 56), fill=(210, 70, 210))
+        d.text((74, 43), "約160万年前の玄武岩の溶岩", font=L.jp(28, True), fill=L.WHITE, anchor="lm")
+    d.text((S / 2, S + 30), "出典：国土地理院（航空写真・陰影起伏）／産総研（シームレス地質図V2）を加工",
+           font=L.jp(22, True), fill=(220, 230, 240), anchor="mm")
+    return im
+
+
+FIGS = {"cooling": cooling, "columns": columns, "magnet": magnet, "realmap": realmap}
 
 SCENES = [
     dict(spk="Z", ex="think", say="この六角形の柱、だれが作ったのだ？",
          read="この、ろっかっけいの柱、だれが作ったのだ？",
          head="だれが作った？", show=("photo", "Genbudo_Cave_2018.jpg", "in")),
-    dict(spk="M", say="ここは兵庫県豊岡市の玄武洞。約160万年前の火山の溶岩が作った、自然の柱なの。",
-         read="ここは、ひょうごけん、とよおかしの、げんぶどう。やく、ひゃくろくじゅうまんねん前の、火山の溶岩が作った、自然の柱なの。",
-         head="自然が作った柱", sub="約160万年前の溶岩", show=("map",)),
-    dict(spk="M", say="厚い溶岩は、冷えて固まるときに縮むの。縮む力で表面がひび割れて、六角形に近い形に分かれるのよ。",
-         read="厚い溶岩は、冷えて固まるときに、ちぢむの。ちぢむ力で、表面がひび割れて、ろっかっけいに近い形に、分かれるのよ。",
+    dict(spk="M", say="ここは兵庫県豊岡市の玄武洞。約160万年前の溶岩でできた、自然の柱なの。",
+         read="ここは、ひょうごけん、とよおかしの、げんぶどう。やく、ひゃくろくじゅうまんねん前の溶岩でできた、自然の柱なの。",
+         head="自然が作った柱", sub="約160万年前の溶岩", show=("map",), head_y=1340),
+    dict(spk="M", say="むらさきが同じ溶岩よ。円山川の西の、二見山のあたりで噴火して、川の両側に広がっていたと考えられているの。",
+         read="むらさきが、同じ溶岩よ。まるやまがわの西の、ふたみやまのあたりで噴火して、川の両側に、広がっていたと考えられているの。",
+         head="両岸に同じ溶岩", show=("fig", "realmap"), head_y=1320),
+    dict(spk="M", say="厚い溶岩は、冷えて固まるときに縮むの。縮む力でひび割れて、六角形に近い柱に分かれたのよ。",
+         read="厚い溶岩は、冷えて固まるときに、ちぢむの。ちぢむ力で、ひび割れて、ろっかっけいに近い柱に、分かれたのよ。",
          head="冷えて縮むと\n割れる", sub="柱状節理", show=("fig", "cooling")),
-    dict(spk="Z", say="田んぼの泥がかわいて、ひび割れるのと同じなのだ！",
-         head="泥のひび割れと\n同じしくみ", show=("photo", "Genbudo_Cave_2018_2.jpg", "right")),
-    dict(spk="M", say="割れ目は冷えた面から内側へのびて、柱がずらりと並ぶの。洞くつは、昔の人が石を切り出したあとなのよ。",
-         read="割れ目は、冷えた面から内側へのびて、柱が、ずらりと並ぶの。洞くつは、昔の人が、石を切り出した、あとなのよ。",
-         head="割れ目がのびて\n柱になる", sub="洞くつは石切り場のあと", show=("fig", "columns")),
+    dict(spk="Z", say="川がけずった崖から、昔の人が石を切り出して、洞くつになったのだ！",
+         read="川が、けずった崖から、昔の人が、石を切り出して、洞くつになったのだ！",
+         head="洞くつは\n石切り場のあと", show=("photo", "Genbudo_Cave_2018_2.jpg", "right")),
     dict(spk="M", say="しかもここの岩は、今と逆向きの磁石になっていたの。地球のN極とS極が入れかわっていた証拠になったのよ。",
          read="しかも、ここの岩は、今と逆向きの、磁石になっていたの。地球の、エヌきょくと、エスきょくが、入れかわっていた証拠になったのよ。",
          head="地球の磁石が\n逆だった！", sub="1926年 松山基範が発見", show=("fig", "magnet")),
@@ -134,8 +210,9 @@ META = dict(
     alt_titles=["自然が作った六角形の柱！玄武洞はこうしてできた #shorts #ジオパーク",
                 "地球の磁石が逆だった証拠が見つかった場所 #shorts #科学 #兵庫"],
     lead="兵庫県豊岡市の玄武洞には、六角形に近い石の柱がずらりと並びます。人が作ったのではなく、約160万年前の溶岩が冷えるときにできた自然の形です。",
-    points=["厚い溶岩は冷えて固まるとき縮み、表面が六角形に近い形にひび割れる（柱状節理）",
-            "割れ目が冷えた面から内側へのびて、柱が並ぶ。洞くつは昔の石切り場のあと",
+    points=["溶岩は円山川の西の二見山付近で噴火し、川の両岸に同じ玄武岩が残っている（産総研の地質図で確認）",
+            "厚い溶岩は冷えて固まるとき縮み、六角形に近い形にひび割れて柱になる（柱状節理）",
+            "川がけずった崖から石を切り出したあとが、今の洞くつ",
             "ここの岩は今と逆向きに磁化していて、地球の磁場（N極とS極）の逆転を示す発見につながった"],
     principle=("ものは冷えると縮みます。厚い溶岩が冷えて固まるとき、縮もうとする力で表面に割れ目ができます。割れ目は"
                "力をいちばん効率よく逃がせる形として、3本が約120度で交わりやすく、全体として六角形に近い網目になります"
@@ -146,12 +223,19 @@ META = dict(
              ("産総研 地質調査総合センター 地質ニュース", "https://www.gsj.jp/data/chishitsunews/05_11_07.pdf"),
              ("豊岡市 資料（玄武洞の名前と採石の歴史）",
               "https://www.city.toyooka.lg.jp/_res/projects/default_project/_page_/001/002/653/0203.pdf"),
+             ("産総研 地質調査総合センター 20万分の1日本シームレス地質図V2", "https://gbank.gsj.jp/seamless/"),
+             ("国土地理院 地理院タイル（航空写真・陰影起伏・標準地図）", "https://maps.gsi.go.jp/development/ichiran.html"),
+             ("日本の地質案内（玄武洞：アルカリかんらん石玄武岩・層厚約100m）",
+              "https://www.web-gis.jp/GS_GeoGuide/GeoDocument/GeoSite_J05-003.html"),
              ("神戸新聞（玄武洞と松山基範）", "https://www.kobe-np.co.jp/rentoku/bunkazai/201606/0009237092.shtml")],
     tags=["玄武洞", "げんぶどう", "柱状節理", "玄武岩", "山陰海岸ジオパーク", "ジオパーク", "兵庫県", "豊岡市", "城崎",
           "絶景", "ふしぎな絶景", "地磁気逆転", "松山基範", "地学", "科学", "観光", "ずんだもん", "四国めたん", "shorts"],
     hashtags=["#絶景", "#科学", "#玄武洞", "#ジオパーク", "#shorts"],
     pinned="アイスランドや北アイルランドにも六角形の柱が並ぶ場所があります。次はどこのふしぎな絶景が見たい？コメントで教えてください！",
-    notes=["発見の年は資料によって1926年（発見）と1929年（発表）があるため、見出しは「1926年 発見」とし、説明欄では発表年にふれていない。",
+    notes=["噴出源は産総研 第四紀火山データベースの「円山川左岸の二見山に噴出源のスコリア丘」に従った。来日岳とする地域資料もある。",
+           "地図のむらさきは20万分の1地質図の「第四紀カラブリアン期のアルカリ玄武岩」の範囲。縮尺が小さいので境界はおおよそ。",
+           "流れの向きの矢印は、噴出源が西岸にあることからの推定として「考えられている」と表現した。",
+           "発見の年は資料によって1926年（発見）と1929年（発表）があるため、見出しは「1926年 発見」とし、説明欄では発表年にふれていない。",
            "「六角形」は「六角形に近い」と言い、5角形や7角形もまじることを説明欄に書いた。",
            "写真は Wikimedia Commons の CC0（著作権放棄）のもの。大きい画像は Commons の自動取得制限で取れず、幅500pxを使用。"],
 )

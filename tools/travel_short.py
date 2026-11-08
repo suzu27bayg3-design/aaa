@@ -172,6 +172,7 @@ def write_metadata(cfg, here, total, credits_used):
             + f"📍 {cfg.PLACE['pref']} {cfg.PLACE['name']}\n\n"
             + "出典:\n" + src + "\n\n"
             + "写真（Wikimedia Commons）:\n" + photos + "\n地図: " + json.load(open(os.path.join(MAP_DIR, "japan.json")))["credit_full"]
+            + "".join("\n" + c for c in getattr(cfg, "MAP_CREDITS", []))
             + "\n\n音声: VOICEVOX:ずんだもん / VOICEVOX:四国めたん\n\n" + " ".join(m["hashtags"]))
     tags = ", ".join(dict.fromkeys(m["tags"]))
     assert len(tags) <= 500
@@ -241,7 +242,7 @@ def main():
         k = max(0.0, (y - SH * 0.55) / (SH * 0.45)) ** 1.5 * 0.85 + max(0.0, (SH * 0.25 - y) / (SH * 0.25)) * 0.45
         sd.line((0, y, SW, y), fill=(0, 0, 0, int(255 * min(0.9, k))))
     heads = [head_layer(s["head"], s.get("sub", ""), s.get("color", accent),
-                        1230 if s["show"][0] == "photo" else 1170) for s in sc]
+                        s.get("head_y", 1230 if s["show"][0] == "photo" else 1170)) for s in sc]
     figs = getattr(cfg, "FIGS", {})
     npg = [sub_pages(s["say"]) for s in sc]
     out = os.path.join(here, "short.mp4")
