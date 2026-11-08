@@ -21,6 +21,7 @@
 | 17 | 整圧器（ガバナ） | 2026-11-05 | [17-gas-governor.md](lessons/17-gas-governor.md) |
 | 18 | 導管材料と強度 | 2026-11-06 | [18-pipe-materials-strength.md](lessons/18-pipe-materials-strength.md) |
 | 19 | 漏えい検知と保安 | 2026-11-07 | [19-leak-detection.md](lessons/19-leak-detection.md) |
+| 20 | 地震対策 | 2026-11-08 | [20-earthquake-measures.md](lessons/20-earthquake-measures.md) |
 | 27（旧・参考） | ガス事業法の目的と事業区分 | 2026-10-19 | [27-gas-business-act-purpose.md](lessons/27-gas-business-act-purpose.md) |
 
 ## 法令トラック：高圧ガス保安法（甲種機械）
