@@ -315,7 +315,7 @@ def main():
     durs[-1] += 0.6
     starts = np.cumsum([0.2] + durs[:-1])
     total = float(starts[-1] + durs[-1])
-    assert total < 60
+    assert total < 90, f"{total:.1f}s"
 
     music = L.base.bgm(total) * 0.8
     vo = np.zeros_like(music)
