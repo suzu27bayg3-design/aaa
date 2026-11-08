@@ -1,0 +1,532 @@
+<title>知財検定3級 法令まとめ</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+New:wght@500;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one reading column, a chip index on top, each field a section with a 考え方 box, tables and bullet points; past-exam numbers in small mono print, traps flagged with an amber tag. */
+:root {
+  --bg: #F3F3F7;
+  --surface: #FFFFFF;
+  --ink: #1C1F2E;
+  --muted: #5D6275;
+  --line: #D6D8E2;
+  --accent: #2E3A78;
+  --accent-soft: #E6E8F5;
+  --seal: #C23A22;
+  --seal-soft: #FBEAE6;
+  --warn: #8A5A00;
+  --warn-soft: #FFF3D6;
+  --ok: #1D7447;
+  --f-display: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", sans-serif;
+  --f-body: "BIZ UDPGothic", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12131B; --surface: #1B1D29; --ink: #E7E8F0; --muted: #A0A4B8; --line: #2F3245;
+    --accent: #9DAAF0; --accent-soft: #232848; --seal: #F07A62; --seal-soft: #3A1F1A;
+    --warn: #F0C062; --warn-soft: #3A2E14; --ok: #52C48D;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12131B; --surface: #1B1D29; --ink: #E7E8F0; --muted: #A0A4B8; --line: #2F3245;
+  --accent: #9DAAF0; --accent-soft: #232848; --seal: #F07A62; --seal-soft: #3A1F1A;
+  --warn: #F0C062; --warn-soft: #3A2E14; --ok: #52C48D;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: 15.5px; line-height: 1.75;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 56px;
+}
+.wrap { max-width: 860px; margin: 0 auto; display: grid; gap: 22px; }
+a { color: var(--accent); }
+a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+header { display: grid; gap: 8px; }
+.brand { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.seal { font-family: var(--f-display); font-weight: 700; color: var(--seal); border: 2px solid var(--seal); border-radius: 4px; padding: 0 8px; letter-spacing: .12em; font-size: 15px; background: var(--surface); }
+h1 { font-family: var(--f-display); font-size: 26px; margin: 0; text-wrap: balance; }
+.lede { margin: 0; color: var(--muted); font-size: 14px; max-width: 65ch; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 13px; color: var(--muted); }
+nav.toc { display: flex; flex-wrap: wrap; gap: 8px; }
+nav.toc a { text-decoration: none; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 4px 12px; font-size: 13.5px; color: var(--ink); }
+nav.toc a .no { font-family: var(--f-mono); color: var(--muted); margin-right: 6px; font-size: 12px; }
+section { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: grid; gap: 14px; min-width: 0; scroll-margin-top: 12px; }
+h2 { font-family: var(--f-display); font-size: 20px; margin: 0; display: flex; gap: 10px; align-items: baseline; text-wrap: balance; }
+h2 .no { font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+h3 { font-family: var(--f-display); font-size: 16px; margin: 6px 0 0; color: var(--accent); }
+p { margin: 0; }
+ul { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
+.why { border-left: 3px solid var(--accent); background: var(--accent-soft); padding: 10px 14px; border-radius: 0 6px 6px 0; font-size: 14.5px; }
+.why b { font-family: var(--f-display); }
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 520px; }
+th, td { border-bottom: 1px solid var(--line); padding: 7px 8px; text-align: left; vertical-align: top; }
+th { font-family: var(--f-display); font-weight: 700; font-size: 13px; color: var(--muted); background: var(--bg); }
+td.n { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.y { color: var(--ok); font-weight: 700; }
+.x { color: var(--muted); }
+.tag { display: inline-block; font-size: 11.5px; font-weight: 700; border-radius: 4px; padding: 0 6px; margin-left: 4px; vertical-align: 1px; letter-spacing: .04em; white-space: nowrap; }
+.trap { color: var(--warn); background: var(--warn-soft); }
+.rev { color: var(--seal); background: var(--seal-soft); }
+.q { font-family: var(--f-mono); font-size: 12px; color: var(--muted); white-space: nowrap; }
+.src { font-size: 12.5px; color: var(--muted); }
+footer { font-size: 13px; color: var(--muted); display: grid; gap: 6px; }
+@media (max-width: 520px) { h1 { font-size: 22px; } section { padding: 16px; } }
+</style>
+
+<div class="wrap">
+<header>
+  <div class="brand"><span class="seal">知財</span><h1>知財検定3級 法令まとめ</h1></div>
+  <p class="lede">知的財産管理技能検定3級の範囲を、法令ドリルの練習問題90問と公式過去問（第52〜54回・180問）の解説から分野ごとに整理したものです。各分野の最初に「考え方」を置き、なぜその制度になっているのかを書いています。</p>
+  <div class="legend">
+    <span><span class="tag trap">ひっかけ</span> 過去問で誤りの選択肢として繰り返し出た所</span>
+    <span><span class="tag rev">改正</span> 最近の改正で変わった所</span>
+    <span><span class="q">52学1</span> 第52回 学科 問1、<span class="q">54実27</span> 第54回 実技 問27（ドリルの過去問セット）</span>
+  </div>
+</header>
+
+<nav class="toc" aria-label="目次">
+  <a href="#base"><span class="no">1</span>全体像と数字</a>
+  <a href="#pat1"><span class="no">2</span>特許 発明・要件</a>
+  <a href="#pat2"><span class="no">3</span>特許 出願・審査</a>
+  <a href="#pat3"><span class="no">4</span>特許権・実施権</a>
+  <a href="#jitu"><span class="no">5</span>実用新案</a>
+  <a href="#isho"><span class="no">6</span>意匠</a>
+  <a href="#sho"><span class="no">7</span>商標</a>
+  <a href="#cho1"><span class="no">8</span>著作物・著作者</a>
+  <a href="#cho2"><span class="no">9</span>著作権の中身</a>
+  <a href="#etc"><span class="no">10</span>不競法・種苗・独禁</a>
+  <a href="#treaty"><span class="no">11</span>条約・弁理士・契約</a>
+</nav>
+
+<section id="base">
+  <h2><span class="no">1</span>知的財産権の全体像と、数字の一覧</h2>
+  <div class="why"><b>考え方</b>　知的財産権は「<b>創作</b>を守る権利」（特許・実用新案・意匠・著作権・育成者権）と「<b>信用</b>を守る権利」（商標）に分かれます。創作は新しさが要件で、期間が来たら誰でも使えるようにします。信用は新しさは要らない代わりに識別力が要り、使い続ける限り更新で永続します。不正競争防止法は権利を作らず、不正な<b>行為</b>を止める法律です。</div>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>特許</th><th>実用新案</th><th>意匠</th><th>商標</th><th>著作権</th></tr></thead>
+    <tbody>
+      <tr><td>発生</td><td colspan="4">出願・審査・登録（意匠と特許は実体審査あり、実用新案は無審査）</td><td>創作した時（無方式）</td></tr>
+      <tr><td>存続期間</td><td class="n">出願から20年</td><td class="n">出願から10年</td><td class="n">出願から25年</td><td class="n">登録から10年・更新可</td><td class="n">死後70年</td></tr>
+      <tr><td>延長・更新</td><td>医薬品等は最長5年延長</td><td class="x">なし</td><td class="x">なし</td><td>更新（延長登録はない <span class="q">53学26</span>）</td><td class="x">—</td></tr>
+      <tr><td>審査請求</td><td class="y">3年以内</td><td class="x">なし</td><td class="x">なし</td><td class="x">なし</td><td class="x">—</td></tr>
+      <tr><td>出願公開</td><td class="y">1年6月</td><td class="x">なし</td><td class="x">なし <span class="q">53学18</span></td><td class="y">遅滞なく <span class="q">52学5 54学18</span></td><td class="x">—</td></tr>
+      <tr><td>異議申立て</td><td>公報から<b>6月</b>・何人も</td><td class="x">なし</td><td class="x">なし</td><td>公報から<b>2月</b>・何人も</td><td class="x">—</td></tr>
+      <tr><td>無効審判</td><td>利害関係人</td><td>利害関係人</td><td>利害関係人</td><td>利害関係人（多くは登録から5年の除斥期間）</td><td class="x">—</td></tr>
+      <tr><td>新規性喪失の例外</td><td class="n">公開から1年</td><td class="n">1年</td><td class="n">1年</td><td class="x">—</td><td class="x">—</td></tr>
+      <tr><td>パリ優先期間</td><td class="n">12月</td><td class="n">12月</td><td class="n">6月</td><td class="n">6月</td><td class="x">—</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li>期間の計算は、初日を数えず、月・年単位なら応当日の前日で終わる。例：2024年9月9日出願の審査請求期限は2027年9月9日 <span class="q">52実27</span>。早期公開を請求しても審査請求期限は変わらない <span class="q">54実27</span>。</li>
+    <li>著作権・著作隣接権は<b>暦年主義</b>：死亡・公表・実演の翌年1月1日から数えて、70年後の12月31日に終わる。</li>
+    <li>属地主義：権利は国ごとに成立し、効力もその国の中だけ。だから外国では条約を使って出願する（11章）。</li>
+  </ul>
+</section>
+
+<section id="pat1">
+  <h2><span class="no">2</span>特許：発明・特許要件</h2>
+  <div class="why"><b>考え方</b>　特許は「技術を公開する代わりに、一定期間の独占を認める」制度です。だから守るのは、自然法則を使って誰でも再現できる技術（発明）で、まだ世に出ておらず（新規性）、簡単には思いつかないもの（進歩性）に限られます。</div>
+  <h3>発明に当たるもの・当たらないもの</h3>
+  <p>発明＝「自然法則を利用した<b>技術的思想</b>の<b>創作</b>のうち高度のもの」（特許法2条1項） <span class="q">52学19</span>。「技術的創作」「産業上利用できる」に言い換えた選択肢は誤り。</p>
+  <div class="tbl"><table>
+    <thead><tr><th>発明に当たる</th><th>発明に当たらない</th></tr></thead>
+    <tbody>
+      <tr><td>天然物から<b>人為的に単離</b>した化学物質 <span class="q">52実9</span></td><td>天然物・自然現象の単なる<b>発見</b> <span class="q">53学19</span></td></tr>
+      <tr><td>スマートフォンのデータ記録方法 <span class="q">53実17</span></td><td>コンピュータ言語、料金の支払方法、スタンプカードの会員制度（人為的な取決め） <span class="q">52実9 53実17 54実15</span></td></tr>
+      <tr><td>センサのデータを解析して地震を予知する装置 <span class="q">54実15</span></td><td>自転車の運転方法、スポーツのフットワーク（個人の技能） <span class="q">52実9 53実17</span></td></tr>
+      <tr><td>医薬品・医療機器（物）</td><td>製品カタログなど情報の単なる提示 <span class="q">53学19 54実15</span>、人間の手術・治療・診断方法（産業上利用できないもの扱い）</td></tr>
+    </tbody>
+  </table></div>
+  <h3>新規性</h3>
+  <ul>
+    <li>判断は「特許出願前」で、<b>時刻</b>まで見る。午前8時に出願し、同じ日の午後8時にテレビ放送されても新規性は失わない <span class="q">52実3-4</span>。午前に出願して午後にプレスリリースもよい <span class="q">54実9</span>。</li>
+    <li><b>外国</b>での公開・販売・展示でも新規性を失う <span class="q">53実1-2 54実9</span>。<span class="tag trap">ひっかけ</span> 「外国の特定の店舗だけ」「ドイツの見本市」でも失う。</li>
+    <li>守秘義務を負う相手（秘密保持契約を結んだ顧客）に見せても、公知にならない <span class="q">54実9</span>。</li>
+  </ul>
+  <h3>新規性喪失の例外（30条）</h3>
+  <ul>
+    <li>公開から<b>1年以内</b>に出願する <span class="q">53学7</span>。1年を過ぎた自己の展示会発表は救えない <span class="q">52実1-2</span>。</li>
+    <li>自己の行為による公開：適用を受けたい旨の書面は出願と<b>同時</b>、証明書は出願から<b>30日以内</b>。<span class="tag trap">ひっかけ</span> 「30日以内に書面」は誤り <span class="q">53学7</span>。</li>
+    <li>意に反する公開（盗用など）：1年以内に出願すればよく、証明書は不要 <span class="q">53学7</span>。</li>
+    <li>自分の<b>特許公報・公開公報</b>に載って公知になったものには使えない <span class="q">52学24</span>。外国での公開には使える。</li>
+    <li>出願日はさかのぼらない。間に他人が出願すると負ける。</li>
+  </ul>
+  <h3>先願</h3>
+  <ul>
+    <li>先に<b>出願</b>した者が勝つ（先発明主義ではない）。他人の先願と同一の発明は拒絶 <span class="q">53実3-4</span>。</li>
+    <li>先願がこちらの出願後に公開された場合は、拡大された先願（29条の2）でも拒絶される。</li>
+    <li>同日出願：特許庁長官が協議を命じ、決まらなければ<b>どちらも</b>特許を受けられない。<span class="tag trap">ひっかけ</span> <b>くじは商標だけ</b> <span class="q">54学30</span>。</li>
+  </ul>
+</section>
+
+<section id="pat2">
+  <h2><span class="no">3</span>特許：出願書類・審査・職務発明</h2>
+  <div class="why"><b>考え方</b>　公開された書類を見て第三者が実際に作れなければ、公開の代償として独占を与える意味がありません。だから明細書には「実施できる程度」の記載が求められます。</div>
+  <h3>出願書類</h3>
+  <ul>
+    <li>願書に添付：<b>明細書・特許請求の範囲・要約書</b>（図面は必要なときだけ） <span class="q">53学29</span>。</li>
+    <li>明細書に書くもの：発明の名称・図面の簡単な説明・発明の詳細な説明 <span class="q">52学7</span>。特許請求の範囲と要約書は明細書とは別の書類。</li>
+    <li>詳細な説明：その分野の「<b>通常の知識</b>を有する者」が「<b>実施</b>できる」程度に明確かつ十分に（36条4項1号）。<span class="tag trap">ひっかけ</span> 「最新の知識」「共通の知識」「事業に従事する者」「理解できる」「簡潔に」は誤り <span class="q">52実20 53学29 54実3-4</span>。</li>
+    <li>特許請求の範囲：特許を受けようとする発明を特定するのに必要と<b>出願人が認める</b>事項を書く <span class="q">52実20</span>。明確なだけでなく、簡潔さなども必要 <span class="q">53学29</span>。権利の範囲はこの記載で決まる <span class="q">52学17</span>。</li>
+    <li>発明者は<b>自然人</b>だけ。会社（合同会社を含む）は発明者になれない。未成年者や別会社の従業者同士の共同発明はよい <span class="q">54学27 54実1-2</span>。</li>
+  </ul>
+  <h3>出願公開と審査請求</h3>
+  <ul>
+    <li>出願公開は1年6月。出願人は早期公開を請求でき（1年で公開されることもある）、その請求は<b>取り下げられない</b> <span class="q">54学5</span>。公開後も拒絶理由は通知され得る。</li>
+    <li>審査請求は出願から<b>3年以内</b>・<b>何人も</b>できる。出願と同時でもよい。出願公開前でもできる <span class="q">52学29 53学2 54学8 53実12</span>。</li>
+    <li>審査請求は<b>取り下げられない</b>。<span class="tag trap">ひっかけ</span> 3回とも出題 <span class="q">52学29 53学2 54学8 53実12</span>。</li>
+    <li>審査請求料＝138,000円＋4,000円×請求項数（8項なら170,000円） <span class="q">53実27</span>。出願料14,000円とは別。</li>
+    <li>早く審査してほしいときは早期審査制度がある <span class="q">53実12</span>。</li>
+  </ul>
+  <h3>拒絶理由通知から審判まで</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>段階</th><th>できること</th><th>できないこと</th></tr></thead>
+    <tbody>
+      <tr><td>拒絶理由通知を受けた</td><td>意見書、手続補正書、分割出願 <span class="q">53学24 54学2</span></td><td>不服審判（まだ査定がない）、答弁書（審判の被請求人が出す）</td></tr>
+      <tr><td>拒絶査定を受けた</td><td>謄本送達から<b>3月</b>以内に拒絶査定不服審判。請求と<b>同時に</b>補正・分割もできる <span class="q">52学2</span></td><td>—</td></tr>
+      <tr><td>審判で拒絶審決</td><td>審決取消訴訟（知財高裁）。審判請求と同時にはできない <span class="q">52学2</span></td><td>—</td></tr>
+    </tbody>
+  </table></div>
+  <h3>職務発明（35条）</h3>
+  <ul>
+    <li>勤務規則などで「特許を受ける権利は<b>発生時から会社</b>に帰属」と定められる（定めないと発明者に帰属） <span class="q">52実15 53実22</span>。</li>
+    <li>会社に権利を取得させた従業者は「<b>相当の利益</b>」を受ける <span class="q">52実15 53実22</span>。</li>
+    <li>会社に権利が移っても、<b>発明者は従業者</b>のまま。願書の発明者欄に会社は書けない <span class="q">52実15 53実22 54実1-2</span>。</li>
+    <li>従業者が権利を持つ場合、会社は無償の<b>通常実施権</b>を持つ（従業者が実施権を持つのではない） <span class="q">53実22</span>。</li>
+  </ul>
+</section>
+
+<section id="pat3">
+  <h2><span class="no">4</span>特許権・実施権・侵害への対応</h2>
+  <div class="why"><b>考え方</b>　独占的な権利（特許権の移転、専用実施権）は、登録して公に示さないと効力を生じません。単に「使っても訴えない」約束にすぎない通常実施権は、登録しなくても後の権利者に対抗できます（当然対抗）。</div>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>専用実施権</th><th>通常実施権</th></tr></thead>
+    <tbody>
+      <tr><td>効力の発生</td><td><b>登録</b>しなければ効力が生じない <span class="q">54実21</span></td><td>契約だけでよい。登録なしで譲受人に対抗できる <span class="q">52実21 52実25</span></td></tr>
+      <tr><td>複数人への設定</td><td>重複する範囲には設定できない <span class="q">53学5</span></td><td>競合する複数人に許諾できる <span class="q">52学8 52実25</span></td></tr>
+      <tr><td>権利者自身の実施</td><td>設定範囲では<b>権利者も実施できない</b>（類似範囲も） <span class="q">52実21 52実25</span></td><td>できる</td></tr>
+      <tr><td>差止請求</td><td>できる</td><td>できない</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li>他に許諾しない特約を付けた<b>独占的通常実施権</b>の契約もできる <span class="q">52学8</span>。範囲（物品など）を限った許諾もできる <span class="q">54実21</span>。</li>
+    <li>契約によらない実施権もある：先使用権（79条）、職務発明の会社の通常実施権など <span class="q">53学5</span>。</li>
+    <li>共有の特許権：自分の実施は自由。持分の譲渡、実施権の許諾・設定には<b>他の共有者の同意</b>が必要 <span class="q">52学8 53学5 54実21</span>。</li>
+    <li>特許権の移転・意匠権の譲渡は登録が効力発生要件（相続などを除く） <span class="q">53学28</span>。</li>
+  </ul>
+  <h3>特許権の効力</h3>
+  <ul>
+    <li>「業として」の実施に及ぶ。1回限りの販売でも事業なら侵害 <span class="q">52実24</span>。</li>
+    <li>実施には、生産・使用・譲渡・輸出・輸入・<b>譲渡の申出</b>（カタログ配布）も含む <span class="q">52実24</span>。</li>
+    <li>試験・研究のための実施には及ばない（69条） <span class="q">52実24</span>。</li>
+    <li>特許発明「柄」をスプーン以外のフォークに使っても侵害 <span class="q">53実11</span>。</li>
+    <li>正規品を買って転売するのは侵害ではない（消尽） <span class="q">52実14</span>。</li>
+  </ul>
+  <h3>侵害の警告を出す側・受ける側</h3>
+  <ul>
+    <li>特許権・商標権の行使に、事前の警告は要らない。<b>警告が要るのは実用新案だけ</b> <span class="q">52学17 54学11 54実16</span>。</li>
+    <li>技術的範囲に属するかは<b>特許請求の範囲</b>で判断 <span class="q">52学17</span>。特許庁の<b>判定</b>は特許権者も相手方も請求できる <span class="q">53実21</span>。</li>
+    <li>権利行使の前に、自分の特許に無効理由がないか確認する <span class="q">53実21</span>。無効理由のある権利は行使できない（104条の3）。</li>
+    <li>特許無効審判は<b>利害関係人</b>だけ。特許異議の申立ては公報から6月以内・何人も <span class="q">54学11</span>。</li>
+    <li><span class="tag trap">ひっかけ</span> 「特許の不使用取消審判」は存在しない（商標の制度） <span class="q">52学17 54学11</span>。</li>
+  </ul>
+</section>
+
+<section id="jitu">
+  <h2><span class="no">5</span>実用新案</h2>
+  <div class="why"><b>考え方</b>　小さな改良を早く安く守るため、実体審査をせずに登録します。その代わり、権利が本当に有効かを示す<b>実用新案技術評価書</b>を見せて警告しないと、権利を行使できません。</div>
+  <ul>
+    <li>対象は「物品の形状・構造・組合せ」の考案。<b>方法</b>は対象外（からみ防止棒の「配置方法」は不可） <span class="q">54実24</span>。</li>
+    <li>存続期間は出願から10年。更新・延長はない。</li>
+    <li>権利行使には、特許庁の審査官が作成した<b>技術評価書を提示して警告</b>することが必要 <span class="q">53学12 54実16</span>。公報や弁理士の鑑定書ではない。</li>
+    <li>技術評価は何人も請求できる。</li>
+    <li>専用実施権を設定した範囲では、権利者自身も実施できない <span class="q">52実21</span>。</li>
+    <li>実用新案登録に基づく特許出願ができる（原則、実用新案の出願から3年以内）。</li>
+  </ul>
+</section>
+
+<section id="isho">
+  <h2><span class="no">6</span>意匠</h2>
+  <div class="why"><b>考え方</b>　デザインは見ればすぐ真似でき、流行で寿命も短いので、<b>類似</b>の範囲まで効力を及ぼし、発売前に秘密にしておける制度（秘密意匠）があります。登録前に公開すると模倣されるので、<b>出願公開制度はありません</b>。</div>
+  <h3>登録要件と保護対象</h3>
+  <ul>
+    <li>要件：工業上の利用可能性・新規性・創作非容易性など。<span class="tag trap">ひっかけ</span> 「識別力」は商標の要件 <span class="q">53学23</span>。</li>
+    <li>新規性は<b>外国</b>で公知の意匠（とその類似）でも失う <span class="q">52学30</span>。昔のアイドルの靴の忠実な再現も新規性なし <span class="q">54実23</span>。</li>
+    <li>創作非容易性は<b>出願前</b>の公知形状が基準 <span class="q">52学30</span>。公知意匠の構成要素の置換は容易 <span class="q">54学24</span>。</li>
+    <li>技術的な特徴がある製品でも、外観は意匠で守れる。流行の商品だから登録できない、ということはない <span class="q">54実23</span>。</li>
+    <li>物品であること：鼻緒・糸はよいが、<b>片栗粉</b>（粉状物）は一定の形態がなく対象外 <span class="q">53実26</span>。</li>
+    <li>機能を確保するのに不可欠な形状のみの意匠は登録されない（5条3号。創作容易とは別の理由） <span class="q">54学24</span>。</li>
+    <li>部分意匠（取引されない部分も可） <span class="q">52学13 52実17 53実10</span>、開いた形と畳んだ形の両方を一出願（変化する意匠） <span class="q">53実10</span>。</li>
+    <li><span class="tag rev">改正</span> 2019年改正で<b>画像・建築物・内装</b>が保護対象に。「建築物は登録できない」は誤り <span class="q">53学18 54学14</span>。物品の区分による出願は廃止され「意匠ごとに」出願 <span class="q">52学13</span>。</li>
+    <li>新規性喪失の例外は公開から1年以内（6月は旧法） <span class="q">52学30</span>。</li>
+  </ul>
+  <h3>手続き</h3>
+  <ul>
+    <li>出願公開<b>なし</b> <span class="q">53学18</span>、審査請求<b>なし</b>（全件審査） <span class="q">52実17</span>。</li>
+    <li>拒絶理由通知には意見書・補正 <span class="q">52実10</span>。</li>
+    <li>秘密意匠：最長3年。請求は出願と<b>同時</b>か、<b>第1年分の登録料の納付と同時</b>。出願後6月以内という期限や、出し直しは不要 <span class="q">52実17 53実10 54実17</span>。</li>
+    <li>意匠権は登録料を納付して設定登録で発生。存続は<b>出願から25年</b>（登録から、ではない） <span class="q">52学13 54学4</span>。</li>
+  </ul>
+  <h3>効力と侵害</h3>
+  <ul>
+    <li>登録意匠と同一・<b>類似</b>の意匠に及ぶ。類似は「物品が類似」かつ「形状が類似」で判断 <span class="q">54学4 52実14 54実10</span>。</li>
+    <li>網戸はテニス用ネットと物品が類似しないので、形状が同じでも侵害ではない <span class="q">53実16</span>。ボールペンも手帳とは非類似 <span class="q">54実12</span>。</li>
+    <li>手帳を万年筆と組み合わせて売るのは手帳の譲渡（侵害）。広告に写真を載せるのは実施ではない <span class="q">54実12</span>。</li>
+    <li>製造・輸出・輸入も実施 <span class="q">53実16 54実10</span>。</li>
+    <li>相手が出願前から類似品を販売していた → 意匠権に無効理由があり、権利行使できない（相手に先使用権の可能性も） <span class="q">52実14 54実10</span>。</li>
+    <li>全範囲に専用実施権を設定すると、意匠権者自身も類似意匠を含めて実施できない <span class="q">52実25</span>。</li>
+  </ul>
+</section>
+
+<section id="sho">
+  <h2><span class="no">7</span>商標</h2>
+  <div class="why"><b>考え方</b>　商標法の目的は、業務上の信用を守ることで「<b>産業</b>の発達」と「需要者の利益の保護」を図ること <span class="q">52実28</span>。だから、誰の商品か見分けられない商標（識別力なし）と、公益を害する商標（品質誤認など）は登録しません。権利の範囲は「マーク×指定商品・役務」の組合せで決まります。</div>
+  <h3>商標・商品・役務</h3>
+  <ul>
+    <li>役務は、他人のために行う労務・便益で、<b>独立して商取引の目的となるもの</b> <span class="q">53学17</span>。</li>
+    <li>音・位置・動き・色彩・ホログラム・立体の商標も登録できる <span class="q">52学5 54実11</span>。</li>
+    <li>使用する意思のない商標は登録できない（3条1項柱書）。出願前の使用は不要で、使用意思があればよい <span class="q">54学12 53実14</span>。</li>
+  </ul>
+  <h3>登録できない商標</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>理由</th><th>例</th><th>条文</th></tr></thead>
+    <tbody>
+      <tr><td>普通名称・品質表示</td><td>カステラに「洋菓子」 <span class="q">53実18</span></td><td>3条1項1号・3号</td></tr>
+      <tr><td>慣用商標</td><td>清酒に「正宗」 <span class="q">53実18</span></td><td>3条1項2号</td></tr>
+      <tr><td>極めて簡単で、かつ、ありふれた標章のみ</td><td>ローマ字1字など <span class="q">52実29</span></td><td>3条1項5号</td></tr>
+      <tr><td>他人の著名な氏名・芸名を含む</td><td>その<b>他人の承諾</b>があれば登録できる <span class="q">52学1</span></td><td>4条1項8号</td></tr>
+      <tr><td>他人の周知商標と同一・類似</td><td><span class="q">53学6</span></td><td>4条1項10号</td></tr>
+      <tr><td>他人の先願・登録商標と同一・類似（商品も同一・類似）</td><td><b>自己の</b>登録商標に類似するものは登録できる <span class="q">52学1 53学6 53実14</span></td><td>4条1項11号</td></tr>
+      <tr><td>品質の誤認を生じるおそれ</td><td>しょうゆに「ウスターソース」 <span class="q">52実30 53実18 54学12</span></td><td>4条1項16号</td></tr>
+      <tr><td>機能確保に不可欠な立体的形状のみ</td><td><span class="q">52学1</span></td><td>4条1項18号</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li>用途・品質の表示（3号〜5号）も、使用を続けて識別できるようになれば登録できる（3条2項）。普通名称・慣用商標は不可 <span class="q">54学12</span>。</li>
+    <li><span class="tag rev">改正</span> 2024年4月からコンセント制度：先行登録の権利者の承諾があり、混同のおそれがなければ類似商標も登録できる（4条4項）。</li>
+  </ul>
+  <h3>出願</h3>
+  <ul>
+    <li><b>一商標一出願</b>：2つの商標を1通では出願できない。1通で複数の商品・区分は指定できる <span class="q">54実28-29 53実14</span>。</li>
+    <li>出願後に指定商品を<b>追加</b>することはできない（要旨変更） <span class="q">54実30</span>。</li>
+    <li>同日に類似商標の出願が競合 → 協議、不成立なら<b>くじ</b>で1つが登録される <span class="q">53学6</span>。</li>
+  </ul>
+  <h3>登録後の争い</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>手段</th><th>誰が</th><th>いつまで</th></tr></thead>
+    <tbody>
+      <tr><td>登録異議の申立て</td><td>何人も</td><td>商標掲載公報の発行から<b>2月</b> <span class="q">54学26 52実11</span></td></tr>
+      <tr><td>無効審判（4条1項11号など）</td><td><b>利害関係人</b> <span class="q">52学26 53実29</span></td><td>多くの理由は設定登録から<b>5年</b>（除斥期間） <span class="q">53実30</span></td></tr>
+      <tr><td>不使用取消審判</td><td>何人も</td><td>継続して3年以上、日本国内で不使用 <span class="q">52実11</span></td></tr>
+      <tr><td>不正使用取消審判</td><td>何人も</td><td>3年の経過は要件ではない <span class="q">54学6</span></td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li>不使用取消を免れる使用：商標権者のほか<b>専用使用権者・通常使用権者</b>の使用でもよい。<b>類似商標だけ</b>の使用や、<b>外国だけ</b>の使用では免れない <span class="q">54学20</span>。</li>
+    <li>不使用取消で消滅すると、<b>審判請求の登録の日</b>に消滅したとみなされる <span class="q">52学27</span>。</li>
+    <li>警告を受けたら、権利の存在と権利者（原簿）、不使用の有無、異議の期間などを確認 <span class="q">52学26 54学26</span>。</li>
+  </ul>
+  <h3>商標権の効力</h3>
+  <ul>
+    <li>専用権：指定商品に登録商標を使う。禁止権：類似範囲で他人の使用を止める（自分も独占的には使えない）。スプーン指定の商標をフォークに付けても「登録商標の使用」ではない <span class="q">53実11</span>。</li>
+    <li>指定商品と<b>非類似</b>の商品には、著名商標でも商標権の効力は及ばない（不正競争防止法で対応） <span class="q">52学27</span>。</li>
+    <li>互いの禁止権が重なる範囲は、どちらも使えない <span class="q">54学6</span>。</li>
+    <li>指定商品ごとに<b>分割して移転</b>できる <span class="q">52実18 54学6</span>。共有持分の譲渡には他の共有者の同意 <span class="q">52実18</span>。</li>
+    <li>通常使用権は登録しないと第三者に対抗できない（<b>当然対抗は商標にはない</b>）。通常使用権者は差止請求できない <span class="q">53学11 52実18</span>。</li>
+    <li>専用使用権を設定した範囲では、商標権者も使用できない <span class="q">53学11</span>。</li>
+    <li>先使用権：他人の出願前から使用し、出願時に<b>周知</b>であることが必要。短期間のテスト販売では足りない <span class="q">52学27 53学11 52実11</span>。</li>
+    <li>普通名称化を防ぐには登録商標である旨を表示する。登録後の普通名称化は無効理由ではないが、効力が制限される <span class="q">54実18</span>。</li>
+  </ul>
+  <h3>地域ブランド</h3>
+  <ul>
+    <li>地域団体商標は「<b>地域名＋商品名</b>」が基本。商品名だけでは不可 <span class="q">52学12</span>。</li>
+    <li>地理的表示（GI）は<b>農林水産大臣</b>に登録申請し、GIマークを付けられる。地域団体商標と両方を受けられる <span class="q">52学5 52学12</span>。</li>
+  </ul>
+</section>
+
+<section id="cho1">
+  <h2><span class="no">8</span>著作権：著作物と著作者</h2>
+  <div class="why"><b>考え方</b>　著作権が守るのは「思想又は感情の<b>創作的な表現</b>」です。事実やアイデアは誰のものでもないので守りません。文化的な表現は毎日大量に生まれるので、手続なしに創作の時点で権利が生まれます（無方式主義）。</div>
+  <h3>著作物</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>著作物になる</th><th>著作物にならない</th></tr></thead>
+    <tbody>
+      <tr><td>即興演奏の曲（固定は不要）、日本国民が外国で公表した小説 <span class="q">54実19</span></td><td>「日本一長い川は信濃川」という事実の文 <span class="q">54実19</span></td></tr>
+      <tr><td>漫画家が色紙に描いたイラスト <span class="q">52実7</span></td><td>株価・為替の数値データ <span class="q">52実5-6</span></td></tr>
+      <tr><td>量産品のデザイン（応用美術）でも認められる場合がある <span class="q">54学19</span></td><td>事実の伝達にすぎない雑報・時事の報道 <span class="q">54学19</span></td></tr>
+      <tr><td>私人が判決を翻訳したもの（二次的著作物） <span class="q">54学19</span></td><td>判決そのもの（権利の目的にならない）</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li>10条の著作物の種類は<b>例示</b>で、限定列挙ではない <span class="q">52学6 53学3</span>。</li>
+    <li>プログラムは、特許で保護される場合でも著作権でも保護される <span class="q">53学3</span>。</li>
+    <li>二次的著作物（翻訳・編曲・映画化など）：利用には原著作者の許諾も必要。二次的著作物の著作権を譲渡するのに原著作物の権利まで譲渡する必要はない <span class="q">54学29 52学6</span>。</li>
+    <li>編集著作物：素材の選択・配列に創作性。データベースは12条の2で別に保護 <span class="q">53学20</span>。</li>
+    <li>共同著作物：各人の寄与を<b>分離して利用できない</b>もの。作詞と作曲のように分けられるものは結合著作物 <span class="q">53学22</span>。</li>
+  </ul>
+  <h3>無方式主義と登録制度</h3>
+  <ul>
+    <li>著作権・著作者人格権の享有にはいかなる方式も要らない <span class="q">54学15 54学10</span>。</li>
+    <li>著作権の<b>移転</b>は、登録しなければ第三者に対抗できない <span class="q">52学22</span>。</li>
+    <li>創作年月日の登録は<b>プログラムだけ</b>。登録すると、その日に創作されたと推定される <span class="q">52学22 53実25</span>。</li>
+    <li>損害額の推定（114条）は登録がなくても使える <span class="q">53実25</span>。</li>
+  </ul>
+  <h3>誰が著作者か</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>場面</th><th>著作者・著作権者</th></tr></thead>
+    <tbody>
+      <tr><td>職務著作：法人の発意・職務上作成・<b>法人名義で公表</b>・別段の定めなし（<b>対価は要件ではない</b>）</td><td>法人（著作者人格権も法人） <span class="q">52学11 53実24</span></td></tr>
+      <tr><td>プログラムの職務著作</td><td>公表名義を問わず法人。会社は従業者の許諾なくバージョンアップできる <span class="q">52実16 54実7-8</span></td></tr>
+      <tr><td>社員が趣味で撮った写真</td><td>社員本人（職務ではない） <span class="q">53実23</span></td></tr>
+      <tr><td>外部のデザイン会社に委託</td><td>受託した側。著作権の譲渡を受けても著作者は受託側 <span class="q">53実23 53実24</span></td></tr>
+      <tr><td>映画</td><td>著作者は監督など全体的形成に創作的に寄与した者。原作・脚本・音楽の作者は<b>除く</b> <span class="q">52学9 53実23</span>。監督が製作参加を約束していれば、著作権は<b>映画製作者</b>に帰属 <span class="q">52学9 54実22</span></td></tr>
+      <tr><td>曲からイメージして描いた絵</td><td>描いた人（表現を利用していない） <span class="q">52実16</span></td></tr>
+      <tr><td>資金を出しただけ</td><td>著作者ではない <span class="q">52実16</span></td></tr>
+    </tbody>
+  </table></div>
+  <ul><li>作品に実名や周知の変名が著作者名として表示されている者は、著作者と<b>推定</b>される <span class="q">52学16</span>。</li></ul>
+</section>
+
+<section id="cho2">
+  <h2><span class="no">9</span>著作権：権利の中身・保護期間・制限</h2>
+  <div class="why"><b>考え方</b>　「物の所有権」と「表現を使う権利（著作権）」は別物です。原画や色紙を買っても、コピーやネット掲載の権利は手に入りません。ただし所有者が原画を展示するなど、所有権と調整するための規定があります。</div>
+  <h3>著作者人格権</h3>
+  <ul>
+    <li>公表権・氏名表示権・同一性保持権の3つ <span class="q">53学1</span>。一身専属で<b>譲渡できない</b>（共有者の同意があっても不可）。著作権を譲渡しても一緒には移らない <span class="q">53学1 54学15 52学16</span>。</li>
+    <li>譲渡の「合意」は無効なので、実務では<b>不行使特約</b>を結ぶ <span class="q">53実24</span>。</li>
+    <li>著作者の死亡で消滅（死後も一定の保護はある）。「死後70年存続」は誤り <span class="q">53学1</span>。</li>
+    <li>同意なく公表されたものはまだ未公表の扱いで、公表権が及ぶ <span class="q">52学16</span>。</li>
+    <li>同一性保持権は<b>題号</b>（タイトル）の変更にも及ぶ。教科書のための、学校教育上やむを得ない用字の変更は除かれる <span class="q">52実19</span>。</li>
+  </ul>
+  <h3>著作権（財産権）</h3>
+  <ul>
+    <li>色紙のイラストを撮影してブログに載せる＝複製＋公衆送信。<b>消尽するのは譲渡権だけ</b>で、公衆送信権は消尽しない <span class="q">52実7-8</span>。</li>
+    <li>原画を印刷してカタログを作る＝複製で、<b>著作者の許諾</b>が必要（原画の所有者の許諾では足りない） <span class="q">53実5-6</span>。</li>
+    <li>原作品の所有者やその<b>同意を得た者</b>は、原作品を公に展示できる（有料の教室でも） <span class="q">52学25 53実7-8</span>。</li>
+    <li>頒布＝有償・無償を問わず複製物を公衆に譲渡・貸与 <span class="q">53学13</span>。頒布権は<b>映画の著作物だけ</b>で、映画には譲渡権・貸与権は適用されない <span class="q">54学25</span>。</li>
+    <li>絵画を買った値段より高く転売するのは自由（譲渡権の消尽） <span class="q">52実22</span>。</li>
+    <li>新聞記事の画像をメールマガジンに添付するのは許諾が必要 <span class="q">52実22</span>。他社のネット記事のスクリーンショットを社内掲示板に載せるのも複製権侵害 <span class="q">54実5-6</span>。</li>
+    <li>著作権は一部（複製権だけなど）を許諾・譲渡できる。翻案権も譲渡できる <span class="q">52実21 54学15</span>。</li>
+  </ul>
+  <h3>保護期間</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>対象</th><th>期間</th><th>過去問の計算例</th></tr></thead>
+    <tbody>
+      <tr><td>実名の著作物</td><td>死後70年</td><td></td></tr>
+      <tr><td>共同著作物</td><td><b>最後に</b>死亡した著作者の死後70年 <span class="q">52学20 54学7</span></td><td></td></tr>
+      <tr><td>無名・変名、団体名義（職務著作）</td><td>公表後70年 <span class="q">52学20</span></td><td></td></tr>
+      <tr><td>映画</td><td>公表後70年 <span class="q">52学9 53学10 54学7</span></td><td>2015年公開 → 2085年12月31日（監督の死亡日は無関係） <span class="q">54実26</span></td></tr>
+      <tr><td>実演</td><td>実演の翌年から70年。実演した時に始まる <span class="q">52学28</span></td><td>2005年の演奏 → 2075年12月31日 <span class="q">52実12</span>、2000年1月1日の演奏 → 2070年12月31日 <span class="q">53実13</span></td></tr>
+      <tr><td>レコード</td><td>音を最初に固定した時に始まり、<b>発行後</b>70年 <span class="q">53学10 54学7</span></td><td></td></tr>
+      <tr><td>放送</td><td>放送後<b>50年</b> <span class="q">53学10</span></td><td></td></tr>
+    </tbody>
+  </table></div>
+  <p class="src"><span class="tag trap">ひっかけ</span> 演奏の著作隣接権を問われているのに、作曲家の「死後70年」の選択肢が混ぜてある <span class="q">52実12 53実13</span>。</p>
+  <h3>許諾なしに使える場合</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>規定</th><th>要件</th><th>ひっかけ</th></tr></thead>
+    <tbody>
+      <tr><td>私的使用の複製（30条）</td><td>個人的・家庭内</td><td><b>会社の業務目的</b>は不可 <span class="q">53学30</span>。違法配信と知りながらのダウンロードは不可 <span class="q">52学25</span></td></tr>
+      <tr><td>引用（32条）</td><td><b>公表された</b>著作物、公正な慣行、正当な範囲、主従関係、明瞭区別、<b>出所の明示</b></td><td>非営利でも未公表は不可 <span class="q">54学1</span>。主従は「引用する側が主」 <span class="q">52学3</span>。出所明示は必要 <span class="q">52学3 53学25</span></td></tr>
+      <tr><td>写り込み（30条の2）</td><td>付随的に写り込んだ軽微なもの</td><td><span class="q">52学25</span></td></tr>
+      <tr><td>非営利の上演・演奏・口述（38条）</td><td>非営利・聴衆から無料・実演者に無報酬</td><td>絵本を<b>購入すること</b>は要件ではない <span class="q">54実14</span>。自宅での練習はそもそも公の演奏ではない <span class="q">52実22</span></td></tr>
+      <tr><td>原作品の展示（45条）</td><td>所有者またはその同意を得た者</td><td><span class="q">53実7-8 52学25</span></td></tr>
+      <tr><td>観覧者用の解説・紹介の小冊子（47条）</td><td>展示する者が作る</td><td>豪華な鑑賞用カタログの販売は範囲外 <span class="q">53実5-6</span></td></tr>
+    </tbody>
+  </table></div>
+  <h3>侵害と救済</h3>
+  <ul>
+    <li>他人の著作物に<b>依拠</b>して<b>実質的に類似</b>するものを作り利用すると侵害 <span class="q">54学10</span>。</li>
+    <li>差止め・損害賠償のほか、不当利得返還請求もできる <span class="q">54学10</span>。</li>
+    <li>共同著作物の権利の行使（演奏の許諾など）は<b>全員の合意</b>が必要。差止めは各自でき、損害賠償は自分の持分について <span class="q">53実20</span>。</li>
+  </ul>
+  <h3>著作隣接権</h3>
+  <ul>
+    <li>実演家・レコード製作者・放送事業者・有線放送事業者の権利。</li>
+    <li>実演家人格権は<b>氏名表示権と同一性保持権だけ</b>。公表権はない <span class="q">53学8 54学23</span>。</li>
+    <li>実演家とレコード製作者は譲渡権を持つ。放送事業者に人格権はない <span class="q">52学28</span>。</li>
+  </ul>
+</section>
+
+<section id="etc">
+  <h2><span class="no">10</span>不正競争防止法・種苗法・独占禁止法</h2>
+  <div class="why"><b>考え方</b>　不正競争防止法は、登録で権利を作るのではなく、他人の信用へのただ乗りや秘密の盗用といった<b>行為</b>を、具体的に並べて禁止する法律です。目的は「国民経済の健全な発展」です。</div>
+  <h3>不正競争防止法</h3>
+  <ul>
+    <li>不正競争は<b>限定列挙</b>で、一般条項はない。差止請求権と罰則の両方がある <span class="q">54学13</span>。</li>
+    <li>営業秘密の3要件：<b>秘密管理性・有用性・非公知性</b>。技術上の情報も営業上の情報も対象。失敗した実験データも有用性が認められ得る <span class="q">52学23</span>。</li>
+    <li>著名表示冒用（2条1項2号）：「周知」より広く知られた「著名」が必要。<b>混同は要件ではない</b>。商品の譲渡・輸出入・ネット提供も含む <span class="q">53学16</span>。混同が要件なのは周知表示（1号）。</li>
+    <li>商品形態の模倣：日本で最初に販売してから3年間保護。</li>
+  </ul>
+  <h3>種苗法（育成者権）</h3>
+  <ul>
+    <li>出願先は<b>農林水産大臣</b>（経済産業大臣ではない）。拒絶査定不服審判はない <span class="q">52実26</span>。出願公表は出願受理後遅滞なく <span class="q">52学10</span>。</li>
+    <li>要件：区別性・均一性・安定性・未譲渡性・名称の適切さ。<span class="tag trap">ひっかけ</span> 「容易に育成できる」は拒絶理由ではない <span class="q">53実15</span>。</li>
+    <li>未譲渡性：出願日から1年以内（国内）の譲渡なら登録できる <span class="q">52実26 53実15</span>。</li>
+    <li>存続期間は<b>品種登録の日から</b>25年（樹木は30年） <span class="q">52学10</span>。植物の新品種は特許でも保護され得る <span class="q">52学10</span>。</li>
+    <li>効力：種苗の無断の業としての生産は侵害 <span class="q">53学14 54学21</span>。品種の<b>名称</b>の使用は侵害ではない（名称の独占権はない） <span class="q">53学14 54学21</span>。</li>
+    <li>効力が及ばない：試験・研究 <span class="q">53学14</span>、適法に譲渡された種苗の再譲渡（消尽） <span class="q">54学21</span>、育成方法の特許権者がその方法で行う生産（特許との調整規定） <span class="q">54実20</span>。</li>
+  </ul>
+  <h3>独占禁止法とライセンス</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>原則として問題にならない</th><th>原則として不公正な取引方法</th></tr></thead>
+    <tbody>
+      <tr><td>販売地域・販売期間の制限 <span class="q">53学27</span><br>輸出できる地域の制限 <span class="q">52学18</span></td><td>販売価格の制限 <span class="q">53学27</span><br>競争技術の研究開発の禁止 <span class="q">52学18</span><br>特許権の消滅後もロイヤリティを求める <span class="q">52学18</span><br>改良技術をライセンサーだけが実施できるとする <span class="q">53学27</span></td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li>他社と共同で価格を決める＝<b>不当な取引制限</b>（カルテル）。私的独占ではない <span class="q">54学22</span>。私的独占は他の事業者の活動を排除・支配すること。</li>
+  </ul>
+</section>
+
+<section id="treaty">
+  <h2><span class="no">11</span>条約・弁理士・契約</h2>
+  <div class="why"><b>考え方</b>　権利は国ごとに成立するので（属地主義）、外国出願の負担を軽くするのが条約の役目です。パリ条約は「最初の出願日を基準にしてもらえる」優先権、PCTは「1つの出願で多くの国に出願した扱いになる」国際出願を用意しています。どちらも、特許を与えるかどうかは各国が決めます。</div>
+  <h3>パリ条約</h3>
+  <ul>
+    <li>三大原則：<b>内国民待遇・優先権・各国特許の独立</b>。<span class="tag trap">ひっかけ</span> 最恵国待遇はパリ条約にはない（TRIPS協定の原則） <span class="q">53学21</span>。</li>
+    <li>優先期間：特許・<b>実用新案</b>は12月、意匠・商標は6月 <span class="q">54学9</span>。同盟国の事情で短縮できない。</li>
+    <li>第2国出願の新規性などは、第1国出願の時点で判断される <span class="q">53学21 54学9 52実13</span>。</li>
+    <li>第1国出願はどの同盟国にしてもよい <span class="q">52学21</span>。後で取り下げ・拒絶されても優先権は有効 <span class="q">52学21 53実19</span>。審査が始まっていても優先権を主張できる <span class="q">52実13</span>。</li>
+    <li>ある国で特許・拒絶されても、他の国に影響しない（特許独立）。特許要件も国ごと <span class="q">52学21 53学21 53実19</span>。</li>
+  </ul>
+  <h3>PCT（特許協力条約）</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>段階</th><th>誰が</th><th>ポイント</th></tr></thead>
+    <tbody>
+      <tr><td>国際出願・国際出願日</td><td>受理官庁（日本国特許庁、WIPO国際事務局も可）</td><td>受理した日が国際出願日。全指定国で正規の国内出願の効果 <span class="q">52学4 54学17 54実25</span>。日本国特許庁へは<b>日本語または英語</b> <span class="q">54実13</span>。国際事務局も受理官庁になる <span class="q">53学15 54実13</span></td></tr>
+      <tr><td>国際調査</td><td>国際調査機関（日本国特許庁も）</td><td><b>請求不要</b>で全件 <span class="q">52実23 53実9</span>。国際調査報告と<b>見解書</b>が出願人と国際事務局に送られる <span class="q">53学4</span></td></tr>
+      <tr><td>国際公開</td><td><b>国際事務局</b></td><td>優先日から18月。請求は不要で、早期公開もできる <span class="q">52学15 52実23 53実9</span></td></tr>
+      <tr><td>国際予備審査</td><td>国際予備審査機関（国際事務局ではない）</td><td>任意 <span class="q">53学15</span></td></tr>
+      <tr><td>国内移行</td><td>出願人が各指定官庁へ</td><td>原則<b>優先日から30月</b>までに翻訳文など。36月が必ず得られるわけではない。国際事務局への移行請求は不要 <span class="q">52学15 53実9 54実25</span></td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li>「国際特許」はない。審査は各国。権利の一元管理もない <span class="q">54学17</span>。</li>
+    <li>TRIPS協定：内国民待遇と最恵国待遇の<b>両方</b>を規定。物と方法の発明、商標権も対象 <span class="q">54学28</span>。</li>
+  </ul>
+  <h3>弁理士</h3>
+  <ul>
+    <li>独占業務：特許出願などの手続の代理。特許料の納付や原簿への登録申請の代理は独占業務ではない <span class="q">53学9</span>。</li>
+    <li>名称を使ってできる業務：特許権・商標権・<b>著作物に関する権利</b>の売買契約やライセンス交渉の代理（自分が出願した権利に限らない）、植物の新品種・地理的表示の相談 <span class="q">52学14 54学3</span>。</li>
+    <li>審決取消訴訟は弁理士が<b>単独で</b>訴訟代理人になれる（侵害訴訟は弁護士と共同） <span class="q">52学14</span>。弁理士法人は法人名で出願代理ができる <span class="q">54学3</span>。</li>
+  </ul>
+  <h3>契約（民法）</h3>
+  <ul>
+    <li>錯誤による契約は<b>取り消せる</b>（取り消さずに対価を請求してもよい）。公序良俗に反する契約は無効で、履行を強制できない <span class="q">54学16</span>。</li>
+    <li>未成年者が法定代理人の同意なく結んだ契約は、無効ではなく<b>取り消すことができる</b> <span class="q">54学16</span>。</li>
+  </ul>
+</section>
+
+<footer>
+  <p>問題は<a href="https://claude.ai/artifact/87foK3oFGoaMFjbHHqy4NR" target="_blank" rel="noopener">知財検定3級 法令ドリル</a>で解けます。「52学1」などはドリルの過去問セットの番号です。公式の過去問題と試験要項は<a href="https://www.kentei-info-ip-edu.org/" target="_blank" rel="noopener">知的財産教育協会</a>で確認してください。</p>
+  <p>条文：<a href="https://laws.e-gov.go.jp/law/334AC0000000121" target="_blank" rel="noopener">特許法</a>・<a href="https://laws.e-gov.go.jp/law/334AC0000000123" target="_blank" rel="noopener">実用新案法</a>・<a href="https://laws.e-gov.go.jp/law/334AC0000000125" target="_blank" rel="noopener">意匠法</a>・<a href="https://laws.e-gov.go.jp/law/334AC0000000127" target="_blank" rel="noopener">商標法</a>・<a href="https://laws.e-gov.go.jp/law/345AC0000000048" target="_blank" rel="noopener">著作権法</a>・<a href="https://laws.e-gov.go.jp/law/405AC0000000047" target="_blank" rel="noopener">不正競争防止法</a>・<a href="https://laws.e-gov.go.jp/law/410AC0000000083" target="_blank" rel="noopener">種苗法</a>（e-Gov法令検索）、<a href="https://www.jftc.go.jp/dk/guideline/unyoukijun/chitekizaisan.html" target="_blank" rel="noopener">公取委 知的財産の利用に関する独占禁止法上の指針</a>、<a href="https://www.wipo.int/pct/en/texts/articles/" target="_blank" rel="noopener">PCT条文（WIPO）</a>。</p>
+  <p>試験は回ごとに決められた基準日の法令で出題されます（第52回は2025年5月1日、第53回は2025年9月1日、第54回は2026年1月1日）。</p>
+</footer>
+</div>
