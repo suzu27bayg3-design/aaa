@@ -28,7 +28,7 @@ import tempfile
 import wave
 
 import numpy as np
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageDraw, ImageFilter, ImageOps
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import longform as L  # noqa: E402
@@ -53,8 +53,10 @@ class Photo:
     （小さい写真でも、画面全体に引き伸ばすより粗さが目立たない）"""
     CW, CH, CY = 1000, 750, 700  # 枠の幅・高さ・中心のy
 
-    def __init__(self, path, move="in"):
+    def __init__(self, path, move="in", bright=False):
         im = Image.open(path).convert("RGB")
+        if bright:  # 暗い洞くつの写真：明るさの幅を広げ、暗い所を持ち上げる
+            im = ImageOps.autocontrast(im, cutoff=1).point(lambda v: int(255 * (v / 255) ** 0.7))
         bg = cover_crop(im, SW // 4, SH // 4).filter(ImageFilter.GaussianBlur(6)).resize((SW, SH), Image.BILINEAR)
         self.bg = Image.blend(bg, Image.new("RGB", (SW, SH), (5, 10, 25)), 0.45).convert("RGBA")
         big = cover_crop(im, int(self.CW * 1.3), int(self.CH * 1.3))
@@ -111,6 +113,108 @@ def japan_map(place, t):
     d.text((x0 + m.width - 10, y0 + m.height + 30), meta["credit"], font=L.jp(22, True),
            fill=(255, 255, 255, 200), anchor="rm")
     return lay
+
+
+class Zoom:
+    """日本全体から目的地へ、航空写真でズームしていく（maps/zoom_z5,8,11,14.jpg をつなぐ）"""
+    LEVELS = (5, 8, 11, 14)
+
+    def __init__(self, here, place):
+        self.ims = [Image.open(os.path.join(here, "maps", f"zoom_z{z}.jpg")).convert("RGBA") for z in self.LEVELS]
+        self.place = place
+
+    def frame(self, lt, dur):
+        p = min(1.0, lt / max(0.1, dur * 0.75))
+        p = 0.5 - 0.5 * math.cos(math.pi * p)
+        zc = self.LEVELS[0] + (self.LEVELS[-1] - self.LEVELS[0]) * p
+        i = min(len(self.LEVELS) - 2, int((zc - self.LEVELS[0]) / 3))
+        S = 900
+
+        def view(k):
+            im, f = self.ims[k], 2 ** (zc - self.LEVELS[k])
+            w = 1024 / f * 0.88
+            return im.crop((int(512 - w / 2), int(512 - w / 2), int(512 + w / 2), int(512 + w / 2))).resize((S, S), Image.BILINEAR)
+        a = view(i)
+        frac = (zc - self.LEVELS[i]) / 3
+        if frac > 0.6:  # 次の細かい写真へなめらかに切りかえ
+            a = Image.blend(a, view(i + 1), min(1, (frac - 0.6) / 0.4))
+        out = Image.new("RGBA", (SW, SH))
+        x0, y0 = (SW - S) // 2, 760 - S // 2
+        d = ImageDraw.Draw(out)
+        d.rounded_rectangle((x0 - 8, y0 - 8, x0 + S + 8, y0 + S + 8), 30, fill=(255, 255, 255, 230))
+        m = Image.new("L", (S, S))
+        ImageDraw.Draw(m).rounded_rectangle((0, 0, S - 1, S - 1), 24, fill=255)
+        out.paste(a, (x0, y0), m)
+        px, py = SW / 2, 760
+        drop = min(1, max(0, (lt - dur * 0.75) / 0.4)) if p >= 0.999 else 0
+        if drop > 0:
+            yy = py - 200 * (1 - drop) ** 2
+            d.ellipse((px - 24, yy - 72, px + 24, yy - 24), fill=(230, 50, 60))
+            d.polygon([(px - 20, yy - 40), (px + 20, yy - 40), (px, yy)], fill=(230, 50, 60))
+            d.ellipse((px - 9, yy - 57, px + 9, yy - 39), fill=L.WHITE)
+            lab = f"{self.place['pref']} {self.place['name']}"
+            f = L.jp(46, True)
+            tw = d.textlength(lab, font=f)
+            d.rounded_rectangle((px - tw / 2 - 30, py + 30, px + tw / 2 + 30, py + 110), 40, fill=(230, 50, 60))
+            d.text((px, py + 70), lab, font=f, fill=L.WHITE, anchor="mm")
+        d.text((x0 + S - 10, y0 + S + 34), "出典：国土地理院", font=L.jp(24, True), fill=(220, 230, 240), anchor="rm")
+        return out
+
+
+class Area:
+    """航空写真（陰影起伏つき）に、地質図から取り出した範囲を色で重ね、地名のピンを置く。
+    cfg.AREA = dict(color=(r,g,b), legend="…", labels=[(文字, 緯度, 経度, "pin"|"text"), ...], crop=(x0,y0,x1,y1))"""
+
+    def __init__(self, here, conf):
+        m = os.path.join(here, "maps")
+        self.aer = Image.open(os.path.join(m, "aerial.jpg")).convert("RGBA")
+        self.mask = Image.open(os.path.join(m, "mask.png")).convert("L")
+        self.info = json.load(open(os.path.join(m, "aerial.json")))
+        self.c = conf
+
+    def px(self, lat, lon):
+        n, (ox, oy) = 2 ** self.info["z"], self.info["origin"]
+        x = (lon + 180) / 360 * n
+        y = (1 - math.log(math.tan(math.radians(lat)) + 1 / math.cos(math.radians(lat))) / math.pi) / 2 * n
+        return (x - ox) * 256, (y - oy) * 256
+
+    def frame(self, lt):
+        S = 900
+        x0, y0, x1, y1 = self.c.get("crop", (246, 246, 1546, 1546))
+        z = 1.0 - 0.06 * min(1, lt / 6)
+        cw = (x1 - x0) * z
+        cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
+        box = (cx - cw / 2, cy - cw / 2, cx + cw / 2, cy + cw / 2)
+        sc = S / cw
+        base = self.aer.crop(tuple(int(v) for v in box)).resize((S, S), Image.BILINEAR)
+        a = min(1.0, max(0.0, (lt - 1.0) / 0.8))
+        if a > 0:
+            mk = self.mask.crop(tuple(int(v) for v in box)).resize((S, S), Image.BILINEAR)
+            op = self.c.get("opacity", 0.5)
+            base = Image.composite(Image.new("RGBA", (S, S), self.c["color"] + (255,)), base, mk.point(lambda v: int(v * op * a)))
+            edge = mk.point(lambda v: 255 if v > 128 else 0).filter(ImageFilter.FIND_EDGES).filter(ImageFilter.MaxFilter(5))
+            base = Image.composite(Image.new("RGBA", (S, S), self.c["color"] + (255,)), base, edge.point(lambda v: int(v * a)))
+        out = Image.new("RGBA", (SW, SH))
+        X0, Y0 = (SW - S) // 2, 740 - S // 2
+        out.paste(base, (X0, Y0))
+        d = ImageDraw.Draw(out)
+        for text, lat, lon, kind in self.c["labels"]:
+            px, py = self.px(lat, lon)
+            gx, gy = X0 + (px - box[0]) * sc, Y0 + (py - box[1]) * sc
+            if kind == "pin":
+                d.ellipse((gx - 18, gy - 58, gx + 18, gy - 22), fill=(230, 50, 60))
+                d.polygon([(gx - 15, gy - 34), (gx + 15, gy - 34), (gx, gy)], fill=(230, 50, 60))
+                gy -= 80
+            d.text((gx, gy), text, font=L.jp(34, True), fill=L.WHITE, anchor="mm", stroke_width=5, stroke_fill=L.NAVY)
+        if a > 0:
+            f = L.jp(28, True)
+            tw = d.textlength(self.c["legend"], font=f)
+            d.rounded_rectangle((X0 + 16, Y0 + 16, X0 + 90 + tw, Y0 + 70), 16, fill=(0, 0, 0, 170))
+            d.rectangle((X0 + 30, Y0 + 30, X0 + 60, Y0 + 56), fill=self.c["color"])
+            d.text((X0 + 74, Y0 + 43), self.c["legend"], font=f, fill=L.WHITE, anchor="lm")
+        d.text((SW / 2, Y0 + S + 30), "出典：国土地理院（航空写真・陰影起伏）／産総研（シームレス地質図V2）を加工",
+               font=L.jp(22, True), fill=(220, 230, 240), anchor="mm")
+        return out
 
 
 def head_layer(head, sub, color, y):
@@ -234,7 +338,8 @@ def main():
     photos, used = {}, []
     for s in sc:
         if s["show"][0] == "photo" and s["show"][1] not in photos:
-            photos[s["show"][1]] = Photo(os.path.join(here, "photos", s["show"][1]), s["show"][2] if len(s["show"]) > 2 else "in")
+            photos[s["show"][1]] = Photo(os.path.join(here, "photos", s["show"][1]), s["show"][2] if len(s["show"]) > 2 else "in",
+                                           len(s["show"]) > 3 and s["show"][3] == "bright")
             used.append(credits[s["show"][1]])
     shade = Image.new("RGBA", (SW, SH))
     sd = ImageDraw.Draw(shade)
@@ -244,6 +349,8 @@ def main():
     heads = [head_layer(s["head"], s.get("sub", ""), s.get("color", accent),
                         s.get("head_y", 1230 if s["show"][0] == "photo" else 1170)) for s in sc]
     figs = getattr(cfg, "FIGS", {})
+    zoom = Zoom(here, cfg.PLACE) if any(x["show"][0] == "zoom" for x in sc) else None
+    area = Area(here, cfg.AREA) if any(x["show"][0] == "area" for x in sc) else None
     npg = [sub_pages(s["say"]) for s in sc]
     out = os.path.join(here, "short.mp4")
     proc = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24",
@@ -267,6 +374,10 @@ def main():
             im = japan_map(cfg.PLACE, lt) if kind == "map" else None
             if kind == "map":
                 frame.alpha_composite(im)
+            elif kind == "zoom":
+                frame.alpha_composite(zoom.frame(lt, durs[n]))
+            elif kind == "area":
+                frame.alpha_composite(area.frame(lt))
             else:
                 fim = figs[s["show"][1]](t, lt)
                 frame.alpha_composite(fim, (int(SW / 2 - fim.width / 2), int(760 - fim.height / 2)))
