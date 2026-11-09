@@ -113,7 +113,7 @@ def drip(t, lt):
         d.text((x, y), "CO2", font=L.jp(26, True), fill=(255, 255, 255, 200), anchor="mm")
     _label(d, (260, 470), "石筍", 30)
     _label(d, (720, 330), "つらら石", 30)
-    _label(d, (W / 2, 620), "CO2がぬける → 石灰がまた固まる（③の逆）", 32, (255, 220, 120))
+    _label(d, (W / 2, 620), "CO2がぬける → 石灰がまた固まる（⑤の逆）", 32, (255, 220, 120))
     return im
 
 
@@ -139,45 +139,63 @@ def reef(t, lt):
     return im
 
 
-def accrete(t, lt):
-    """プレートが大陸の下に沈むとき、石灰岩は海山からはなれて大陸のふちにくっつき、のちに持ち上がる"""
-    W, H = 900, 680
+def _accrete(t, lt, phase):
+    """断面図。phase 1: 海の底が大陸の下へもぐり、海山が運ばれてくる
+    phase 2: 海山はもぐるが、上の石灰岩は大陸の端に残る / phase 3: 押し上げられて地表に出る（秋吉台）"""
+    W, H = 900, 700
     im = Image.new("RGBA", (W, H))
     d = ImageDraw.Draw(im)
-    sea = 140
+    sea, tx = 140, 560
+    k = min(1.0, lt / 4.0)
+    up = 70 * (k if phase == 3 else 0)  # 押し上げ
     d.rectangle((0, sea, W, 600), fill=(40, 90, 170))
-    tx = 560  # 海溝
-    d.polygon([(0, 420), (tx, 420), (W, 640), (W, 680), (0, 680)], fill=(110, 80, 60))  # 海のプレート
-    d.polygon([(tx + 20, sea), (W, sea), (W, 600), (tx + 120, 470)], fill=(90, 150, 80))  # 大陸のふち
-    _label(d, (780, 110), "大陸のふち\n（日本のもと）", 28)
-    k = min(1.0, lt / 6.0)
-    for i in range(5):  # プレートの動き
+    d.polygon([(0, 420), (tx, 420), (W, 640), (W, 700), (0, 700)], fill=(110, 80, 60))
+    for i in range(5):
         x = 40 + i * 110 + (t * 50) % 110
         d.line((x, 450, x + 40, 450), fill=(255, 220, 120), width=6)
         d.polygon([(x + 40, 440), (x + 58, 450), (x + 40, 460)], fill=(255, 220, 120))
-    p = min(1.0, k / 0.55)  # 0→1：海溝まで運ばれる
-    sx = 150 + (tx - 150) * p
-    if k < 0.55:
-        sy = 420
-        d.polygon([(sx - 100, sy), (sx, 250), (sx + 100, sy)], fill=(60, 50, 50))
+    if phase == 1:
+        sx = 150 + (tx - 220) * k
+        d.polygon([(sx - 100, 420), (sx, 250), (sx + 100, 420)], fill=(60, 50, 50))
         d.polygon([(sx - 40, 280), (sx - 15, 245), (sx + 15, 245), (sx + 40, 280)], fill=(245, 240, 225))
-    else:
-        q = (k - 0.55) / 0.45  # 海山は沈み、石灰岩は大陸側に残る
-        mx, my = tx + 200 * q, 420 + 120 * q
-        d.polygon([(mx - 100, my), (mx, my - 170 + 80 * q), (mx + 100, my)], fill=(60, 50, 50, int(255 * (1 - q))))
-        d.polygon([(tx + 20, sea), (W, sea), (W, 600), (tx + 120, 470)], fill=(90, 150, 80))  # 海山は大陸の下へ
-        lx, ly = tx + 95, 360 - 70 * max(0, (q - 0.6) / 0.4)  # 大陸のふちにくっつく
+        _label(d, (sx, 215), "石灰岩をのせた海山", 28)
+    elif phase == 2:
+        mx, my = tx - 60 + 260 * k, 420 + 130 * k
+        d.polygon([(mx - 100, my), (mx, my - 170 + 70 * k), (mx + 100, my)], fill=(60, 50, 50))
+    # 大陸の端（押し上げで上に動く）
+    d.polygon([(tx + 20, sea - up), (W, sea - up), (W, 600), (tx + 120, 470)], fill=(90, 150, 80))
+    if phase >= 2:
+        q = k if phase == 2 else 1
+        lx = tx - 60 + 190 * q  # 大陸の端の上へ
+        ly = 280 + 80 * q
+        if phase == 3:  # 押し上げられて地表（大陸のいちばん上）へ
+            ly = 360 + (sea - up + 30 - 360) * k
         d.polygon([(lx - 45, ly + 30), (lx - 18, ly - 5), (lx + 18, ly - 5), (lx + 45, ly + 30)], fill=(245, 240, 225))
-        _label(d, (lx - 150, ly - 10), "石灰岩が\nくっつく →", 28, (255, 240, 200))
-        if q > 0.6:
-            d.line((lx + 80, ly + 40, lx + 80, ly - 30), fill=(255, 220, 120), width=8)
-            d.polygon([(lx + 68, ly - 30), (lx + 92, ly - 30), (lx + 80, ly - 52)], fill=(255, 220, 120))
-            _label(d, (lx + 160, ly + 10), "持ち上がる", 28, (255, 220, 120))
-    _label(d, (tx - 20, 630), "海溝：プレートが沈みこむ", 30)
+        if phase == 3 and k > 0.6:
+            _label(d, (lx - 120, ly + 10), "秋吉台 →", 34, (255, 240, 200))
+    if phase == 3:
+        d.line((W - 60, 420, W - 60, 300), fill=(255, 220, 120), width=8)
+        d.polygon([(W - 74, 300), (W - 46, 300), (W - 60, 274)], fill=(255, 220, 120))
+    _label(d, (720, 105) if phase == 1 else (380, 330), "大陸の端（のちの日本）" + ("" if phase == 1 else " →"), 28)
+    _label(d, (tx - 40, 660), "海溝（海の底がもぐる所）", 28)
+    cap = {1: "海の底が、大陸の下へもぐっていく", 2: "海山はもぐる → 石灰岩だけ大陸の端に残る", 3: "押し上げられて地表へ → 秋吉台"}[phase]
+    _label(d, (W / 2, 30), cap, 34, (255, 220, 120))
     return im
 
 
-FIGS = {"origin": origin, "reef": reef, "accrete": accrete, "dissolve": dissolve, "cave": cave, "drip": drip}
+def accrete1(t, lt):
+    return _accrete(t, lt, 1)
+
+
+def accrete2(t, lt):
+    return _accrete(t, lt, 2)
+
+
+def accrete3(t, lt):
+    return _accrete(t, lt, 3)
+
+
+FIGS = {"origin": origin, "reef": reef, "accrete1": accrete1, "accrete2": accrete2, "accrete3": accrete3, "dissolve": dissolve, "cave": cave, "drip": drip}
 
 SCENES = [
     dict(spk="Z", ex="panic", say="地下に、こんな巨大な空間があるのだ！？",
@@ -191,18 +209,24 @@ SCENES = [
     dict(spk="M", say="約3億年前、南の海の海底火山のてっぺんに、サンゴやフズリナが積もって、厚い石灰岩になったの。",
          read="やく、さんおくねん前、南の海の、かいてい火山の、てっぺんに、サンゴや、フズリナが積もって、厚い、せっかいがんに、なったの。",
          head="① 海山のてっぺんに\nサンゴ礁", show=("fig", "reef"), head_y=1230),
-    dict(spk="M", say="プレートが大陸の下に沈むとき、石灰岩は海山からはなれて、大陸のふちにくっついたの。それが持ち上がったのが秋吉台よ。",
-         read="プレートが、大陸の下に沈むとき、せっかいがんは、かいざんから、はなれて、大陸のふちに、くっついたの。それが持ち上がったのが、あきよしだいよ。",
-         head="② 大陸にくっついて\n持ち上がった", show=("fig", "accrete"), head_y=1250),
+    dict(spk="M", say="海の底は少しずつ動いて、大陸の下にもぐっていくの。石灰岩をのせた海山も、運ばれてきたわ。",
+         read="海の底は、少しずつ動いて、大陸の下に、もぐっていくの。せっかいがんを、のせた、かいざんも、運ばれてきたわ。",
+         head="② 海の底が\nもぐる", show=("fig", "accrete1"), head_y=1250),
+    dict(spk="M", say="海山はもぐっても、上の石灰岩は、大陸の端に取り残されたの。",
+         read="かいざんは、もぐっても、上の、せっかいがんは、大陸のはしに、取り残されたの。",
+         head="③ 石灰岩だけ\n残る", show=("fig", "accrete2"), head_y=1250),
+    dict(spk="M", say="それが長い時間をかけて押し上げられ、地表に出たのが秋吉台よ。",
+         read="それが、長い時間をかけて、押し上げられ、地表に出たのが、あきよしだいよ。",
+         head="④ 押し上げられて\n秋吉台に", show=("fig", "accrete3"), head_y=1250),
     dict(spk="M", say="雨は二酸化炭素をとかして弱い酸になる。その水が割れ目にしみこんで、石灰岩を少しずつ溶かすの。",
          read="雨は、にさんかたんそを、とかして、弱い、さんになる。その水が、割れ目にしみこんで、せっかいがんを、少しずつ溶かすの。",
-         head="③ 雨水が\n溶かす", show=("fig", "dissolve"), head_y=1230),
+         head="⑤ 雨水が\n溶かす", show=("fig", "dissolve"), head_y=1230),
     dict(spk="M", say="割れ目が広がって地下の川になり、長い時間をかけて大きな洞くつになったのよ。",
          read="割れ目が広がって、地下の川になり、長い時間をかけて、大きな洞くつに、なったのよ。",
-         head="④ 地下の川が\n洞くつに", show=("fig", "cave"), head_y=1230),
+         head="⑥ 地下の川が\n洞くつに", show=("fig", "cave"), head_y=1230),
     dict(spk="M", say="しずくから二酸化炭素がぬけると、溶けていた石灰がまた固まる。だから天井から、つらら石がのびるの。",
          read="しずくから、にさんかたんそが、ぬけると、溶けていた、せっかいが、また固まる。だから天井から、つららいしが、のびるの。",
-         head="⑤ しずくが\nまた固まる", show=("fig", "drip"), head_y=1230),
+         head="⑦ しずくが\nまた固まる", show=("fig", "drip"), head_y=1230),
     dict(spk="Z", say="地球が作った地下の大空間なのだ！行ってみたいのだ？",
          head="行ってみたい？", show=("photo", "Entrance_of_Akiyoshi_Cave_3.jpg", "out")),
 ]
