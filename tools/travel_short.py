@@ -333,6 +333,7 @@ def main():
         w.writeframes((mix * 32767).astype(np.int16).tobytes())
 
     accent = getattr(cfg, "ACCENT", (255, 200, 60))
+    full = getattr(cfg, "FULL", False)  # 全画面の型（題名の帯なし）
     dark = T.background((24, 40, 70), (8, 12, 30))
     band = T.top_band(cfg.TITLE, accent)
     photos, used = {}, []
@@ -347,7 +348,7 @@ def main():
         k = max(0.0, (y - SH * 0.55) / (SH * 0.45)) ** 1.5 * 0.85 + max(0.0, (SH * 0.25 - y) / (SH * 0.25)) * 0.45
         sd.line((0, y, SW, y), fill=(0, 0, 0, int(255 * min(0.9, k))))
     heads = [head_layer(s["head"], s.get("sub", ""), s.get("color", accent),
-                        s.get("head_y", 1230 if s["show"][0] == "photo" else 1170)) for s in sc]
+                        s.get("head_y", 330 if full else (1230 if s["show"][0] == "photo" else 1170))) for s in sc]
     figs = getattr(cfg, "FIGS", {})
     zoom = Zoom(here, cfg.PLACE) if any(x["show"][0] == "zoom" for x in sc) else None
     area = Area(here, cfg.AREA) if any(x["show"][0] == "area" for x in sc) else None
@@ -380,10 +381,15 @@ def main():
                 frame.alpha_composite(area.frame(lt))
             else:
                 fim = figs[s["show"][1]](t, lt)
-                frame.alpha_composite(fim, (int(SW / 2 - fim.width / 2), int(760 - fim.height / 2)))
+                if fim.size == (SW, SH):  # 全画面の絵
+                    frame = fim.convert("RGBA")
+                    frame.alpha_composite(shade)
+                else:
+                    frame.alpha_composite(fim, (int(SW / 2 - fim.width / 2), int(760 - fim.height / 2)))
         if n > 0 and lt < 0.25 and sc[n - 1]["show"] != s["show"]:  # 場面の切りかえは白く一瞬光らせる
             frame = Image.blend(frame, Image.new("RGBA", (SW, SH), (255, 255, 255, 255)), 0.3 * (1 - lt / 0.25))
-        frame.alpha_composite(band)
+        if not full:
+            frame.alpha_composite(band)
         dy = int(50 * (1 - min(1, lt / 0.25)) ** 2)
         frame.alpha_composite(heads[n].crop((0, 0, SW, SH - dy)), (0, dy))
         page = min(npg[n] - 1, int(lt / max(0.1, durs[n] - GAP) * npg[n]))
