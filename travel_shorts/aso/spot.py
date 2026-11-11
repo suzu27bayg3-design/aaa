@@ -130,12 +130,30 @@ def spread(t, lt):
     return _credit(im, "出典：国土地理院／産総研（シームレス地質図V2）を加工")
 
 
-FIGS = {"rim": rim, "sink": sink, "spread": spread}
+def aerial(t, lt, zoom_in=True):
+    """上空から見たカルデラ（本物の航空写真）をゆっくりズーム"""
+    k = min(1.0, lt / 6.0)
+    z = (0.95 - 0.25 * k) if zoom_in else (0.7 + 0.25 * k)
+    w = 900 * z
+    box = (int(CX - w / 2), int(CY - w / 2), int(CX + w / 2), int(CY + w / 2))
+    im = _CAL.crop(box).resize((900, 900), Image.BILINEAR).convert("RGBA")
+    return _credit(im)
+
+
+def hook(t, lt):
+    return aerial(t, lt, True)
+
+
+def ending(t, lt):
+    return aerial(t, lt, False)
+
+
+FIGS = {"hook": hook, "ending": ending, "rim": rim, "sink": sink, "spread": spread}
 
 SCENES = [
     dict(spk="Z", ex="panic", say="この広い平野、全部が火山の穴の中なのだ！？",
          read="この、ひろい、へいや、全部が、火山の穴の中なのだ！？",
-         head="全部\n火山の穴の中！？", show=("photo", "Daikanbō_Lookout__Yamada__Aso__Kumamoto_-_Jul_9__2011.jpg", "in")),
+         head="全部\n火山の穴の中！？", show=("fig", "hook"), head_y=1285),
     dict(spk="M", say="熊本県の阿蘇。上から見ると、山がぐるりと輪になっているの。",
          read="くまもとけんの、あそ。上から見ると、山が、ぐるりと、輪になっているの。",
          head="阿蘇", show=("zoom",), head_y=1340),
@@ -150,7 +168,7 @@ SCENES = [
          head="② 支えを失って\n落ちこんだ", show=("fig", "sink"), head_y=1285),
     dict(spk="Z", say="その中に町や田んぼがあって、人が暮らしているのだ！行ってみたいのだ？",
          read="その中に、町や田んぼがあって、人が暮らしているのだ！行ってみたいのだ？",
-         head="行ってみたい？", show=("photo", "Daikanbō_Lookout__Yamada__Aso__Kumamoto_-_Jul_9__2011.jpg", "out")),
+         head="行ってみたい？", show=("fig", "ending"), head_y=1285),
 ]
 
 META = dict(

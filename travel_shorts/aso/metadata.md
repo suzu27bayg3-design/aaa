@@ -37,7 +37,7 @@ https://www.gsj.jp/data/gcn/gsj_cn_vol13.no4_p63-68.pdf
 https://www.bousai.go.jp/kohou/kouhoubousai/h21/03/volcano.html
 
 写真（Wikimedia Commons）:
-・t-mizo（CC BY 2.0）https://commons.wikimedia.org/wiki/File:Daikanb%C5%8D_Lookout%2C_Yamada%2C_Aso%2C_Kumamoto_-_Jul_9%2C_2011.jpg
+
 地図: GSHHG 海岸線データ（Wessel & Smith, LGPL） https://www.soest.hawaii.edu/pwessel/gshhg/
 航空写真・陰影起伏: 出典 国土地理院（地理院タイルを加工して作成）
 地質図: 出典 産総研地質調査総合センター 20万分の1日本シームレス地質図V2（CC BY 4.0、大規模火砕流の範囲を抽出して加工）
