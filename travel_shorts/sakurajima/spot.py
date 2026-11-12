@@ -16,7 +16,7 @@ FULL = True
 TITLE = "ふしぎな絶景の科学"
 ACCENT = (255, 150, 80)
 PLACE = dict(name="桜島", pref="鹿児島県", lat=31.585, lon=130.66)
-MAP_CREDITS = ["航空写真・陰影起伏: 出典 国土地理院（地理院タイルを加工して作成）"]
+MAP_CREDITS = ["航空写真・陰影起伏: 出典 国土地理院（地理院タイルを加工して作成）"]  # 古い地図と写真は photos/credits.json
 
 SW, SH = 1080, 1920
 _M = os.path.join(os.path.dirname(os.path.abspath(__file__)), "maps")
@@ -26,8 +26,8 @@ _BASE = ImageChops.multiply(_P, Image.blend(_H, Image.new("RGB", _H.size, "white
 BOX = (300, 0, 1308, 1792)  # 縦長（9:16）の範囲：桜島と大隅半島がつながる所まで
 LAVA, GOLD = (255, 110, 40), (255, 214, 120)
 # 東の山腹から瀬戸海峡（つながった所）までの溶岩の通り道（目安）
-FLOW = [(1000, 1030), (1060, 1062), (1120, 1095), (1170, 1120), (1210, 1144), (1238, 1160)]
-STRAIT = (1215, 1146)
+FLOW = [(975, 1050), (1005, 1082), (1035, 1115), (1060, 1145), (1080, 1166), (1092, 1176)]
+STRAIT = (1080, 1166)  # 地形図で大正溶岩と大隅半島がつながる所（国道224号と220号の合流付近）
 
 
 def _view(scale, cx=None, cy=None):
@@ -124,24 +124,56 @@ def days(t, lt):
     return _lava_frame(t, 1.0, f"{int(round(17 * k))}日目")
 
 
-FIGS = {"hook": hook, "joint": joint, "lava": lava, "days": days}
+_OLD = Image.open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "photos",
+                               "Sakurajima_southeast_map_before_1914.png")).convert("RGB")
+
+
+def oldmap(t, lt):
+    """噴火前の地図（全体を見せる）。海峡の場所を光の輪で示す"""
+    W = 1000
+    sc = W / _OLD.width
+    m = _OLD.resize((W, int(_OLD.height * sc)), Image.LANCZOS)
+    z = 1.0 + 0.25 * min(1, lt / 5)  # 海峡に向かってゆっくり寄る
+    fx, fy = 395 / 500, 205 / 310  # 地図の上の海峡の位置（割合）
+    mw, mh = int(W / z), int(m.height / z)
+    x0 = int(min(max(0, fx * W - mw / 2), W - mw))
+    y0 = int(min(max(0, fy * m.height - mh / 2), m.height - mh))
+    m = m.crop((x0, y0, x0 + mw, y0 + mh)).resize((W, int(W * mh / mw)), Image.LANCZOS)
+    out = Image.new("RGB", (SW, SH), (14, 18, 30))
+    X, Y = (SW - W) // 2, 700 - m.height // 2
+    out.paste(m, (X, Y))
+    lay = Image.new("RGB", (SW, SH))
+    d = ImageDraw.Draw(lay)
+    cx = X + (fx * _OLD.width * sc - x0) * W / mw
+    cy = Y + (fy * _OLD.height * sc - y0) * W / mw
+    for i in range(3):
+        ph = (t * 0.7 + i / 3) % 1
+        r = 25 + 110 * ph
+        d.ellipse((cx - r, cy - r, cx + r, cy + r), outline=tuple(int(v * (1 - ph)) for v in GOLD), width=7)
+    out = _glow(out, lay).convert("RGBA")
+    ImageDraw.Draw(out).text((SW / 2, Y + m.height + 30), "地図：大日本帝国陸軍 陸地測量部（噴火前）/ Public domain / Wikimedia Commons",
+                             font=L.jp(22, True), fill=(220, 230, 240), anchor="mm")
+    return out
+
+
+FIGS = {"oldmap": oldmap, "hook": hook, "joint": joint, "lava": lava, "days": days}
 
 SCENES = [
     dict(spk="Z", ex="panic", say="この島、陸とつながってるのだ！？",
          read="この、しま、りくと、つながってるのだ！？",
          head="この島\n陸とつながってる！？", show=("fig", "hook")),
-    dict(spk="M", say="鹿児島の桜島。東側で、大隅半島とくっついているの。",
-         read="かごしまの、さくらじま。ひがしがわで、おおすみはんとうと、くっついているの。",
-         head="ここで\nくっついた", show=("fig", "joint")),
-    dict(spk="M", say="1914年の大噴火で流れた溶岩が、幅400メートルの海峡を埋めたのよ。",
-         read="せんきゅうひゃくじゅうよねんの、だいふんかで流れた、ようがんが、幅、よんひゃくメートルの、かいきょうを、うめたのよ。",
-         head="溶岩が\n海を埋めた", show=("fig", "lava")),
-    dict(spk="M", say="噴火が始まってから、わずか17日で陸続きになったの。",
-         read="ふんかが始まってから、わずか、じゅうななにちで、りくつづきに、なったの。",
+    dict(spk="M", say="噴火の前の地図を見て。ここは海峡で、島と半島は離れていたの。",
+         read="ふんかの前の、ちずを見て。ここは、かいきょうで、しまと、はんとうは、はなれていたの。",
+         head="1914年より前は\n海だった", show=("fig", "oldmap"), head_y=1240),
+    dict(spk="M", say="1914年の大噴火で、溶岩がこの海峡に流れこんだのよ。",
+         read="せんきゅうひゃくじゅうよねんの、だいふんかで、ようがんが、この、かいきょうに、ながれこんだのよ。",
+         head="溶岩が\n海に流れこむ", show=("photo", "Sakurajima_taisyo_eruption_at_seto_strait.jpg", "in"), head_y=1240),
+    dict(spk="M", say="噴火が始まってから、わずか17日で海峡を埋めて、陸続きになったの。",
+         read="ふんかが始まってから、わずか、じゅうななにちで、かいきょうを、うめて、りくつづきに、なったの。",
          head="わずか17日", show=("fig", "days")),
-    dict(spk="Z", say="島が、陸になったのだ！",
-         read="しまが、りくに、なったのだ！",
-         head="島が陸に！", show=("fig", "hook")),
+    dict(spk="Z", say="今はここで、島が陸になっているのだ！",
+         read="いまは、ここで、しまが、りくに、なっているのだ！",
+         head="島が陸に！", show=("fig", "joint")),
 ]
 
 META = dict(
@@ -160,7 +192,9 @@ META = dict(
           "火山", "絶景", "ふしぎな絶景", "地学", "科学", "航空写真", "shorts"],
     hashtags=["#絶景", "#科学", "#桜島", "#火山", "#shorts"],
     pinned="大正噴火では対岸の鹿児島市でも大きな地震の被害がありました。次はどこのふしぎな絶景が見たい？",
-    notes=["「17日」は内閣府の「1月12日に噴火開始、1月29日に瀬戸海峡を閉塞」から計算。",
+    notes=["噴火前の地図は大日本帝国陸軍参謀本部陸地測量部の地図（パブリックドメイン、Wikimedia Commons）。噴火中の写真は鹿児島県の記録写真（パブリックドメイン）。",
+           "つながった場所は、地理院地図で大正溶岩の範囲と大隅半島が接する所（国道224号と220号の合流付近）に合わせた。",
+           "「17日」は内閣府の「1月12日に噴火開始、1月29日に瀬戸海峡を閉塞」から計算。",
            "「幅400メートル」は鹿児島県の「幅300〜400m」の大きい方。説明欄では幅を正確に書いた。",
            "光る溶岩の流れは、東の山腹から瀬戸までの目安の道すじ。実際の溶岩流の形とはちがう。地質図は大正溶岩だけを分けていないので使っていない。",
            "今の噴火警戒レベルは変わるため、動画ではふれていない。"],

@@ -1,5 +1,5 @@
-# この島、陸とつながってる！？桜島（25秒）
-- 動画: `short.mp4`（1080×1920 縦長 / 約25秒）/ 表紙候補: `cover.png`
+# この島、陸とつながってる！？桜島（28秒）
+- 動画: `short.mp4`（1080×1920 縦長 / 約28秒）/ 表紙候補: `cover.png`
 - 作り直し: `python3 tools/travel_short.py travel_shorts/sakurajima/spot.py`
 
 **タイトル**
@@ -33,7 +33,7 @@ https://www.pref.kagoshima.jp/aj01/bosai/sonae/sakura100/documents/38032_2014032
 https://www.city.kagoshima.lg.jp/kikikanri/kurashi/bosai/bosai/sakurajima/documents/02kyozaip2.pdf
 
 写真（Wikimedia Commons）:
-
+・鹿児島県（Public domain）https://commons.wikimedia.org/wiki/File:Sakurajima_taisyo_eruption_at_seto_strait.jpg
 地図: GSHHG 海岸線データ（Wessel & Smith, LGPL） https://www.soest.hawaii.edu/pwessel/gshhg/
 航空写真・陰影起伏: 出典 国土地理院（地理院タイルを加工して作成）
 
@@ -51,6 +51,8 @@ https://www.city.kagoshima.lg.jp/kikikanri/kurashi/bosai/bosai/sakurajima/docume
 ```
 
 **事実確認のメモ**
+- 噴火前の地図は大日本帝国陸軍参謀本部陸地測量部の地図（パブリックドメイン、Wikimedia Commons）。噴火中の写真は鹿児島県の記録写真（パブリックドメイン）。
+- つながった場所は、地理院地図で大正溶岩の範囲と大隅半島が接する所（国道224号と220号の合流付近）に合わせた。
 - 「17日」は内閣府の「1月12日に噴火開始、1月29日に瀬戸海峡を閉塞」から計算。
 - 「幅400メートル」は鹿児島県の「幅300〜400m」の大きい方。説明欄では幅を正確に書いた。
 - 光る溶岩の流れは、東の山腹から瀬戸までの目安の道すじ。実際の溶岩流の形とはちがう。地質図は大正溶岩だけを分けていないので使っていない。
