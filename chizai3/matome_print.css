@@ -1,0 +1,53 @@
+@page { size: A4; margin: 13mm 12mm 15mm; }
+@media print {
+  :root, :root[data-theme="dark"], :root:not([data-theme="light"]) {
+    --bg: #F3F3F7; --surface: #FFFFFF; --ink: #1C1F2E; --muted: #4F5468; --line: #C9CCD8;
+    --accent: #2E3A78; --accent-soft: #E6E8F5; --seal: #C23A22; --seal-soft: #FBEAE6;
+    --warn: #7A4F00; --warn-soft: #FFF0C8; --ok: #1D7447;
+    --f-display: "IPAPGothic", "IPAGothic", sans-serif;
+    --f-body: "IPAPGothic", "IPAGothic", sans-serif;
+    --f-mono: "IPAGothic", monospace;
+    color-scheme: light;
+  }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { background: #fff; font-size: 9.6pt; line-height: 1.6; padding: 0 !important; }
+  .wrap { max-width: none; gap: 10px; }
+  h1 { font-size: 18pt; }
+  .lede, .legend { max-width: none; font-size: 8.6pt; }
+  nav.toc { gap: 4px; }
+  nav.toc a { font-size: 8.4pt; padding: 1px 8px; }
+  section { border: none; border-top: 2px solid var(--accent); border-radius: 0; padding: 8px 0 4px; gap: 7px; }
+  h2 { font-size: 13.5pt; break-after: avoid; }
+  h3 { font-size: 11pt; margin-top: 4px; break-after: avoid; }
+  h2 + .why, h3 + .tbl, h3 + ul, h3 + p, h3 + .why { break-before: avoid; }
+  .why { font-size: 9pt; padding: 6px 10px; break-inside: avoid; }
+  .tbl { overflow: visible; }
+  table { min-width: 0; font-size: 8.6pt; }
+  thead { display: table-header-group; }
+  tr, li, .why, .legend span, p { break-inside: avoid; }
+  th, td { padding: 4px 6px; }
+  ul { gap: 2px; }
+  .q { font-size: 7.4pt; }
+  .tag { font-size: 7.6pt; }
+  a { color: var(--ink); text-decoration: none; }
+  p, li { orphans: 3; widows: 3; }
+  footer { font-size: 8pt; break-inside: avoid; }
+}
+@media print {
+  .wrap, section { display: block; }
+  .wrap > * + * { margin-top: 10px; }
+  section > * + * { margin-top: 7px; }
+  ul { display: block; }
+  li + li { margin-top: 2px; }
+  section { break-before: page; }
+  section#base, section#jitu { break-before: auto; }
+  header, nav.toc { break-inside: avoid; }
+}
+@media print {
+  section#pat3, section#treaty { break-before: auto; margin-top: 18px; }
+  h2 + .why { break-after: avoid; }
+}
+@media print {
+  body { font-size: 9.3pt; }
+  section#isho { break-before: auto; margin-top: 18px; }
+}
