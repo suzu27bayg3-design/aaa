@@ -17,7 +17,7 @@ FULL = True
 TITLE = "ふしぎな絶景の科学"
 ACCENT = (255, 150, 80)
 PLACE = dict(name="昭和新山", pref="北海道壮瞥町", lat=42.5425, lon=140.864)
-MAP_CREDITS = ["航空写真（現在・1961〜69年）・陰影起伏: 出典 国土地理院（地理院タイルを加工して作成）"]
+MAP_CREDITS = ["航空写真（現在・1961〜69年）・陰影起伏・標高（5mメッシュ）: 出典 国土地理院（地理院タイルを加工して作成）"]
 
 SW, SH = 1080, 1920
 _M = os.path.join(os.path.dirname(os.path.abspath(__file__)), "maps")
@@ -104,24 +104,75 @@ def eras(t, lt):
     return im
 
 
-FIGS = {"hook": hook, "rise": rise, "magma": magma, "eras": eras}
+# ---- 立体（国土地理院の5m標高データ＋航空写真） ----
+import sys  # noqa: E402
+
+import numpy as np  # noqa: E402
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "tools"))
+import terrain3d as T3  # noqa: E402
+
+_DEM = np.load(os.path.join(_M, "dem5a_z15.npy"))
+_TEX = np.array(_P)
+_MPP = 156543.03 * math.cos(math.radians(42.54)) / 2 ** 15
+EXAG = 1.5  # 高さを1.5倍に強調
+
+
+def _r3(az, el, dist, k=1.0):
+    im = T3.render(_DEM, _TEX, _MPP, DOME, az=az, el=el, dist=dist, exag=EXAG, size=(720, 1280),
+                   local=None if k >= 1 else (DOME[0], DOME[1], 95, k))
+    return im.resize((SW, SH), Image.BILINEAR)
+
+
+def hook3d(t, lt):
+    """立体の昭和新山を、まわりこみながら見る"""
+    return _r3(az=-35 + 6 * lt, el=26, dist=1700 - 40 * lt)
+
+
+def rise3d(t, lt):
+    """平らな畑から、山が盛り上がっていく（高さを0→本物まで）"""
+    k = min(1.0, lt / 5.0)
+    return _r3(az=-10, el=24, dist=1500, k=k)
+
+
+def magma3d(t, lt):
+    """立体の山の下から、マグマが赤く光る（頂上は画面の真ん中に来る）"""
+    im = _r3(az=-10 + 2 * lt, el=24, dist=1400)
+    lay = Image.new("RGB", (SW, SH))
+    d = ImageDraw.Draw(lay)
+    x, y = SW / 2, SH / 2 + 60
+    k = min(1.0, lt / 2.5)
+    a = 0.75 + 0.25 * math.sin(t * 3)
+    r = 260 * (0.4 + 0.6 * k)
+    d.ellipse((x - r, y - r * 0.6, x + r, y + r * 0.6), fill=tuple(int(v * 0.5 * a) for v in LAVA))
+    lay = lay.filter(ImageFilter.GaussianBlur(70))
+    d = ImageDraw.Draw(lay)
+    for off, sx in _EMB:
+        ph = (t * 0.5 + off) % 1
+        ex, ey = x + sx * 170 * (0.3 + ph), y - 60 - ph * 460 * k
+        rr = 5 * (1 - ph) + 1
+        d.ellipse((ex - rr, ey - rr, ex + rr, ey + rr), fill=tuple(int(v * (1 - ph)) for v in GOLD))
+    return ImageChops.add(im, lay)
+
+
+FIGS = {"hook": hook, "rise": rise, "magma": magma, "eras": eras, "hook3d": hook3d, "rise3d": rise3d, "magma3d": magma3d}
 
 SCENES = [
     dict(spk="Z", ex="panic", say="この山、畑から生えてきたのだ！？",
          read="この、やま、はたけから、はえてきたのだ！？",
-         head="畑から\n山が生えた！？", show=("fig", "hook")),
+         head="畑から\n山が生えた！？", show=("fig", "hook3d")),
     dict(spk="M", say="北海道の昭和新山。1943年から、畑だった土地がどんどん盛り上がったの。",
          read="ほっかいどうの、しょうわしんざん。せんきゅうひゃくよんじゅうさんねんから、はたけだった、とちが、どんどん、もりあがったの。",
-         head="畑が\n盛り上がった", show=("fig", "rise")),
+         head="畑が\n盛り上がった", show=("fig", "rise3d")),
     dict(spk="M", say="地下から上がってきたマグマが押し上げて、2年ほどで高さ約400メートルの山になったのよ。",
          read="ちかから、あがってきた、マグマが、おしあげて、にねんほどで、たかさ、やく、よんひゃくメートルの、やまに、なったのよ。",
-         head="2年で\n約400m", show=("fig", "magma")),
+         head="2年で\n約400m", show=("fig", "magma3d")),
     dict(spk="M", say="1960年代はまだ岩がむき出し。今は森におおわれ始めているわ。",
          read="せんきゅうひゃくろくじゅうねんだいは、まだ、いわが、むきだし。いまは、もりに、おおわれはじめているわ。",
          head="昔と今", show=("fig", "eras")),
     dict(spk="Z", say="畑が、山になったのだ！",
          read="はたけが、やまに、なったのだ！",
-         head="畑が山に！", show=("fig", "hook")),
+         head="畑が山に！", show=("fig", "hook3d")),
 ]
 
 META = dict(
@@ -141,7 +192,8 @@ META = dict(
           "北海道", "火山", "絶景", "ふしぎな絶景", "地学", "科学", "航空写真", "shorts"],
     hashtags=["#絶景", "#科学", "#昭和新山", "#火山", "#shorts"],
     pinned="当時の郵便局長・三松正夫さんは、2年近く山の成長を描き続けました。次はどこのふしぎな絶景が見たい？",
-    notes=["「約400メートル」は、1945年9月の標高406.9m（国土交通省資料）にもとづく。今の標高は浸食などで少しちがう。",
+    notes=["立体の場面は、国土地理院の5mメッシュ標高データに航空写真を貼って作った。山の形がわかりやすいよう高さを1.5倍に強調している。",
+           "「約400メートル」は、1945年9月の標高406.9m（国土交通省資料）にもとづく。今の標高は浸食などで少しちがう。",
            "「平らな畑 → 盛り上がる」の場面は、陰影起伏をならした絵から本物の起伏へ切りかえる演出で、当時の写真ではない。",
            "昔の航空写真は1961〜69年のもの（1940年代の写真はこの場所にない）。",
            "ミマツダイヤグラムの図は著作権の確認ができないため使っていない。"],
