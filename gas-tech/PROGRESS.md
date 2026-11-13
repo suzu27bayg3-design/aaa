@@ -26,6 +26,7 @@
 | 22 | 不完全燃焼と CO 中毒 | 2026-11-10 | [22-incomplete-combustion-co.md](lessons/22-incomplete-combustion-co.md) |
 | 23 | 給排気方式（CF・FE・BF・FF） | 2026-11-11 | [23-flue-ventilation-types.md](lessons/23-flue-ventilation-types.md) |
 | 24 | 給湯器と潜熱回収 | 2026-11-12 | [24-water-heater-latent-heat.md](lessons/24-water-heater-latent-heat.md) |
+| 25 | ガスメーター（マイコンメーター） | 2026-11-13 | [25-gas-meter.md](lessons/25-gas-meter.md) |
 | 27（旧・参考） | ガス事業法の目的と事業区分 | 2026-10-19 | [27-gas-business-act-purpose.md](lessons/27-gas-business-act-purpose.md) |
 
 ## 法令トラック：高圧ガス保安法（甲種機械）
