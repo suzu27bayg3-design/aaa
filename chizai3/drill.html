@@ -145,7 +145,7 @@ footer p { margin: 0; }
 <div class="wrap">
   <header>
     <div class="brand"><span class="seal">知財</span><h1>知財検定3級 法令ドリル</h1></div>
-    <p class="lede">知的財産管理技能検定3級。学科は本試験と同じ3肢択一（ア・イ・ウから1つ）、実技は事例問題で3肢択一・○×・理由選択・数字記入。01〜J2 は練習問題、過去問は公式問題の第52〜54回です。各セットの冒頭に「この分野の原理」、各問の解説に根拠条文へのリンクがあります。合格基準は学科・実技とも満点の70%以上です。</p>
+    <p class="lede">知的財産管理技能検定3級。学科は本試験と同じ3肢択一（ア・イ・ウから1つ）、実技は事例問題で3肢択一・○×・理由選択・数字記入。01〜J2 は練習問題、過去問は公式問題の第52〜54回、テキスト問題は公式テキスト第15版対応の問題です。各セットの冒頭に「この分野の原理」、各問の解説に根拠条文へのリンクがあります。合格基準は学科・実技とも満点の70%以上です。</p>
   </header>
 
   <nav class="sets" id="sets" aria-label="演習セット"></nav>
@@ -159,7 +159,7 @@ footer p { margin: 0; }
   <main id="stage"></main>
 
   <footer>
-    <p>01〜J2 はオリジナルの練習問題で、法令は2026年11月時点です。過去問の問題文と正解は<a href="https://www.kentei-info-ip-edu.org/" target="_blank" rel="noopener">知的財産教育協会</a>の公式問題によるもので、出題時点の法令に基づきます（解説は本ドリルで作成）。条文は<a href="https://laws.e-gov.go.jp/" target="_blank" rel="noopener">e-Gov法令検索</a>で確認してください。</p>
+    <p>01〜J2 はオリジナルの練習問題で、法令は2026年11月時点です。過去問の問題文と正解は<a href="https://www.kentei-info-ip-edu.org/" target="_blank" rel="noopener">知的財産教育協会</a>の公式問題によるもので、出題時点の法令に基づきます（解説は本ドリルで作成）。テキスト問題（公式テキスト第15版対応）は、問題・正解・解説とも配布資料のものです（©2024 Upload Co.,Ltd.）。条文は<a href="https://laws.e-gov.go.jp/" target="_blank" rel="noopener">e-Gov法令検索</a>で確認してください。</p>
     <p>成績はこのブラウザにだけ保存されます。<button class="btn ghost" id="reset" type="button" style="padding:2px 10px;font-weight:400">成績を消す</button> <span id="resetMsg" role="status"></span></p>
   </footer>
 </div>
@@ -225,6 +225,8 @@ function renderSets() {
   SETS.filter(s => s.kind === '実技').forEach(s => add(r2, s.id, s.id, s.topic.replace(/^実技 /, ''), setScore(s)));
   const past = SETS.filter(s => s.kind === '過去問');
   if (past.length) { const rp = row('過去問'); past.forEach(s => add(rp, s.id, '', s.chip, setScore(s))); }
+  const tx = SETS.filter(s => s.kind === 'テキスト');
+  if (tx.length) { const rt = row('テキスト'); tx.forEach(s => add(rt, s.id, '', s.chip, setScore(s))); }
   const r3 = row('演習');
   add(r3, 'mock', '', '学科 模擬試験 30問', '');
   add(r3, 'mix', '', '全セットから 10 問', '');
