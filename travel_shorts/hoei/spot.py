@@ -23,7 +23,7 @@ FULL = True
 TITLE = "ふしぎな絶景の科学"
 ACCENT = (255, 150, 80)
 PLACE = dict(name="宝永火口", pref="静岡県", lat=35.351, lon=138.745)
-MAP_CREDITS = ["標高（地理院タイル DEM10B）・陰影起伏: 出典 国土地理院。標高に合わせて色をつけて立体表示に加工"]
+MAP_CREDITS = []
 
 SW, SH = 1080, 1920
 _M = os.path.join(os.path.dirname(os.path.abspath(__file__)), "maps")
@@ -94,19 +94,19 @@ FIGS = {"hook": hook, "zoom": zoom, "erupt": erupt, "last": last}
 SCENES = [
     dict(spk="Z", ex="panic", say="富士山の横に、大きな穴があいてるのだ！？",
          read="ふじさんの、よこに、おおきな、あなが、あいてるのだ！？",
-         head="富士山の横に\n穴！？", show=("fig", "hook")),
+         head="富士山の横に\n穴！？", show=("photo", "ISS-46_Mount_Fuji__Japan.jpg", "in"), head_y=1230),
     dict(spk="M", say="これは宝永火口。南東の山腹に、大きな火口が3つ並んでいるの。",
          read="これは、ほうえいかこう。なんとうの、さんぷくに、おおきな、かこうが、みっつ、ならんでいるの。",
-         head="宝永火口", show=("fig", "zoom")),
+         head="宝永火口", show=("photo", "Mount_Fuji_20120203_a.jpg", "right"), head_y=1230),
     dict(spk="M", say="1707年の噴火で、ここから16日間も火山灰が噴き出したの。灰は江戸にまで降ったわ。",
          read="せんななひゃくななねんの、ふんかで、ここから、じゅうろくにちの、あいだ、かざんばいが、ふきだしたの。はいは、えどにまで、ふったわ。",
-         head="灰は江戸まで", show=("fig", "erupt")),
+         head="灰は江戸まで", show=("photo", "1st_Hoei_Crater.jpg", "in"), head_y=1230),
     dict(spk="M", say="これが、今のところ富士山の最後の噴火なのよ。",
          read="これが、いまのところ、ふじさんの、さいごの、ふんかなのよ。",
-         head="富士山\n最後の噴火", show=("fig", "last")),
+         head="富士山\n最後の噴火", show=("photo", "FujiHoei2078.jpg", "out"), head_y=1230),
     dict(spk="Z", say="富士山にも、穴があいていたのだ！",
          read="ふじさんにも、あなが、あいていたのだ！",
-         head="富士山に穴！", show=("fig", "hook")),
+         head="富士山に穴！", show=("photo", "ISS-46_Mount_Fuji__Japan.jpg", "out"), head_y=1230),
 ]
 
 META = dict(
@@ -123,11 +123,10 @@ META = dict(
              ("内閣府 防災「1707 富士山宝永噴火 報告書」", "https://www.bousai.go.jp/kyoiku/kyokun/kyoukunnokeishou/rep/1707_houei_fujisan_funka/pdf/1707-houei-fujisanFUNKA_06_chap2.pdf"),
              ("内閣府 防災（富士山の降灰の想定）", "https://www.bousai.go.jp/kazan/kouikikouhaiworking/pdf/20181207siryo3.pdf")],
     tags=["富士山", "宝永火口", "宝永噴火", "宝永山", "1707年", "火山灰", "江戸", "静岡県", "山梨県", "火山",
-          "絶景", "ふしぎな絶景", "地学", "科学", "立体地図", "shorts"],
+          "絶景", "ふしぎな絶景", "地学", "科学", "shorts"],
     hashtags=["#絶景", "#科学", "#富士山", "#火山", "#shorts"],
     pinned="宝永火口は登山道（富士宮ルート）から近くまで歩いて行けます。次はどこのふしぎな絶景が見たい？",
-    notes=["立体は国土地理院の10m標高データ（DEM10B）を使用。山頂付近の航空写真タイルが欠けていたため、色は標高に合わせてつけた（実際の色とはちがう）。",
+    notes=["写真は Wikimedia Commons（NASA 国際宇宙ステーションからの写真＝パブリックドメイン、宝永火口の写真＝CC BY-SA 4.0 Alpsdake ほか）。",
            "「最後の噴火」は「今のところ」と言い、将来の噴火がないとは言っていない。",
-           "火口のまわりの光、灰と火の粉の流れは演出。灰が東へ流れたのは、上空の西風に流されたという説明にもとづく。",
            "噴火の始まりの時刻は資料によって差がある（午前10時ごろ／正午前ごろ）ため、時刻は言っていない。"],
 )

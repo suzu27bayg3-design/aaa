@@ -236,19 +236,73 @@ def head_layer(head, sub, color, y):
     return lay
 
 
-def subtitle(text, spk, page):
-    """画面下の字幕（話者の色の帯つき）。長いときは2行ずつページ送り"""
+import re  # noqa: E402
+import urllib.parse  # noqa: E402
+import urllib.request  # noqa: E402
+
+_PUNCT = re.compile(r"(?<=[、。！？!?])")
+
+
+def _pieces(text):
+    return [p for p in _PUNCT.split(text) if p.strip()]
+
+
+def _speech_len(text, spk):
+    """VOICEVOX の audio_query から、この文を読む長さ（秒）を見積もる（モーラごとの長さ＋間の合計 ÷ 話速）"""
+    sid, speed = L.SPK[spk][2], L.SPK[spk][3]
+    op = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+    q = json.loads(op.open(urllib.request.Request(
+        "http://127.0.0.1:50021/audio_query?" + urllib.parse.urlencode({"text": text, "speaker": sid}),
+        data=b"", method="POST")).read())
+    t = 0.0
+    for a in q["accent_phrases"]:
+        for m in a["moras"] + ([a["pause_mora"]] if a.get("pause_mora") else []):
+            t += (m.get("consonant_length") or 0) + (m.get("vowel_length") or 0)
+    return t / speed
+
+
+def sub_units(say, read, spk, total, maxlen=16):
+    """字幕を句読点ごとの短いまとまりに分け、それぞれが声のどこからどこまでかを計算する。
+    say と read を同じ句読点で分け、読み（read）の長さの割合で、実際の音声の長さ total を配る。
+    返り値: [(表示する文字, 始まりの秒, 終わりの秒), ...]"""
+    sp, rp = _pieces(say), _pieces(read or say)
+    try:  # 句読点の数がそろえば読みで、そろわなければ表示文そのものを読ませて長さを見積もる
+        w = [_speech_len(r, spk) for r in (rp if len(sp) == len(rp) else sp)]
+    except Exception:
+        w = None
+    if not w:
+        w = [len(p) for p in sp]
+    # 短いまとまりは次とくっつける（1つの字幕が maxlen 文字くらいまで）
+    units, cur, cw = [], "", 0.0
+    for p, x in zip(sp, w):
+        if cur and len(cur) + len(p) > maxlen:
+            units.append((cur, cw))
+            cur, cw = "", 0.0
+        cur, cw = cur + p, cw + x
+    if cur:
+        units.append((cur, cw))
+    tot = sum(x for _, x in units) or 1
+    out, t = [], 0.0
+    for txt, x in units:
+        dt = total * x / tot
+        out.append((txt, t, t + dt))
+        t += dt
+    return out
+
+
+def subtitle(text, spk, page=0):
+    """画面下の字幕（話者の色の帯つき）。text は声に合わせて区切った1まとまり（最大2行）"""
     lay = Image.new("RGBA", (SW, SH))
     d = ImageDraw.Draw(lay)
-    f = L.jp(50, True)
-    ls = L.wrap(d, text, f, SW - 160)[page * 2: page * 2 + 2]
+    f = L.jp(56, True)
+    ls = L.wrap(d, text, f, SW - 160)[:2]
     y1 = SH - 150
-    y0 = y1 - 40 - 66 * len(ls)
+    y0 = y1 - 40 - 72 * len(ls)
     d.rounded_rectangle((40, y0, SW - 40, y1), 28, fill=(10, 16, 40, 215))
     d.rounded_rectangle((40, y0, 60, y1), 10, fill=L.SPK[spk][1])
     d.text((80, y0 - 26), L.SPK[spk][0], font=L.jp(32, True), fill=L.SPK[spk][1], stroke_width=5, stroke_fill=L.NAVY)
     for i, s in enumerate(ls):
-        d.text((SW / 2 + 10, y0 + 20 + 33 + i * 66), s, font=f, fill=L.WHITE, anchor="mm")
+        d.text((SW / 2 + 10, y0 + 20 + 36 + i * 72), s, font=f, fill=L.WHITE, anchor="mm")
     return lay
 
 
@@ -352,7 +406,7 @@ def main():
     figs = getattr(cfg, "FIGS", {})
     zoom = Zoom(here, cfg.PLACE) if any(x["show"][0] == "zoom" for x in sc) else None
     area = Area(here, cfg.AREA) if any(x["show"][0] == "area" for x in sc) else None
-    npg = [sub_pages(s["say"]) for s in sc]
+    units = [sub_units(s["say"], s.get("read"), s["spk"], len(v) / L.SR) for s, v in zip(sc, voices)]
     out = os.path.join(here, "short.mp4")
     proc = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24",
                              "-s", f"{SW}x{SH}", "-r", str(FPS), "-i", "-", "-i", wav,
@@ -392,11 +446,15 @@ def main():
             frame.alpha_composite(band)
         dy = int(50 * (1 - min(1, lt / 0.25)) ** 2)
         frame.alpha_composite(heads[n].crop((0, 0, SW, SH - dy)), (0, dy))
-        page = min(npg[n] - 1, int(lt / max(0.1, durs[n] - GAP) * npg[n]))
+        page = len(units[n]) - 1
+        for ui, (_, a0, a1) in enumerate(units[n]):
+            if lt < a1:
+                page = ui
+                break
         key = (n, page)
         if key not in cache:
             cache.clear()
-            cache[key] = subtitle(s["say"], s["spk"], page)
+            cache[key] = subtitle(units[n][page][0], s["spk"])
         frame.alpha_composite(cache[key])
         ImageDraw.Draw(frame).rectangle((0, SH - 16, SW * t / total, SH), fill=accent)
         if n == 0 and cover is None and lt > 0.8:

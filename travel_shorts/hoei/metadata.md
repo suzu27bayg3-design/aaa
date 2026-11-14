@@ -34,9 +34,11 @@ https://www.bousai.go.jp/kyoiku/kyokun/kyoukunnokeishou/rep/1707_houei_fujisan_f
 https://www.bousai.go.jp/kazan/kouikikouhaiworking/pdf/20181207siryo3.pdf
 
 写真（Wikimedia Commons）:
-
+・NASA/Scott Kelly（Public domain）https://commons.wikimedia.org/wiki/File:ISS-46_Mount_Fuji%2C_Japan.jpg
+・Batholith（Public domain）https://commons.wikimedia.org/wiki/File:Mount_Fuji_20120203_a.jpg
+・Alpsdake（CC BY-SA 4.0）https://commons.wikimedia.org/wiki/File:1st_Hoei_Crater.jpg
+・作者不明（Public domain）https://commons.wikimedia.org/wiki/File:FujiHoei2078.jpg
 地図: GSHHG 海岸線データ（Wessel & Smith, LGPL） https://www.soest.hawaii.edu/pwessel/gshhg/
-標高（地理院タイル DEM10B）・陰影起伏: 出典 国土地理院。標高に合わせて色をつけて立体表示に加工
 
 音声: VOICEVOX:ずんだもん / VOICEVOX:四国めたん
 
@@ -44,7 +46,7 @@ https://www.bousai.go.jp/kazan/kouikikouhaiworking/pdf/20181207siryo3.pdf
 ```
 **タグ**（タグ欄に貼る）
 ```
-富士山, 宝永火口, 宝永噴火, 宝永山, 1707年, 火山灰, 江戸, 静岡県, 山梨県, 火山, 絶景, ふしぎな絶景, 地学, 科学, 立体地図, shorts
+富士山, 宝永火口, 宝永噴火, 宝永山, 1707年, 火山灰, 江戸, 静岡県, 山梨県, 火山, 絶景, ふしぎな絶景, 地学, 科学, shorts
 ```
 **固定コメント**
 ```
@@ -52,7 +54,6 @@ https://www.bousai.go.jp/kazan/kouikikouhaiworking/pdf/20181207siryo3.pdf
 ```
 
 **事実確認のメモ**
-- 立体は国土地理院の10m標高データ（DEM10B）を使用。山頂付近の航空写真タイルが欠けていたため、色は標高に合わせてつけた（実際の色とはちがう）。
+- 写真は Wikimedia Commons（NASA 国際宇宙ステーションからの写真＝パブリックドメイン、宝永火口の写真＝CC BY-SA 4.0 Alpsdake ほか）。
 - 「最後の噴火」は「今のところ」と言い、将来の噴火がないとは言っていない。
-- 火口のまわりの光、灰と火の粉の流れは演出。灰が東へ流れたのは、上空の西風に流されたという説明にもとづく。
 - 噴火の始まりの時刻は資料によって差がある（午前10時ごろ／正午前ごろ）ため、時刻は言っていない。
