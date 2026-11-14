@@ -27,6 +27,7 @@
 | 23 | 給排気方式（CF・FE・BF・FF） | 2026-11-11 | [23-flue-ventilation-types.md](lessons/23-flue-ventilation-types.md) |
 | 24 | 給湯器と潜熱回収 | 2026-11-12 | [24-water-heater-latent-heat.md](lessons/24-water-heater-latent-heat.md) |
 | 25 | ガスメーター（マイコンメーター） | 2026-11-13 | [25-gas-meter.md](lessons/25-gas-meter.md) |
+| 26 | 燃料電池（PEFC／SOFC） | 2026-11-14 | [26-fuel-cells.md](lessons/26-fuel-cells.md) |
 | 27（旧・参考） | ガス事業法の目的と事業区分 | 2026-10-19 | [27-gas-business-act-purpose.md](lessons/27-gas-business-act-purpose.md) |
 
 ## 法令トラック：高圧ガス保安法（甲種機械）
