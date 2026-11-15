@@ -28,6 +28,7 @@
 | 24 | 給湯器と潜熱回収 | 2026-11-12 | [24-water-heater-latent-heat.md](lessons/24-water-heater-latent-heat.md) |
 | 25 | ガスメーター（マイコンメーター） | 2026-11-13 | [25-gas-meter.md](lessons/25-gas-meter.md) |
 | 26 | 燃料電池（PEFC／SOFC） | 2026-11-14 | [26-fuel-cells.md](lessons/26-fuel-cells.md) |
+| 2-01 | （第2周）ウォッベ指数の深掘り：水素混合の上限・空気比のずれ・圧力感度 | 2026-11-15 | [r2-01-wobbe-hydrogen-limits.md](lessons/r2-01-wobbe-hydrogen-limits.md) |
 | 27（旧・参考） | ガス事業法の目的と事業区分 | 2026-10-19 | [27-gas-business-act-purpose.md](lessons/27-gas-business-act-purpose.md) |
 
 ## 法令トラック：高圧ガス保安法（甲種機械）
