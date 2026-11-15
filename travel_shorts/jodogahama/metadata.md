@@ -1,5 +1,5 @@
-# 海に真っ白なとがった岩！浄土ヶ浜（22秒）
-- 動画: `short.mp4`（1080×1920 縦長 / 約22秒）/ 表紙候補: `cover.png`
+# 海に真っ白なとがった岩！浄土ヶ浜（29秒）
+- 動画: `short.mp4`（1080×1920 縦長 / 約29秒）/ 表紙候補: `cover.png`
 - 作り直し: `python3 tools/travel_short.py travel_shorts/jodogahama/spot.py`
 
 **タイトル**
@@ -17,6 +17,7 @@
 ```
 岩手県宮古市の浄土ヶ浜は、白い岩が入り江をかこむ景色で知られる国の名勝です。白い岩の正体は「流紋岩」です。
 
+・長い年月、波にけずられて、とがった岩が入り江に残った。三陸ジオパークの一部
 ・白い岩がならぶ景色は国の名勝。三陸復興国立公園・三陸ジオパークの一部
 ・白い岩は、ねばりの強いマグマが冷えて固まった流紋岩（できた年代は資料により約4000万〜5200万年前）
 ・流紋岩は、ガラスや水晶と同じ成分（二酸化ケイ素）を多くふくむため、白っぽく見える
@@ -35,6 +36,7 @@ https://www.rinya.maff.go.jp/tohoku/koho/koho_si/midori_No234_202309miyako.pdf
 ・Raita Futo（CC BY 2.0）https://commons.wikimedia.org/wiki/File:Jodogahama_Beach_%2851971544590%29.jpg
 ・くろふね（CC BY-SA 4.0）https://commons.wikimedia.org/wiki/File:%E6%B5%84%E5%9C%9F%E3%83%B6%E6%B5%9C01.jpg
 ・Raita Futo（CC BY 2.0）https://commons.wikimedia.org/wiki/File:Jodogahama_Beach_%2851971050948%29.jpg
+・Raita Futo（CC BY 2.0）https://commons.wikimedia.org/wiki/File:Jodogahama_Beach_%2851969977762%29.jpg
 地図: GSHHG 海岸線データ（Wessel & Smith, LGPL） https://www.soest.hawaii.edu/pwessel/gshhg/
 航空写真: 出典 国土地理院（地理院タイルを加工して作成）
 

@@ -1,5 +1,5 @@
-# 日本に砂漠！？鳥取砂丘の砂はどこから来た？（22秒）
-- 動画: `short.mp4`（1080×1920 縦長 / 約22秒）/ 表紙候補: `cover.png`
+# 日本に砂漠！？鳥取砂丘の砂はどこから来た？（31秒）
+- 動画: `short.mp4`（1080×1920 縦長 / 約31秒）/ 表紙候補: `cover.png`
 - 作り直し: `python3 tools/travel_short.py travel_shorts/sakyu/spot.py`
 
 **タイトル**
@@ -17,6 +17,7 @@
 ```
 鳥取県の鳥取砂丘は、東西約16kmに広がる砂の丘です。その砂は、中国山地の岩が川と海と風に運ばれてきたものです。
 
+・花こう岩は雨や寒さ暑さでもろくなり、ばらばらの砂つぶ（まさ土）になる
 ・東西約16km、南北2km余り。「馬の背」は高さ47mをこえる
 ・砂のもとは中国山地の花こう岩。けずられた砂が千代川で日本海へ運ばれた
 ・その砂が波と北西の季節風で浜にうち上げられ、積み重なって砂丘になった。山陰海岸ジオパークの一部
@@ -34,6 +35,7 @@ https://www.pref.tottori.lg.jp/secure/780377/sy_2012_003.pdf
 写真（Wikimedia Commons）:
 ・Zairon（CC BY 4.0）https://commons.wikimedia.org/wiki/File:Tottori_Tottori_Sand_Dunes_51.jpg
 ・Zairon（CC BY 4.0）https://commons.wikimedia.org/wiki/File:Tottori_Tottori_Sand_Dunes_16.jpg
+・Zairon（CC BY 4.0）https://commons.wikimedia.org/wiki/File:Tottori_Tottori_Sand_Dunes_42.jpg
 ・Zairon（CC BY 4.0）https://commons.wikimedia.org/wiki/File:Tottori_Tottori_Sand_Dunes_34.jpg
 地図: GSHHG 海岸線データ（Wessel & Smith, LGPL） https://www.soest.hawaii.edu/pwessel/gshhg/
 航空写真: 出典 国土地理院（地理院タイルを加工して作成）

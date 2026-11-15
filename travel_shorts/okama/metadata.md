@@ -1,5 +1,5 @@
-# 山頂にエメラルドの池！？蔵王の御釜（23秒）
-- 動画: `short.mp4`（1080×1920 縦長 / 約23秒）/ 表紙候補: `cover.png`
+# 山頂にエメラルドの池！？蔵王の御釜（31秒）
+- 動画: `short.mp4`（1080×1920 縦長 / 約31秒）/ 表紙候補: `cover.png`
 - 作り直し: `python3 tools/travel_short.py travel_shorts/okama/spot.py`
 
 **タイトル**
@@ -17,6 +17,7 @@
 ```
 宮城県と山形県の県境、蔵王連峰にある「御釜」は、噴火のあとの火口に水がたまってできた火口湖です。
 
+・蔵王連峰の五色岳の中にある。水は強い酸性で、生き物はすめない
 ・噴火のあとの火口に水がたまってできた火口湖。直径約330m、最大水深約30m
 ・天気などで湖の色がエメラルドグリーンやるり色に変わって見えるため「五色沼」とも呼ばれる
 ・水は強い酸性
@@ -34,6 +35,7 @@ https://www.tohokukanko.jp/attractions/detail_1240.html
 写真（Wikimedia Commons）:
 ・Σ64（CC BY 4.0）https://commons.wikimedia.org/wiki/File:Lake_Okama_%28Zao%29%2C_Miyagi_05.jpg
 ・OKJaguar（CC BY-SA 4.0）https://commons.wikimedia.org/wiki/File:Fall_colors_at_Okama_crater_lake%2C_Mt._Zao%2C_Tohoku_region%2C_Japan%2C.jpg
+・Σ64（CC BY 4.0）https://commons.wikimedia.org/wiki/File:Lake_Okama_%28Zao%29%2C_Miyagi_01.jpg
 地図: GSHHG 海岸線データ（Wessel & Smith, LGPL） https://www.soest.hawaii.edu/pwessel/gshhg/
 航空写真: 出典 国土地理院（地理院タイルを加工して作成）
 

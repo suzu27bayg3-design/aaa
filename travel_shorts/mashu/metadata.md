@@ -1,5 +1,5 @@
-# 昔、世界一すんでいた湖！摩周湖（23秒）
-- 動画: `short.mp4`（1080×1920 縦長 / 約23秒）/ 表紙候補: `cover.png`
+# 昔、世界一すんでいた湖！摩周湖（35秒）
+- 動画: `short.mp4`（1080×1920 縦長 / 約35秒）/ 表紙候補: `cover.png`
 - 作り直し: `python3 tools/travel_short.py travel_shorts/mashu/spot.py`
 
 **タイトル**
@@ -17,6 +17,7 @@
 ```
 北海道の摩周湖は、1931年の調査で透明度41.6mを記録し、当時「世界一すんだ湖」といわれました。
 
+・透明度は白い円板を沈めて見えなくなる深さで測る。1950年代以降も20〜30mほど
 ・火山の噴火でできたくぼ地（カルデラ）にできた湖
 ・1931年8月の調査で透明度41.6m。同じころのバイカル湖（40.5m）を上回り、当時世界一といわれた
 ・目立った川が流れこまず、流れ出る川もない。水は湖の底からしみ出ていると考えられている
@@ -35,6 +36,7 @@ https://eprints.lib.hokudai.ac.jp/repo/huscap/all/14175/49_p281-289.pdf
 写真（Wikimedia Commons）:
 ・Suicasmo（CC BY-SA 4.0）https://commons.wikimedia.org/wiki/File:Lake_Mash%C5%AB_20200222-3.jpg
 ・Raita Futo（CC BY 2.0）https://commons.wikimedia.org/wiki/File:Mashu_Lake_%2852357155626%29.jpg
+・Benlisquare（CC BY-SA 4.0）https://commons.wikimedia.org/wiki/File:Lake_Mashu_in_Summer_2025.jpg
 地図: GSHHG 海岸線データ（Wessel & Smith, LGPL） https://www.soest.hawaii.edu/pwessel/gshhg/
 航空写真: 出典 国土地理院（地理院タイルを加工して作成）
 
