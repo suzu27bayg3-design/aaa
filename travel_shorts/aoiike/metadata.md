@@ -1,5 +1,5 @@
-# 絵の具みたいに青い池は、噴火対策で生まれた！？白金青い池（33秒）
-- 動画: `short.mp4`（1080×1920 縦長 / 約33秒）/ 表紙候補: `cover.png`
+# 絵の具みたいに青い池は、噴火対策で生まれた！？白金青い池（23秒）
+- 動画: `short.mp4`（1080×1920 縦長 / 約23秒）/ 表紙候補: `cover.png`
 - 作り直し: `python3 tools/travel_short.py travel_shorts/aoiike/spot.py`
 
 **タイトル**

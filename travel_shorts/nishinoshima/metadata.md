@@ -1,5 +1,5 @@
-# 島が12倍に！？今も成長する西之島（34秒）
-- 動画: `short.mp4`（1080×1920 縦長 / 約34秒）/ 表紙候補: `cover.png`
+# 島が12倍に！？今も成長する西之島（21秒）
+- 動画: `short.mp4`（1080×1920 縦長 / 約21秒）/ 表紙候補: `cover.png`
 - 作り直し: `python3 tools/travel_short.py travel_shorts/nishinoshima/spot.py`
 
 **タイトル**

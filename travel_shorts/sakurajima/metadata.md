@@ -1,5 +1,5 @@
-# この島、陸とつながってる！？桜島（28秒）
-- 動画: `short.mp4`（1080×1920 縦長 / 約28秒）/ 表紙候補: `cover.png`
+# この島、陸とつながってる！？桜島（20秒）
+- 動画: `short.mp4`（1080×1920 縦長 / 約20秒）/ 表紙候補: `cover.png`
 - 作り直し: `python3 tools/travel_short.py travel_shorts/sakurajima/spot.py`
 
 **タイトル**

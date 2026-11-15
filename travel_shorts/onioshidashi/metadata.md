@@ -1,5 +1,5 @@
-# 黒いごつごつの大地は溶岩！鬼押出し（35秒）
-- 動画: `short.mp4`（1080×1920 縦長 / 約35秒）/ 表紙候補: `cover.png`
+# 黒いごつごつの大地は溶岩！鬼押出し（24秒）
+- 動画: `short.mp4`（1080×1920 縦長 / 約24秒）/ 表紙候補: `cover.png`
 - 作り直し: `python3 tools/travel_short.py travel_shorts/onioshidashi/spot.py`
 
 **タイトル**

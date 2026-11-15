@@ -1,5 +1,5 @@
-# 畑から山が生えた！？昭和新山（30秒）
-- 動画: `short.mp4`（1080×1920 縦長 / 約30秒）/ 表紙候補: `cover.png`
+# 畑から山が生えた！？昭和新山（22秒）
+- 動画: `short.mp4`（1080×1920 縦長 / 約22秒）/ 表紙候補: `cover.png`
 - 作り直し: `python3 tools/travel_short.py travel_shorts/showashinzan/spot.py`
 
 **タイトル**

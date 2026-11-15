@@ -1,5 +1,5 @@
-# 地下に巨大な空間！秋芳洞はこうしてできた（79秒）
-- 動画: `short.mp4`（1080×1920 縦長 / 約79秒）/ 表紙候補: `cover.png`
+# 地下に巨大な空間！秋芳洞はこうしてできた（60秒）
+- 動画: `short.mp4`（1080×1920 縦長 / 約60秒）/ 表紙候補: `cover.png`
 - 作り直し: `python3 tools/travel_short.py travel_shorts/akiyoshido/spot.py`
 
 **タイトル**

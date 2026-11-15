@@ -1,5 +1,5 @@
-# 山頂にエメラルドの池！？蔵王の御釜（33秒）
-- 動画: `short.mp4`（1080×1920 縦長 / 約33秒）/ 表紙候補: `cover.png`
+# 山頂にエメラルドの池！？蔵王の御釜（23秒）
+- 動画: `short.mp4`（1080×1920 縦長 / 約23秒）/ 表紙候補: `cover.png`
 - 作り直し: `python3 tools/travel_short.py travel_shorts/okama/spot.py`
 
 **タイトル**

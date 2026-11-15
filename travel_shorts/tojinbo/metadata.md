@@ -1,5 +1,5 @@
-# 海に石の柱がびっしり！東尋坊は波がほり出した（33秒）
-- 動画: `short.mp4`（1080×1920 縦長 / 約33秒）/ 表紙候補: `cover.png`
+# 海に石の柱がびっしり！東尋坊は波がほり出した（23秒）
+- 動画: `short.mp4`（1080×1920 縦長 / 約23秒）/ 表紙候補: `cover.png`
 - 作り直し: `python3 tools/travel_short.py travel_shorts/tojinbo/spot.py`
 
 **タイトル**

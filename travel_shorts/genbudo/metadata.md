@@ -1,5 +1,5 @@
-# 六角形の柱は誰が作った？兵庫・玄武洞のふしぎ（52秒）
-- 動画: `short.mp4`（1080×1920 縦長 / 約52秒）/ 表紙候補: `cover.png`
+# 六角形の柱は誰が作った？兵庫・玄武洞のふしぎ（42秒）
+- 動画: `short.mp4`（1080×1920 縦長 / 約42秒）/ 表紙候補: `cover.png`
 - 作り直し: `python3 tools/travel_short.py travel_shorts/genbudo/spot.py`
 
 **タイトル**

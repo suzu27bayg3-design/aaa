@@ -1,5 +1,5 @@
-# この平野ぜんぶ火山の穴の中！阿蘇カルデラのでき方（46秒）
-- 動画: `short.mp4`（1080×1920 縦長 / 約46秒）/ 表紙候補: `cover.png`
+# この平野ぜんぶ火山の穴の中！阿蘇カルデラのでき方（34秒）
+- 動画: `short.mp4`（1080×1920 縦長 / 約34秒）/ 表紙候補: `cover.png`
 - 作り直し: `python3 tools/travel_short.py travel_shorts/aso/spot.py`
 
 **タイトル**

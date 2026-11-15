@@ -1,5 +1,5 @@
-# 海の上に松の道！天橋立は砂が作った（50秒）
-- 動画: `short.mp4`（1080×1920 縦長 / 約50秒）/ 表紙候補: `cover.png`
+# 海の上に松の道！天橋立は砂が作った（40秒）
+- 動画: `short.mp4`（1080×1920 縦長 / 約40秒）/ 表紙候補: `cover.png`
 - 作り直し: `python3 tools/travel_short.py travel_shorts/amanohashidate/spot.py`
 
 **タイトル**

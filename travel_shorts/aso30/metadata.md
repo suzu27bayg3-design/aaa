@@ -1,5 +1,5 @@
-# この丸い穴、ぜんぶ火山！？阿蘇カルデラ（24秒）
-- 動画: `short.mp4`（1080×1920 縦長 / 約24秒）/ 表紙候補: `cover.png`
+# この丸い穴、ぜんぶ火山！？阿蘇カルデラ（17秒）
+- 動画: `short.mp4`（1080×1920 縦長 / 約17秒）/ 表紙候補: `cover.png`
 - 作り直し: `python3 tools/travel_short.py travel_shorts/aso30/spot.py`
 
 **タイトル**

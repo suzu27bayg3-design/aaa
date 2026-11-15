@@ -1,5 +1,5 @@
-# 富士山の横に穴！？宝永火口（29秒）
-- 動画: `short.mp4`（1080×1920 縦長 / 約29秒）/ 表紙候補: `cover.png`
+# 富士山の横に穴！？宝永火口（21秒）
+- 動画: `short.mp4`（1080×1920 縦長 / 約21秒）/ 表紙候補: `cover.png`
 - 作り直し: `python3 tools/travel_short.py travel_shorts/hoei/spot.py`
 
 **タイトル**

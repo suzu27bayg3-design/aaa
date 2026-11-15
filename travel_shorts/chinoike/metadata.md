@@ -1,5 +1,5 @@
-# 真っ赤な池の正体は？別府・血の池地獄（28秒）
-- 動画: `short.mp4`（1080×1920 縦長 / 約28秒）/ 表紙候補: `cover.png`
+# 真っ赤な池の正体は？別府・血の池地獄（19秒）
+- 動画: `short.mp4`（1080×1920 縦長 / 約19秒）/ 表紙候補: `cover.png`
 - 作り直し: `python3 tools/travel_short.py travel_shorts/chinoike/spot.py`
 
 **タイトル**
