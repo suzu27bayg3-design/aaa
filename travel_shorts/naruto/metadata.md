@@ -1,5 +1,5 @@
-# 海に穴があいた！？鳴門の渦潮のしくみ（31秒）
-- 動画: `short.mp4`（1080×1920 縦長 / 約31秒）/ 表紙候補: `cover.png`
+# 海に穴があいた！？鳴門の渦潮のしくみ（21秒）
+- 動画: `short.mp4`（1080×1920 縦長 / 約21秒）/ 表紙候補: `cover.png`
 - 作り直し: `python3 tools/travel_short.py travel_shorts/naruto/spot.py`
 
 **タイトル**

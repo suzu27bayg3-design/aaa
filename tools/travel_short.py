@@ -261,13 +261,62 @@ def _speech_len(text, spk):
     return t / speed
 
 
+def smooth(text, minlen=12):
+    """読みの文の読点（、）を減らす：短い区切りは次とつなげ、minlen 文字以上のまとまりごとにだけ間を入れる"""
+    out = []
+    for sent in re.split(r"(?<=[。！？!?])", text):
+        parts = [p for p in sent.split("、") if p]
+        buf, groups = "", []
+        for p in parts:
+            buf += p
+            if len(buf) >= minlen:
+                groups.append(buf)
+                buf = ""
+        if buf:
+            if groups and len(buf) < minlen // 2:
+                groups[-1] += buf
+            else:
+                groups.append(buf)
+        out.append("、".join(groups))
+    return "".join(out)
+
+
+def _query(text, sid):
+    op = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+    return json.loads(op.open(urllib.request.Request(
+        "http://127.0.0.1:50021/audio_query?" + urllib.parse.urlencode({"text": text, "speaker": sid}), data=b"", method="POST")).read())
+
+
+def _kana(q):
+    return "".join("".join(m["text"] for m in a["moras"]) for a in q["accent_phrases"])
+
+
+def tts_smooth(say, read, spk, path, pause=0.6):
+    """VOICEVOX で読み上げる。
+    漢字まじりの文（say）のほうが言葉の切れ目と抑揚が自然なので、読み（カナ）が read と同じなら say を使う。
+    ちがうとき（読みまちがい）だけ read を使う。どちらも読点を減らし、残った間も短めにする（pauseLengthScale）"""
+    _, _, sid, speed = L.SPK[spk]
+    op = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+    q = _query(smooth(say), sid)
+    if read:
+        qr = _query(smooth(read), sid)
+        if _kana(qr) != _kana(q):
+            q = qr
+    q.update(speedScale=speed, intonationScale=1.2, prePhonemeLength=0.05, postPhonemeLength=0.1,
+             outputSamplingRate=48000, pauseLengthScale=pause)
+    open(path, "wb").write(op.open(urllib.request.Request(
+        f"http://127.0.0.1:50021/synthesis?speaker={sid}", data=json.dumps(q).encode(), method="POST",
+        headers={"Content-Type": "application/json"})).read())
+    return "/".join("".join(m["text"] for m in a["moras"]) for a in q["accent_phrases"])
+
+
 def sub_units(say, read, spk, total, maxlen=16):
     """字幕を句読点ごとの短いまとまりに分け、それぞれが声のどこからどこまでかを計算する。
     say と read を同じ句読点で分け、読み（read）の長さの割合で、実際の音声の長さ total を配る。
     返り値: [(表示する文字, 始まりの秒, 終わりの秒), ...]"""
     sp, rp = _pieces(say), _pieces(read or say)
     try:  # 句読点の数がそろえば読みで、そろわなければ表示文そのものを読ませて長さを見積もる
-        w = [_speech_len(r, spk) for r in (rp if len(sp) == len(rp) else sp)]
+        w = [_speech_len(smooth(r), spk) for r in (rp if len(sp) == len(rp) else sp)]
     except Exception:
         w = None
     if not w:
@@ -362,7 +411,7 @@ def main():
     os.makedirs(vdir, exist_ok=True)
     if not a.no_tts:
         for n, s in enumerate(sc):
-            kana = L.tts(s.get("read") or s["say"], s["spk"], os.path.join(vdir, f"{n:02d}_{s['spk']}.wav"))
+            kana = tts_smooth(s["say"], s.get("read"), s["spk"], os.path.join(vdir, f"{n:02d}_{s['spk']}.wav"))
             print(f"{n:02d} {L.SPK[s['spk']][0]}: {kana}")
     voices = [L.base.load_audio(os.path.join(vdir, f"{n:02d}_{s['spk']}.wav"), L.base.VOICE_FX) for n, s in enumerate(sc)]
     durs = [len(v) / L.SR + GAP for v in voices]
