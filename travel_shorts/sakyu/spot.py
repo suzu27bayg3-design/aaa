@@ -51,7 +51,6 @@ SCENES = [
     dict(spk="M", say="この砂丘は、山陰海岸ジオパークの一部にもなっているのよ。",
          head="ジオパーク", show=("photo", "Tottori_Tottori_Sand_Dunes_42.jpg", "in"), head_y=1230),
     dict(spk="Z", say="山と川と海と風が、作った砂丘なのだ！",
-         read="やまと、かわと、うみと、かぜが、つくった、さきゅうなのだ！",
          head="山・川・海・風\nが作った！", show=("photo", "Tottori_Tottori_Sand_Dunes_34.jpg", "out"), head_y=1230),
 ]
 

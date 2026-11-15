@@ -1,5 +1,5 @@
-# 日本に砂漠！？鳥取砂丘の砂はどこから来た？（31秒）
-- 動画: `short.mp4`（1080×1920 縦長 / 約31秒）/ 表紙候補: `cover.png`
+# 日本に砂漠！？鳥取砂丘の砂はどこから来た？（30秒）
+- 動画: `short.mp4`（1080×1920 縦長 / 約30秒）/ 表紙候補: `cover.png`
 - 作り直し: `python3 tools/travel_short.py travel_shorts/sakyu/spot.py`
 
 **タイトル**

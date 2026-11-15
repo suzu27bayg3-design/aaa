@@ -291,13 +291,24 @@ def _kana(q):
     return "".join("".join(m["text"] for m in a["moras"]) for a in q["accent_phrases"])
 
 
+# 読みまちがいやすい言葉（表示はそのまま、読み上げのときだけ置きかえる）
+READ_FIX = {"花こう岩": "かこうがん", "鎌原": "かんばら", "流紋岩": "りゅうもんがん", "安山岩": "あんざんがん",
+            "玄武岩": "げんぶがん", "火砕流": "かさいりゅう", "堰堤": "えんてい"}
+
+
+def fix_read(text):
+    for k, v in READ_FIX.items():
+        text = text.replace(k, v)
+    return text
+
+
 def tts_smooth(say, read, spk, path, pause=0.6):
     """VOICEVOX で読み上げる。
     漢字まじりの文（say）のほうが言葉の切れ目と抑揚が自然なので、読み（カナ）が read と同じなら say を使う。
     ちがうとき（読みまちがい）だけ read を使う。どちらも読点を減らし、残った間も短めにする（pauseLengthScale）"""
     _, _, sid, speed = L.SPK[spk]
     op = urllib.request.build_opener(urllib.request.ProxyHandler({}))
-    q = _query(smooth(say), sid)
+    q = _query(smooth(fix_read(say)), sid)
     if read:
         qr = _query(smooth(read), sid)
         if _kana(qr) != _kana(q):
