@@ -33,15 +33,20 @@ ECCJ公式の過去問PDF(課目II〜IV、R7〜H30の8年分(H30・R1〜R7)、�
 - OCR(tesseract jpn)は数式・表の精度が低い。索引として使い、本文と解答はページ画像を見て起こす。
 
 ## 決定事項(2026-11-16)
-- 出力形式:Claude Docs
+- 出力形式:知財検定3級と同じ2本立ての HTML Artifact(まとめ+ドリル)。当初の Docs 案から変更(2026-11-16)
+  - 見本にした形式:知財検定3級 法令まとめ https://claude.ai/artifact/UZbMNrMK5jBt4Z8ircFnTP / 法令ドリル https://claude.ai/artifact/87foK3oFGoaMFjbHHqy4NR
 - 課目I(法規・エネルギー総合管理)も含める
 - 問題集の原稿はリポジトリに置かない(Docs のみ)
 - まず見本1単元(熱力学)を作り、形式の確認後に残りを作る
 
 ## 進捗
-- 見本「熱力学」:https://claude.ai/artifact/DARVttSsq4cc72xkie9dT9
-  - 要点、8年分の頻出度表、R7 課目II 問題4 の全文と解説(公式解答と計算一致を確認済み)
-  - 確認待ち:本編で16問すべてを全文+解説にするか(Docs のコメント)
+- エネ管 熱分野まとめ:https://claude.ai/artifact/MMa3nMzJ1s6T2mF7sVNvhV
+- エネ管 熱分野ドリル:https://claude.ai/artifact/7vSHaYCJFzgvSxL4L69ADi
+  - 収録:練1 原理チェック(10問)、R7 問題4・5、R6 問題4・5(課目II 熱力学、計58問)。公式解答と全数値の計算一致を確認済み
+  - 数値の空欄は入力式(相対誤差0.5%以内で正解)。記号の空欄は試験と同じ解答群(ア〜)
+  - 確認待ち:この形式で全課目・全年度に広げてよいか
+- 原稿(HTML)は問題文を含むため公開リポジトリに置かない。続きの作業では Artifact の read で最新版を取得して編集する
+- 旧 Docs 版の見本:https://claude.ai/artifact/DARVttSsq4cc72xkie9dT9(HTML 版に置き換え)
 
 ## 未決定
 - 知財検定の問題集の見本はまだ受け取っていない
