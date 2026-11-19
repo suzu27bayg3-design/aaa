@@ -32,6 +32,7 @@
 | 2-02 | （第2周）実在気体の深掘り：ファンデルワールス式・Peng-Robinson 式で圧縮係数 Z を導く | 2026-11-16 | [r2-02-real-gas-compressibility.md](lessons/r2-02-real-gas-compressibility.md) |
 | 2-03 | （第2周）燃焼計算の深掘り：エネルギー収支から断熱火炎温度と排ガス損失（ジーゲルト式） | 2026-11-17 | [r2-03-flame-temperature-flue-loss.md](lessons/r2-03-flame-temperature-flue-loss.md) |
 | 2-04 | （第2周）燃焼範囲の深掘り：限界火炎温度からル・シャトリエ・予熱効果・LOC を導く（水素の例外） | 2026-11-18 | [r2-04-flammability-limit-flame-temperature.md](lessons/r2-04-flammability-limit-flame-temperature.md) |
+| 2-05 | （第2周）熱力学の深掘り：エクセルギー（LNG 冷熱・整圧での損失・給湯のエクセルギー効率） | 2026-11-19 | [r2-05-exergy.md](lessons/r2-05-exergy.md) |
 | 27（旧・参考） | ガス事業法の目的と事業区分 | 2026-10-19 | [27-gas-business-act-purpose.md](lessons/27-gas-business-act-purpose.md) |
 
 ## 法令トラック：高圧ガス保安法（甲種機械）
