@@ -34,6 +34,7 @@
 | 2-04 | （第2周）燃焼範囲の深掘り：限界火炎温度からル・シャトリエ・予熱効果・LOC を導く（水素の例外） | 2026-11-18 | [r2-04-flammability-limit-flame-temperature.md](lessons/r2-04-flammability-limit-flame-temperature.md) |
 | 2-05 | （第2周）熱力学の深掘り：エクセルギー（LNG 冷熱・整圧での損失・給湯のエクセルギー効率） | 2026-11-19 | [r2-05-exergy.md](lessons/r2-05-exergy.md) |
 | 2-06 | （第2周）ガスタービンの深掘り：最適圧力比の導出と、実際のサイクルで TIT が効く理由 | 2026-11-22（11-20 分） | [r2-06-brayton-optimum.md](lessons/r2-06-brayton-optimum.md) |
+| 2-07 | （第2周）流体力学の深掘り：圧縮性流れとチョーク（臨界圧力比・漏えい量） | 2026-11-22（11-21 分） | [r2-07-compressible-choked-flow.md](lessons/r2-07-compressible-choked-flow.md) |
 | 27（旧・参考） | ガス事業法の目的と事業区分 | 2026-10-19 | [27-gas-business-act-purpose.md](lessons/27-gas-business-act-purpose.md) |
 
 ## 法令トラック：高圧ガス保安法（甲種機械）
