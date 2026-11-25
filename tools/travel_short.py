@@ -53,10 +53,15 @@ class Photo:
     （小さい写真でも、画面全体に引き伸ばすより粗さが目立たない）"""
     CW, CH, CY = 1000, 750, 700  # 枠の幅・高さ・中心のy
 
-    def __init__(self, path, move="in", bright=False):
+    def __init__(self, path, move="in", bright=False, full=False):
         im = Image.open(path).convert("RGB")
         if bright:  # 暗い洞くつの写真：明るさの幅を広げ、暗い所を持ち上げる
             im = ImageOps.autocontrast(im, cutoff=1).point(lambda v: int(255 * (v / 255) ** 0.7))
+        self.full = full
+        if full:  # 全画面：写真を画面いっぱいに切り出し、0秒目からゆっくり寄る・横に流す（スワイプ対策）
+            self.src = im
+            self.move = move
+            return
         bg = cover_crop(im, SW // 4, SH // 4).filter(ImageFilter.GaussianBlur(6)).resize((SW, SH), Image.BILINEAR)
         self.bg = Image.blend(bg, Image.new("RGB", (SW, SH), (5, 10, 25)), 0.45).convert("RGBA")
         big = cover_crop(im, int(self.CW * 1.3), int(self.CH * 1.3))
@@ -67,6 +72,8 @@ class Photo:
         self.mask = m
 
     def frame(self, k):  # k: 0→1
+        if self.full:
+            return self._full(k)
         k = 0.5 - 0.5 * math.cos(math.pi * min(1, max(0, k)))
         bw, bh = self.big.size
         z = {"in": 1.0 - 0.2 * k, "out": 0.8 + 0.2 * k}.get(self.move, 0.8)
@@ -80,6 +87,20 @@ class Photo:
         ImageDraw.Draw(out).rounded_rectangle((x - 8, y - 8, x + self.CW + 8, y + self.CH + 8), 42, fill=(255, 255, 255, 230))
         out.paste(card, (x, y), self.mask)
         return out
+
+
+    def _full(self, k):
+        k = min(1, max(0, k))  # 0秒目から動いて見えるよう、なめらかすぎない一定の速さ
+        w, h = self.src.size
+        ch = h
+        cw = min(w, h * SW / SH)
+        z = {"in": 1.0 - 0.18 * k, "out": 0.82 + 0.18 * k}.get(self.move, 0.9)
+        cw2, ch2 = cw * z, ch * z
+        span = w - cw2
+        cx = w / 2 + {"left": 1, "right": -1}.get(self.move, 0) * span / 2 * (1 - 2 * k)
+        x0 = min(max(0, cx - cw2 / 2), w - cw2)
+        y0 = (h - ch2) / 2
+        return self.src.crop((int(x0), int(y0), int(x0 + cw2), int(y0 + ch2))).resize((SW, SH), Image.BICUBIC).convert("RGBA")
 
 
 def japan_map(place, t):
@@ -370,13 +391,13 @@ def sub_pages(text):
     return max(1, (len(L.wrap(ImageDraw.Draw(Image.new("RGB", (8, 8))), text, L.jp(50, True), SW - 160)) + 1) // 2)
 
 
-def credit_layer(c):
+def credit_layer(c, y=None):
     lay = Image.new("RGBA", (SW, SH))
     d = ImageDraw.Draw(lay)
     s = f"写真: {c['artist'][:28]} / {c['license']} / Wikimedia Commons"
     f = L.jp(24, True)
     tw = d.textlength(s, font=f)
-    y = Photo.CY + Photo.CH // 2 + 34
+    y = y or Photo.CY + Photo.CH // 2 + 34
     d.text((SW / 2, y), s, font=f, fill=(255, 255, 255, 220), anchor="mm", stroke_width=3, stroke_fill=(0, 0, 0))
     return lay
 
@@ -454,7 +475,7 @@ def main():
     for s in sc:
         if s["show"][0] == "photo" and s["show"][1] not in photos:
             photos[s["show"][1]] = Photo(os.path.join(here, "photos", s["show"][1]), s["show"][2] if len(s["show"]) > 2 else "in",
-                                           len(s["show"]) > 3 and s["show"][3] == "bright")
+                                           len(s["show"]) > 3 and s["show"][3] == "bright", getattr(cfg, "PHOTO_FULL", False))
             used.append(credits[s["show"][1]])
     shade = Image.new("RGBA", (SW, SH))
     sd = ImageDraw.Draw(shade)
@@ -483,7 +504,9 @@ def main():
         kind = s["show"][0]
         if kind == "photo":
             frame = photos[s["show"][1]].frame(lt / durs[n])
-            frame.alpha_composite(credit_layer(credits[s["show"][1]]))
+            if photos[s["show"][1]].full:
+                frame.alpha_composite(shade)
+            frame.alpha_composite(credit_layer(credits[s["show"][1]], SH - 52 if photos[s["show"][1]].full else None))
         else:
             frame = dark.copy()
             im = japan_map(cfg.PLACE, lt) if kind == "map" else None
