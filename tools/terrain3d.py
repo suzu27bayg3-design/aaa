@@ -46,7 +46,7 @@ def dem_mosaic(lat, lon, z, r, kind="dem5a_png"):
 
 
 def render(H, tex, mpp, target, az, el, dist, hscale=1.0, exag=1.5, size=(540, 960), fov=50, bg=(14, 22, 48),
-           local=None):
+           local=None, fill_gaps=False):
     """H: 標高(m)の2次元配列, tex: 同じ大きさの航空写真(RGB配列), mpp: 1pxあたりのm
     target: 注目点 (px, py), az: カメラの方位(度, 0=南から北を見る), el: 見下ろす角度(度), dist: カメラまでの距離(m)
     local: (cx, cy, radius_px, k) なら、その円の中だけ高さを k 倍（盛り上がる演出）"""
@@ -101,5 +101,19 @@ def render(H, tex, mpp, target, az, el, dist, hscale=1.0, exag=1.5, size=(540, 9
             mm = ww > dx
             xx = np.clip(sx[m][v][mm] + dx, 0, W - 1)
             img[yy[v][mm], xx] = C[m][v][mm]
+    if fill_gaps:  # 急な斜面で点と点のすき間から空が見える所（白い線のノイズ）を、上下の地面の色でうめる
+        drawn = np.zeros((Hh, W), bool)
+        drawn[np.clip(sy, 0, Hh - 1), sx] = True
+        top = np.where(drawn.any(0), drawn.argmax(0), Hh)
+        below = np.arange(Hh)[:, None] > top[None, :] + 1
+        sky_px = (img == sky[:, None, :]).all(2) & below
+        for _ in range(80):
+            if not sky_px.any():
+                break
+            up_img = np.roll(img, 1, 0)
+            up_sky = np.roll(sky_px, 1, 0)
+            fix = sky_px & ~up_sky
+            img[fix] = up_img[fix]
+            sky_px &= ~fix
     # 空のグラデーション（地面がない上の方）
     return Image.fromarray(img)
