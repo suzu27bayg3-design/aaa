@@ -475,7 +475,8 @@ def main():
     for s in sc:
         if s["show"][0] == "photo" and s["show"][1] not in photos:
             photos[s["show"][1]] = Photo(os.path.join(here, "photos", s["show"][1]), s["show"][2] if len(s["show"]) > 2 else "in",
-                                           len(s["show"]) > 3 and s["show"][3] == "bright", getattr(cfg, "PHOTO_FULL", False))
+                                           len(s["show"]) > 3 and s["show"][3] == "bright",
+                                           getattr(cfg, "PHOTO_FULL", False) and not (len(s["show"]) > 3 and s["show"][3] == "card"))
             used.append(credits[s["show"][1]])
     shade = Image.new("RGBA", (SW, SH))
     sd = ImageDraw.Draw(shade)
