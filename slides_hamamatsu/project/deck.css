@@ -1,0 +1,325 @@
+/* 浜松ホトニクス 銘柄紹介デッキ 共通スタイル
+   方針: 金融解説。暗いインク色と温かい紙色の2トーン、アクセントは「光」を想わせる琥珀色。
+   型: 5段のタイプスケール 160 / 80 / 48 / 32 / 24px。
+   スライド固有の座標(left/top/width/height)だけは要素の style に書いてよい。色と文字はクラスで。 */
+
+:root {
+  --ink: #111B2E;        /* 暗: 文字・暗い背景 */
+  --paper: #F4F2ED;      /* 明: 通常の背景 */
+  --paper-2: #E8E4DB;    /* 明の2トーン目: 区切り・強調文のスライド */
+  --card: #FBFAF7;       /* カードの面 */
+  --line: #D3CDC1;       /* 罫線・ヘアライン */
+  --muted: #4F5A6B;      /* 補足文字(紙色の上で 6.5:1) */
+  --muted-dark: #A9B4C4; /* 暗い背景の上の補足文字(8:1) */
+  --amber: #F2A93B;      /* アクセント1: 光。暗い背景の上の強調、アクセントスライドの背景 */
+  --blue: #1F5FA8;       /* アクセント2: 明るい背景の上の強調文字、増加、注目の棒 */
+  --down: #C8611E;       /* 減少の棒(図形用) */
+  --down-text: #A8441A;  /* 減少の文字(紙色の上で 5.3:1) */
+  --bar: #6F7F96;        /* 比較対象の棒(図形用、3.6:1) */
+
+  --fs-hero: 160px;
+  --fs-display: 80px;
+  --fs-title: 48px;
+  --fs-body: 32px;
+  --fs-small: 24px;
+}
+
+body {
+  font-family: "Noto Sans JP", sans-serif;
+  color: #111B2E;
+}
+
+/* ---------- スライドの土台 ---------- */
+section {
+  counter-increment: page;
+  box-sizing: border-box;
+  background: #F4F2ED;
+  color: #111B2E;
+  font-family: "Noto Sans JP", sans-serif;
+  padding: 128px 128px 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+/* 通常のコンテンツスライド(明) */
+.s-content { background: #F4F2ED; color: #111B2E; }
+/* 明の2トーン目: 強調文・区切り(見出しなしで中央寄せ) */
+.s-alt { background: #E8E4DB; color: #111B2E; justify-content: center; }
+/* アクセントの強調スライド(デッキで1枚: hook-profit) */
+.s-accent { background: #F2A93B; color: #111B2E; justify-content: center; }
+/* 暗: 表紙と最後のスライド */
+.s-dark { background: #111B2E; color: #F4F2ED; justify-content: center; }
+
+/* ページ番号: フッター行の右端。表紙・最後(s-dark)には出さない */
+.s-content::after,
+.s-alt::after,
+.s-accent::after {
+  content: counter(page);
+  position: absolute;
+  right: 128px;
+  bottom: 64px;
+  width: 120px;
+  text-align: right;
+  font-family: "Inter", sans-serif;
+  font-size: 24px;
+  line-height: 24px;
+  color: #4F5A6B;
+}
+.s-accent::after { color: #111B2E; }
+
+/* ---------- フッター(出典・基準日)。bottom:64px の24px行1本 ---------- */
+.footer {
+  position: absolute;
+  left: 128px;
+  bottom: 64px;
+  width: 1400px;
+  margin: 0;
+  font-size: 24px;
+  line-height: 24px;
+  white-space: nowrap;
+  color: #4F5A6B;
+}
+.s-dark .footer { color: #A9B4C4; }
+.s-accent .footer { color: #111B2E; }
+
+/* ---------- 見出し ---------- */
+.head { display: flex; flex-direction: column; gap: 12px; }
+.eyebrow {
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: #1F5FA8;
+}
+.s-dark .eyebrow { color: #F2A93B; }
+.s-accent .eyebrow { color: #111B2E; }
+.title {
+  font-size: 48px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+.display {
+  font-size: 80px;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+/* ---------- 本文 ---------- */
+.lead { font-size: 32px; line-height: 1.45; font-weight: 500; }
+.text { font-size: 32px; line-height: 1.45; font-weight: 400; }
+.small { font-size: 24px; line-height: 1.4; font-weight: 400; }
+.note { font-size: 24px; line-height: 1.4; font-weight: 400; color: #4F5A6B; }
+.s-dark .note { color: #A9B4C4; }
+.s-accent .note { color: #111B2E; }
+.label { font-size: 24px; line-height: 1.3; font-weight: 500; color: #4F5A6B; }
+.s-dark .label { color: #A9B4C4; }
+.s-accent .label { color: #111B2E; }
+.bullets { font-size: 32px; line-height: 1.4; margin: 0; padding-left: 40px; }
+.bullets-sm { font-size: 24px; line-height: 1.4; margin: 0; padding-left: 32px; }
+
+/* 文字色のユーティリティ */
+.t-up { color: #1F5FA8; }
+.t-down { color: #A8441A; }
+.t-muted { color: #4F5A6B; }
+.s-dark .t-muted { color: #A9B4C4; }
+.s-accent .t-muted { color: #111B2E; }
+.t-amber { color: #F2A93B; }  /* 暗い背景の上でのみ使う */
+.t-ink { color: #111B2E; }
+.b700 { font-weight: 700; }
+.center { text-align: center; }
+.right { text-align: right; }
+
+/* ---------- 数字 ---------- */
+.bignum {
+  font-family: "Inter", sans-serif;
+  font-size: 160px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -4px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.bignum-muted { color: #4F5A6B; }
+.s-dark .bignum-muted { color: #A9B4C4; }
+.s-accent .bignum-muted { color: #111B2E; }
+.num {
+  font-family: "Inter", sans-serif;
+  font-size: 80px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -2px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.unit { font-size: 32px; line-height: 1.2; font-weight: 700; white-space: nowrap; }
+.val {
+  font-family: "Inter", sans-serif;
+  font-size: 32px;
+  line-height: 1.2;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+/* 数字と単位を下揃えで並べる行 */
+.num-row { display: flex; align-items: baseline; gap: 12px; }
+.stat { display: flex; flex-direction: column; gap: 12px; }
+
+/* ---------- レイアウトの部品 ---------- */
+.body { flex: 1; display: flex; flex-direction: column; gap: 32px; }
+.body-spread { justify-content: space-between; }
+.body-center { justify-content: center; }
+.row { display: flex; gap: 48px; }
+.row-tight { display: flex; gap: 24px; }
+.items-center { align-items: center; }
+.items-end { align-items: flex-end; }
+.grow { flex: 1; }
+.between { justify-content: space-between; }
+.col { display: flex; flex-direction: column; gap: 16px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+
+/* カード(明るい背景の上の面) */
+.card {
+  box-sizing: border-box;
+  background: #FBFAF7;
+  border: 1px solid #D3CDC1;
+  border-radius: 16px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+/* 数字タイル(カードより詰めた間隔) */
+.tile {
+  box-sizing: border-box;
+  background: #FBFAF7;
+  border: 1px solid #D3CDC1;
+  border-radius: 16px;
+  padding: 32px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+/* 塗りの強調カード(インク地に紙色の文字) */
+.card-ink {
+  box-sizing: border-box;
+  background: #111B2E;
+  color: #F4F2ED;
+  border-radius: 16px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.card-ink .label { color: #A9B4C4; }
+.card-ink .note { color: #A9B4C4; }
+.card-title { font-size: 32px; line-height: 1.3; font-weight: 700; }
+.card-title-lg { font-size: 48px; line-height: 1.2; font-weight: 700; }
+
+/* 小さな札(ピル) */
+.chip {
+  align-self: flex-start;
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 700;
+  padding: 8px 20px;
+  border-radius: 32px;
+  background: #E8E4DB;
+  color: #111B2E;
+  white-space: nowrap;
+}
+.chip-ink { background: #111B2E; color: #F4F2ED; }
+.chip-amber { background: #F2A93B; color: #111B2E; }
+/* 暗い背景の上の免責の札(琥珀の枠) */
+.chip-outline {
+  align-self: flex-start;
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 700;
+  padding: 10px 24px;
+  border-radius: 32px;
+  border: 2px solid #F2A93B;
+  color: #F2A93B;
+  white-space: nowrap;
+}
+
+/* 手順の箱と矢印(流れ図) */
+.chain { display: flex; align-items: stretch; gap: 24px; }
+.step {
+  flex: 1;
+  box-sizing: border-box;
+  background: #FBFAF7;
+  border: 1px solid #D3CDC1;
+  border-radius: 16px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.step-hl {
+  flex: 1;
+  box-sizing: border-box;
+  background: #1F5FA8;
+  color: #F4F2ED;
+  border-radius: 16px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.step-num { font-family: "Inter", sans-serif; font-size: 24px; line-height: 1.2; font-weight: 700; color: #1F5FA8; }
+.step-hl .step-num { color: #F4F2ED; }
+.arrow { width: 64px; height: 32px; align-self: center; flex-shrink: 0; background: #6F7F96; }
+
+/* 区切り線 */
+.rule { border: none; border-top: 2px solid #D3CDC1; margin: 0; }
+
+/* ---------- 表 ---------- */
+.tbl { width: 100%; font-size: 32px; line-height: 1.35; color: #111B2E; }
+.tbl-sm { width: 100%; font-size: 24px; line-height: 1.35; color: #111B2E; }
+.tbl-head { background: #E8E4DB; }
+.tbl-hl { background: #FBFAF7; }
+
+/* ---------- チャート ---------- */
+/* 絶対配置のホスト。width/height は要素の style に書く。中の絶対配置は24個まで */
+.chart { position: relative; }
+.pin { position: absolute; margin: 0; }
+.axis { font-size: 24px; line-height: 1.2; font-weight: 500; color: #4F5A6B; white-space: nowrap; }
+/* 棒(div で描く場合の塗り) */
+.bar { background: #6F7F96; }
+.bar-up { background: #1F5FA8; }
+.bar-down { background: #C8611E; }
+.bar-focus { background: #1F5FA8; }
+.bar-ink { background: #111B2E; }
+/* 横棒1行の枠(position:relative の中に .bar と .zero を絶対配置) */
+.track { position: relative; height: 56px; }
+.zero { position: absolute; top: -8px; width: 2px; height: 72px; background: #111B2E; }
+/* 凡例 */
+.legend { display: flex; flex-direction: column; gap: 20px; }
+.legend-item { display: flex; align-items: center; gap: 16px; }
+.swatch { width: 28px; height: 28px; border-radius: 6px; flex-shrink: 0; }
+.sw-ink { background: #111B2E; }
+.sw-blue { background: #1F5FA8; }
+.sw-bar { background: #6F7F96; }
+.sw-amber { background: #F2A93B; }
+.sw-line { background: #D3CDC1; }
+.sw-down { background: #C8611E; }
+
+/* ---------- 動き(到着時に下から浮かぶ。普段の見た目が完成形) ---------- */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0px); }
+}
+@keyframes fadein {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.enter { animation: rise 600ms ease-out both; }
+.fade { animation: fadein 800ms ease-out both; }
+.d1 { animation-delay: 150ms; }
+.d2 { animation-delay: 300ms; }
+.d3 { animation-delay: 450ms; }
+.d4 { animation-delay: 600ms; }
